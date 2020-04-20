@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from abc import ABC
 import abc
-from typing import List, NamedTuple
+from typing import List, NamedTuple, Optional
 from enum import Enum, auto
 
 from .constants import URI, MIME_TYPES
@@ -31,26 +31,21 @@ class Album(NamedTuple):
 
 
 class Track(NamedTuple):
-  track_id: int = 1
+  track_id: str = '/default/1'
   name: str = "Default Track"
   track_no: int = None
   length: int = None
   uri: str = None
   artists: List[Artist] = []
+  album: Optional[Album] = None
   art_url: str = None
   disc_no: int = None
+  type: Optional[Enum] = None
 
 
-@dataclass
 class Adapter(ABC):
-  def __init__(self,
-               name: str = 'mprisAdapter',
-               interface: 'Interface' = None):
+  def __init__(self, name: str = 'mprisAdapter'):
     self.name = name
-    self.interface = interface
-
-  def set_mpris_interface(self, interface: 'Interface'):
-    self.interface = interface
 
   ## root.py
   def get_uri_schemes(self) -> List[str]:
@@ -150,7 +145,6 @@ class Adapter(ABC):
   def can_control(self) -> bool:
     pass
 
-  ## needed for metadata
   def metadata(self):
     pass
 

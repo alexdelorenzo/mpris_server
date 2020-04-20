@@ -1,7 +1,7 @@
 import logging
 
 from pydbus.generic import signal
-from .constants import NAME
+from .constants import NAME, INTERFACE as _INTERFACE
 from .adapter import Adapter
 
 logger = logging.getLogger(__name__)
@@ -11,6 +11,8 @@ TRACE_LOG_LEVEL = 5
 
 
 class Interface:
+    INTERFACE = _INTERFACE
+
     def __init__(self, name: str = NAME, adapter: Adapter = None):
         self.name = name
         self.adapter = adapter
