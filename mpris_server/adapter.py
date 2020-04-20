@@ -34,7 +34,7 @@ class Track(NamedTuple):
   track_id: str = '/default/1'
   name: str = "Default Track"
   track_no: int = None
-  length: int = None
+  length: int = 0
   uri: str = None
   artists: List[Artist] = []
   album: Optional[Album] = None

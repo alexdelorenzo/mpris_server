@@ -16,15 +16,6 @@ setup(name="mpris_server",
       packages=['mpris_server'],
       zip_safe=True,
       install_requires=requirements,
-#       keywords="mount google music musicfs fuse googlemusic google_music gmusicfs fs file system".split(' '),
-#       entry_points={"console_scripts":
-#                         ["campfs = campfs.command:cmd"]},
       python_requires='~=3.6',
-
-    # options={'py2app': OPTIONS},
 )
-
-
-
-
 

@@ -14,6 +14,7 @@ from .adapter import PlayState
 
 logger = logging.getLogger(__name__)
 
+SEC_TO_MICROSEC = 1_000_000
 
 class Player(Interface):
   """
@@ -58,9 +59,11 @@ class Player(Interface):
     """
 
   INTERFACE = "org.mpris.MediaPlayer2.Player"
-
-  # To override from tests.
   _CanControl = True
+
+  Seeked = signal()
+  MinimumRate = 1.0
+  MaximumRate = 1.0
 
   def Next(self):
     logger.debug("%s.Next called", self.INTERFACE)
@@ -114,14 +117,16 @@ class Player(Interface):
     else:
       self.adapter.play()
 
-  def Seek(self, offset):
+  def Seek(self, offset: int):
     logger.debug("%s.Seek called", self.INTERFACE)
+
     if not self.CanSeek:
       logger.debug("%s.Seek not allowed", self.INTERFACE)
       return
-    offset_in_milliseconds = offset // 1000
+
     current_position = self.adapter.get_current_postion()
-    new_position = current_position + offset_in_milliseconds
+    new_position = current_position + offset
+
     if new_position < 0:
       new_position = 0
     self.adapter.seek(new_position)
@@ -131,7 +136,6 @@ class Player(Interface):
     if not self.CanSeek:
       logger.debug("%s.SetPosition not allowed", self.INTERFACE)
       return
-    position = position // 1000
     current_track = self.adapter.get_current_track()
     if current_track is None:
       return
@@ -139,7 +143,7 @@ class Player(Interface):
       return
     if position < 0:
       return
-    if current_track.track.length < position:
+    if current_track.length < position:
       return
     self.adapter.seek(position)
 
@@ -154,8 +158,6 @@ class Player(Interface):
     # NOTE Check if URI has MIME type known to the backend, if MIME support
     # is added to the backend.
     self.adapter.open_uri(uri)
-
-  Seeked = signal()
 
   @property
   def PlaybackStatus(self):
@@ -234,7 +236,7 @@ class Player(Interface):
     track_id = track.track_id
     res = {"mpris:trackid": Variant("o", track_id)}
     if track.length:
-      res["mpris:length"] = Variant("x", track.length * 1000)
+      res["mpris:length"] = Variant("x", track.length)
     if track.uri:
       res["xesam:url"] = Variant("s", track.uri)
     if stream_title or track.name:
@@ -259,7 +261,6 @@ class Player(Interface):
     if track.track_no:
       res["xesam:trackNumber"] = Variant("i", track.track_no)
 
-    print(res)
     return res
 
   def _get_art_url(self, track):
@@ -293,10 +294,7 @@ class Player(Interface):
   @property
   def Position(self):
     self.log_trace("Getting %s.Position", self.INTERFACE)
-    return self.adapter.get_position() * 1000
-
-  MinimumRate = 1.0
-  MaximumRate = 1.0
+    return self.adapter.get_position()
 
   @property
   def CanGoNext(self):
