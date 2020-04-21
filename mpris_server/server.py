@@ -1,8 +1,8 @@
 from .player import Player
 from .playlists import Playlists
 from .root import Root
-from .constants import NAME, BUS_TYPE
-from .adapter import Adapter
+from .base import NAME, BUS_TYPE
+from .adapters import MprisAdapter
 import logging
 
 import pydbus
@@ -14,7 +14,8 @@ logger.debug("test")
 class Server:
     def __init__(self,
                  name: str = NAME,
-                 adapter: Adapter = None):
+                 adapter: MprisAdapter = None):
+        self.name = name
         self.root = Root(name, adapter)
         self.player = Player(name, adapter)
         self.playlists = Playlists(name, adapter)
@@ -36,7 +37,7 @@ class Server:
         logger.info("MPRIS server connected to D-Bus %s bus", bus_type)
 
         self._publication_token = bus.publish(
-            f"org.mpris.MediaPlayer2.{NAME}",
+            f"org.mpris.MediaPlayer2.{self.name}",
             ("/org/mpris/MediaPlayer2", self.root),
             ("/org/mpris/MediaPlayer2", self.player),
             # ("/org/mpris/MediaPlayer2", self.playlists),

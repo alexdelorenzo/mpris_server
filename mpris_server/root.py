@@ -7,7 +7,7 @@ https://specifications.freedesktop.org/mpris-spec/2.2/Media_Player.html
 import logging
 
 from .interface import Interface
-from .constants import INTERFACE as _INTERFACE, MIME_TYPES, NAME
+from .base import INTERFACE as _INTERFACE, MIME_TYPES, NAME
 
 logger = logging.getLogger(__name__)
 
@@ -32,16 +32,20 @@ class Root(Interface):
     """
 
     INTERFACE = _INTERFACE
+    Identity = NAME
+
+    CanSetFullscreen = False
+    CanRaise = False
+    HasTrackList = False
+    CanQuit = False
 
     def Raise(self):
         logger.debug("%s.Raise called", self.INTERFACE)
-        # Do nothing, as we do not have a GUI
+        pass
 
     def Quit(self):
         logger.debug("%s.Quit called", self.INTERFACE)
-        # Do nothing, as we do not allow MPRIS clients to shut down Mopidy
-
-    CanQuit = False
+        pass
 
     @property
     def Fullscreen(self):
@@ -52,11 +56,6 @@ class Root(Interface):
     def Fullscreen(self, value):
         logger.debug("Setting %s.Fullscreen to %s", self.INTERFACE, value)
         pass
-
-    CanSetFullscreen = False
-    CanRaise = False
-    HasTrackList = False  # NOTE Change if adding optional track list support
-    Identity = NAME
 
     @property
     def DesktopEntry(self):

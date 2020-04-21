@@ -2,19 +2,16 @@
 
 https://specifications.freedesktop.org/mpris-spec/2.2/Player_Interface.html
 """
-
 import logging
-from typing import Iterable
 
 from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
+from .base import PlayState
 from .interface import Interface
-from .adapter import PlayState
 
 logger = logging.getLogger(__name__)
 
-SEC_TO_MICROSEC = 1_000_000
 
 class Player(Interface):
   """
@@ -124,27 +121,34 @@ class Player(Interface):
       logger.debug("%s.Seek not allowed", self.INTERFACE)
       return
 
-    current_position = self.adapter.get_current_postion()
+    current_position = self.adapter.get_current_position()
     new_position = current_position + offset
 
     if new_position < 0:
       new_position = 0
     self.adapter.seek(new_position)
 
-  def SetPosition(self, track_id, position):
+  def SetPosition(self, track_id: str, position: int):
     logger.debug("%s.SetPosition called", self.INTERFACE)
+
     if not self.CanSeek:
       logger.debug("%s.SetPosition not allowed", self.INTERFACE)
       return
+
     current_track = self.adapter.get_current_track()
+
     if current_track is None:
       return
+
     if track_id != current_track.track_id:
       return
+
     if position < 0:
       return
+
     if current_track.length < position:
       return
+
     self.adapter.seek(position)
 
   def OpenUri(self, uri):
@@ -294,7 +298,7 @@ class Player(Interface):
   @property
   def Position(self):
     self.log_trace("Getting %s.Position", self.INTERFACE)
-    return self.adapter.get_position()
+    return self.adapter.get_current_position()
 
   @property
   def CanGoNext(self):
@@ -339,15 +343,3 @@ class Player(Interface):
     return self.adapter.can_control()
 
 
-def echo_method(method):
-    def inner(self, *args, **kwargs):
-        return method(self, *args, **kwargs)
-    return inner
-
-
-def dbus_emit_changes(interface: Interface,
-                      changes: Iterable[str]):
-  attr_vals = {attr: getattr(interface, attr)
-               for attr in changes}
-
-  interface.PropertiesChanged(interface.INTERFACE, attr_vals, [])

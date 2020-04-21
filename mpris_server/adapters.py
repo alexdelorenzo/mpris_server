@@ -1,23 +1,14 @@
-from dataclasses import dataclass
 from abc import ABC
-import abc
-from typing import List, NamedTuple, Optional
-from enum import Enum, auto
+from typing import List, NamedTuple, Optional, Dict, Union
+from enum import Enum
 
-from .constants import URI, MIME_TYPES
-# from .interface import Interface
-
-
-# from https://docs.python.org/3/library/enum.html#using-automatic-values
-class AutoName(Enum):
-  def _generate_next_value_(name, start, count, last_values):
-    return name
+from .base import URI, MIME_TYPES, PlayState, dbus_emit_changes
+from .player import Player
 
 
-class PlayState(AutoName):
-  PLAYING = auto()
-  PAUSED = auto()
-  STOPPED = auto()
+TimeInMicroseconds = int
+VolumeAsDecimal = float
+Metadata = Dict[str, Union[str, float, int, bool]]
 
 
 class Artist(NamedTuple):
@@ -34,7 +25,7 @@ class Track(NamedTuple):
   track_id: str = '/default/1'
   name: str = "Default Track"
   track_no: int = None
-  length: int = 0
+  length: TimeInMicroseconds = 0
   uri: str = None
   artists: List[Artist] = []
   album: Optional[Album] = None
@@ -43,19 +34,56 @@ class Track(NamedTuple):
   type: Optional[Enum] = None
 
 
-class Adapter(ABC):
-  def __init__(self, name: str = 'mprisAdapter'):
+class EventAdapter(ABC):
+  """
+  Implement this class to notify DBUS of state changes in
+  the media player app or device.
+  """
+
+  def __init__(self, player: Player):
+    self.player = player
+
+  def on_ended(self):
+    dbus_emit_changes(self.player, ['PlaybackStatus'])
+
+  def on_volume(self):
+    dbus_emit_changes(self.player, ['Volume', 'Metadata'])
+
+  def on_playback(self):
+    dbus_emit_changes(self.player, ['PlaybackStatus', 'Metadata'])
+
+  def on_playpause(self):
+    dbus_emit_changes(self.player, ['PlaybackStatus'])
+
+  def on_title(self):
+    dbus_emit_changes(self.player, ['Metadata'])
+
+  def on_seek(self, position: int):
+    self.player.Seeked(position)
+
+  def on_options(self):
+    dbus_emit_changes(self.player,
+                      ['LoopStatus', 'Shuffle, CanGoPrevious', 'CanGoNext'])
+
+
+class MprisAdapter(ABC):
+  """
+  MRPRIS interface for your application.
+
+  The MPRIS implementation is supplied with information
+  returned from this adapter.
+  """
+
+  def __init__(self, name: str = 'MprisAdapter'):
     self.name = name
 
-  ## root.py
   def get_uri_schemes(self) -> List[str]:
     return URI
 
   def get_mime_types(self) -> List[str]:
     return MIME_TYPES
 
-  ## player.py
-  def get_current_postion(self) -> int:
+  def get_current_position(self) -> TimeInMicroseconds:
     pass
 
   def next(self):
@@ -79,7 +107,7 @@ class Adapter(ABC):
   def get_playstate(self) -> PlayState:
     pass
 
-  def seek(self, time: int):
+  def seek(self, time: TimeInMicroseconds):
     pass
 
   def open_uri(self, uri: str):
@@ -112,19 +140,16 @@ class Adapter(ABC):
   def get_art_url(self, track: int) -> str:
     pass
 
-  def get_volume(self) -> int:
+  def get_volume(self) -> VolumeAsDecimal:
     pass
 
-  def set_volume(self, val: int):
+  def set_volume(self, val: VolumeAsDecimal):
     pass
 
   def is_mute(self) -> bool:
     pass
 
   def set_mute(self, val: bool):
-    pass
-
-  def get_position(self) -> int:
     pass
 
   def can_go_next(self) -> bool:
@@ -145,7 +170,7 @@ class Adapter(ABC):
   def can_control(self) -> bool:
     pass
 
-  def metadata(self):
+  def metadata(self) -> Metadata:
     pass
 
   def get_stream_title(self) -> str:
