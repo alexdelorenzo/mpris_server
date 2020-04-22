@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 TRACE_LOG_LEVEL = 5
 
 
-class Interface:
+class MprisInterface:
     INTERFACE = _INTERFACE
 
     def __init__(self,
