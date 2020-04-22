@@ -6,13 +6,13 @@ https://specifications.freedesktop.org/mpris-spec/2.2/Media_Player.html
 
 import logging
 
-from .interface import Interface
+from .interface import MprisInterface
 from .base import INTERFACE as _INTERFACE, MIME_TYPES, NAME
 
 logger = logging.getLogger(__name__)
 
 
-class Root(Interface):
+class Root(MprisInterface):
     """
     <node>
       <interface name="org.mpris.MediaPlayer2">
@@ -41,26 +41,26 @@ class Root(Interface):
 
     def Raise(self):
         logger.debug("%s.Raise called", self.INTERFACE)
-        pass
+        self.adapter.set_raise(True)
 
     def Quit(self):
         logger.debug("%s.Quit called", self.INTERFACE)
-        pass
+        self.adapter.quit()
 
     @property
     def Fullscreen(self):
         self.log_trace("Getting %s.Fullscreen", self.INTERFACE)
-        return False
+        return self.adapter.get_fullscreen()
 
     @Fullscreen.setter
     def Fullscreen(self, value):
         logger.debug("Setting %s.Fullscreen to %s", self.INTERFACE, value)
-        pass
+        self.adapter.set_fullscreen(value)
 
     @property
     def DesktopEntry(self):
         self.log_trace("Getting %s.DesktopEntry", self.INTERFACE)
-        return ""
+        return self.adapter.get_desktop_entry()
 
     @property
     def SupportedUriSchemes(self):

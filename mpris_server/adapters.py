@@ -1,9 +1,10 @@
+from typing import List, NamedTuple, Optional, Dict, Union, Tuple
 from abc import ABC
-from typing import List, NamedTuple, Optional, Dict, Union
 from enum import Enum
 
 from .base import URI, MIME_TYPES, PlayState, dbus_emit_changes
 from .player import Player
+from .root import Root
 
 
 TimeInMicroseconds = int
@@ -17,7 +18,7 @@ class Artist(NamedTuple):
 
 class Album(NamedTuple):
   name: str = "Default Album"
-  artists: List[Artist] = []
+  artists: Tuple[Artist] = tuple()
   art_url: str = None
 
 
@@ -27,7 +28,7 @@ class Track(NamedTuple):
   track_no: int = None
   length: TimeInMicroseconds = 0
   uri: str = None
-  artists: List[Artist] = []
+  artists: Tuple[Artist] = tuple()
   album: Optional[Album] = None
   art_url: str = None
   disc_no: int = None
@@ -36,53 +37,63 @@ class Track(NamedTuple):
 
 class EventAdapter(ABC):
   """
-  Implement this class to notify DBUS of state changes in
-  the media player app or device.
+  Notify DBUS of state-change events in the media player.
   """
 
-  def __init__(self, player: Player):
+  def __init__(self, player: Player, root: Root):
     self.player = player
+    self.root = root
+
+  def emit_changes(self, changes: List[str]):
+    # TODO: emit Root changes, too
+    dbus_emit_changes(self.player, changes)
 
   def on_ended(self):
-    dbus_emit_changes(self.player, ['PlaybackStatus'])
+    self.emit_changes(['PlaybackStatus'])
 
   def on_volume(self):
-    dbus_emit_changes(self.player, ['Volume', 'Metadata'])
+    self.emit_changes(['Volume', 'Metadata'])
 
   def on_playback(self):
-    dbus_emit_changes(self.player, ['PlaybackStatus', 'Metadata'])
+    self.emit_changes(['PlaybackStatus', 'Metadata'])
 
   def on_playpause(self):
-    dbus_emit_changes(self.player, ['PlaybackStatus'])
+    self.emit_changes(['PlaybackStatus'])
 
   def on_title(self):
-    dbus_emit_changes(self.player, ['Metadata'])
+    self.emit_changes(['Metadata'])
 
   def on_seek(self, position: int):
     self.player.Seeked(position)
 
   def on_options(self):
-    dbus_emit_changes(self.player,
-                      ['LoopStatus', 'Shuffle, CanGoPrevious', 'CanGoNext'])
+    self.emit_changes(['LoopStatus', 'Shuffle', 'CanGoPrevious', 'CanGoNext'])
 
 
-class MprisAdapter(ABC):
-  """
-  MRPRIS interface for your application.
-
-  The MPRIS implementation is supplied with information
-  returned from this adapter.
-  """
-
-  def __init__(self, name: str = 'MprisAdapter'):
-    self.name = name
-
+class RootAdapter(ABC):
   def get_uri_schemes(self) -> List[str]:
     return URI
 
   def get_mime_types(self) -> List[str]:
     return MIME_TYPES
 
+  def set_raise(self, val: bool):
+    pass
+
+  def quit(self):
+    pass
+
+  def get_fullscreen(self) -> bool:
+    return False
+
+  def set_fullscreen(self, val: bool):
+    pass
+
+  def get_desktop_entry(self) -> str:
+    return ''
+
+
+class PlayerAdapter(ABC):
   def get_current_position(self) -> TimeInMicroseconds:
     pass
 
@@ -170,9 +181,6 @@ class MprisAdapter(ABC):
   def can_control(self) -> bool:
     pass
 
-  def metadata(self) -> Metadata:
-    pass
-
   def get_stream_title(self) -> str:
     pass
 
@@ -184,3 +192,23 @@ class MprisAdapter(ABC):
 
   def get_next_track(self) -> Track:
     pass
+
+  def metadata(self) -> Metadata:
+    pass
+
+
+# TODO: implement PlaylistAdapter interface
+class PlaylistAdapter(ABC):
+  pass
+
+
+class MprisAdapter(RootAdapter, PlayerAdapter, PlaylistAdapter):
+  """
+  MRPRIS interface for your application.
+
+  The MPRIS implementation is supplied with information
+  returned from this adapter.
+  """
+
+  def __init__(self, name: str = 'MprisAdapter'):
+    self.name = name

@@ -1,6 +1,7 @@
 from enum import Enum, auto
 from typing import Iterable
 
+
 INTERFACE = "org.mpris.MediaPlayer2"
 NAME = "mprisServer"
 MIME_TYPES = ["audio/mpeg", "application/ogg", "video/mpeg"]
@@ -21,7 +22,7 @@ class PlayState(AutoName):
   STOPPED = auto()
 
 
-def dbus_emit_changes(interface: 'Interface',
+def dbus_emit_changes(interface: 'MprisInterface',
                       changes: Iterable[str]):
   attr_vals = {attr: getattr(interface, attr)
                for attr in changes}

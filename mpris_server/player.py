@@ -8,12 +8,12 @@ from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from .base import PlayState
-from .interface import Interface
+from .interface import MprisInterface
 
 logger = logging.getLogger(__name__)
 
 
-class Player(Interface):
+class Player(MprisInterface):
   """
     <node>
       <interface name="org.mpris.MediaPlayer2.Player">
@@ -56,7 +56,6 @@ class Player(Interface):
     """
 
   INTERFACE = "org.mpris.MediaPlayer2.Player"
-  _CanControl = True
 
   Seeked = signal()
   MinimumRate = 1.0
@@ -67,6 +66,7 @@ class Player(Interface):
     if not self.CanGoNext:
       logger.debug("%s.Next not allowed", self.INTERFACE)
       return
+
     self.adapter.next()
 
   def Previous(self):
@@ -74,6 +74,7 @@ class Player(Interface):
     if not self.CanGoPrevious:
       logger.debug("%s.Previous not allowed", self.INTERFACE)
       return
+
     self.adapter.previous()
 
   def Pause(self):
@@ -81,6 +82,7 @@ class Player(Interface):
     if not self.CanPause:
       logger.debug("%s.Pause not allowed", self.INTERFACE)
       return
+
     self.adapter.pause()
 
   def PlayPause(self):
@@ -88,7 +90,9 @@ class Player(Interface):
     if not self.CanPause:
       logger.debug("%s.PlayPause not allowed", self.INTERFACE)
       return
+
     state = self.adapter.get_playstate()
+
     if state == PlayState.PLAYING:
       self.adapter.pause()
     elif state == PlayState.PAUSED:
@@ -98,17 +102,22 @@ class Player(Interface):
 
   def Stop(self):
     logger.debug("%s.Stop called", self.INTERFACE)
+
     if not self.CanControl:
       logger.debug("%s.Stop not allowed", self.INTERFACE)
       return
+
     self.adapter.stop()
 
   def Play(self):
     logger.debug("%s.Play called", self.INTERFACE)
+
     if not self.CanPlay:
       logger.debug("%s.Play not allowed", self.INTERFACE)
       return
+
     state = self.adapter.get_playstate()
+
     if state == PlayState.PAUSED:
       self.adapter.resume()
     else:
@@ -126,6 +135,7 @@ class Player(Interface):
 
     if new_position < 0:
       new_position = 0
+
     self.adapter.seek(new_position)
 
   def SetPosition(self, track_id: str, position: int):
@@ -151,7 +161,7 @@ class Player(Interface):
 
     self.adapter.seek(position)
 
-  def OpenUri(self, uri):
+  def OpenUri(self, uri: str):
     logger.debug("%s.OpenUri called", self.INTERFACE)
     if not self.CanControl:
       # NOTE The spec does not explicitly require this check, but
@@ -174,14 +184,16 @@ class Player(Interface):
     self.log_trace("Getting %s.LoopStatus", self.INTERFACE)
     if not self.adapter.is_repeating():
       return "None"
+
     else:
       if not self.adapter.is_playlist():
         return "Track"
+
       else:
         return "Playlist"
 
   @LoopStatus.setter
-  def LoopStatus(self, value):
+  def LoopStatus(self, value: str):
     if not self.CanControl:
       logger.debug("Setting %s.LoopStatus not allowed", self.INTERFACE)
       return
@@ -204,16 +216,18 @@ class Player(Interface):
     return self.adapter.get_rate()
 
   @Rate.setter
-  def Rate(self, value):
+  def Rate(self, value: int):
     if not self.CanControl:
       # NOTE The spec does not explicitly require this check, but it was
       # added to be consistent with all the other property setters.
       logger.debug("Setting %s.Rate not allowed", self.INTERFACE)
       return
+
     logger.debug("Setting %s.Rate to %s", self.INTERFACE, value)
     self.adapter.set_rate(value)
-    # if value == 0:
-    # self.Pause()
+
+    if value == 0:
+      self.Pause()
 
   @property
   def Shuffle(self):
@@ -221,10 +235,11 @@ class Player(Interface):
     return self.adapter.get_shuffle()
 
   @Shuffle.setter
-  def Shuffle(self, value):
+  def Shuffle(self, value: bool):
     if not self.CanControl:
       logger.debug("Setting %s.Shuffle not allowed", self.INTERFACE)
       return
+
     logger.debug("Setting %s.Shuffle to %s", self.INTERFACE, value)
     self.adapter.set_shuffle(value)
 
@@ -239,24 +254,31 @@ class Player(Interface):
 
     track_id = track.track_id
     res = {"mpris:trackid": Variant("o", track_id)}
+
     if track.length:
       res["mpris:length"] = Variant("x", track.length)
+
     if track.uri:
       res["xesam:url"] = Variant("s", track.uri)
+
     if stream_title or track.name:
       res["xesam:title"] = Variant("s", stream_title or track.name)
+
     if track.artists:
       artists = list(track.artists)
       artists.sort(key=lambda a: a.name or "")
       res["xesam:artist"] = Variant("as", [a.name for a in artists if a.name])
+
     if track.album and track.album.name:
       res["xesam:album"] = Variant("s", track.album.name)
+
     if track.album and track.album.artists:
       artists = list(track.album.artists)
       artists.sort(key=lambda a: a.name or "")
       res["xesam:albumArtist"] = Variant(
         "as", [a.name for a in artists if a.name]
       )
+
     art_url = self._get_art_url(track)
     if art_url:
       res["mpris:artUrl"] = Variant("s", art_url)
@@ -267,7 +289,7 @@ class Player(Interface):
 
     return res
 
-  def _get_art_url(self, track):
+  def _get_art_url(self, track: 'Track'):
     return self.adapter.get_art_url(track)
 
   @property
@@ -275,12 +297,14 @@ class Player(Interface):
     self.log_trace("Getting %s.Volume", self.INTERFACE)
     mute = self.adapter.is_mute()
     volume = self.adapter.get_volume()
+
     if volume is None or mute is True:
       return 0
+
     return volume
 
   @Volume.setter
-  def Volume(self, value):
+  def Volume(self, value: float):
     if not self.CanControl:
       logger.debug("Setting %s.Volume not allowed", self.INTERFACE)
       return
@@ -305,6 +329,7 @@ class Player(Interface):
     self.log_trace("Getting %s.CanGoNext", self.INTERFACE)
     if not self.CanControl:
       return False
+
     return self.adapter.can_go_next()
 
   @property
@@ -312,6 +337,7 @@ class Player(Interface):
     self.log_trace("Getting %s.CanGoPrevious", self.INTERFACE)
     if not self.CanControl:
       return False
+
     return self.adapter.can_go_previous()
 
   @property
@@ -319,6 +345,7 @@ class Player(Interface):
     self.log_trace("Getting %s.CanPlay", self.INTERFACE)
     if not self.CanControl:
       return False
+
     return self.adapter.can_play()
 
   @property
@@ -339,7 +366,4 @@ class Player(Interface):
 
   @property
   def CanControl(self):
-    # NOTE This could be a setting for the end user to change.
     return self.adapter.can_control()
-
-
