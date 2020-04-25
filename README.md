@@ -16,14 +16,18 @@ Implements the following from the [MPRIS specification](https://specifications.f
 The library also provides an event-listener that emits `org.freedesktop.DBus.Properties.PropertiesChanged` in response to changes in your media player. This allows for real-time updates from your media player to DBus.
 
 ## Installation
-Run `pip3 install -r requirements.txt`, followed by `python3 setup.py install`. 
-
 ### Requirements
  - Linux
  - DBus
  - Python >= 3.6
  - python3-gi (Python GObject introspection)
  - `requirements.txt`
+
+### PyPI
+`pip3 install mpris_server`
+
+### Github
+Clone the repo, run `pip3 install -r requirements.txt`, followed by `python3 setup.py install`. 
 
 ## Usage
 ### Implement `adapters.MprisAdapter`
