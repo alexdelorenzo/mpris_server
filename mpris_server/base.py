@@ -34,12 +34,9 @@ DbusTypes = Union[str, float, int, bool]
 Metadata = Dict[str, DbusTypes]
 
 
+#  See https://docs.python.org/3/library/enum.html#using-automatic-values
 class AutoName(Enum):
-  """
-  See https://docs.python.org/3/library/enum.html#using-automatic-values
-  """
-
-  def _generate_next_value_(name, *args):
+  def _generate_next_value_(name: str, *args):
     return name
 
 
