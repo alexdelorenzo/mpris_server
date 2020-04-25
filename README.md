@@ -62,8 +62,8 @@ class MyMediaAdapter(MprisAdapter):
 
 
 class MyAppEventHandler(EventAdapter):
-    # This is okay! EventAdapter has good default implementations for its methods.
-    # Override the default implementation if it suits your app.
+    # EventAdapter has good default implementations for its methods.
+    # Only override the default implementation if it suits your app.
     pass
 
 
@@ -75,7 +75,7 @@ mpris = Server('MyMedia', adapter=my_adapter)
 event_handler = MyAppEventHandler()
 app.register_event_handler(event_handler)
 
-# publish and serve!
+# publish and serve
 mpris.loop()
 ```
 
