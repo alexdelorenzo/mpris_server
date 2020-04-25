@@ -5,7 +5,7 @@ Whereas [existing MPRIS libraries for Python](https://github.com/hugosenari/mpri
 
 If you want to give your media player an MPRIS interface, use this library.
 
-`mpris_server` is a fork of [Mopidy-MPRIS](https://github.com/mopidy/mopidy-mpris) that provides a general purpose library to create MPRIS media player services.
+`mpris_server` is a fork of [Mopidy-MPRIS](https://github.com/mopidy/mopidy-mpris) that was made into a general purpose library to create MPRIS services.
 
 Checkout [📺chromecast_mpris](https://github.com/alexdelorenzo/chromecast_mpris) for an app that uses this library.
 
