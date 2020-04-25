@@ -151,7 +151,7 @@ class Player(MprisInterface):
     if track_id != current_track.track_id:
       return
 
-    if position < 0:
+    if position < BEGINNING:
       return
 
     if current_track.length < position:
