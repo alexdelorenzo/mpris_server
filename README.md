@@ -26,13 +26,13 @@ Run `pip3 install -r requirements.txt`, followed by `python3 setup.py install`.
  - `requirements.txt`
 
 ## Usage
-### Implement `adapter.MprisAdapter`
-Subclass `adapter.MprisAdapter` and implement each method. `get_metadata()` is optional to implement, only implement it if you don't want to implement `get_current_track()` and create `adapter.Track` objects.
+### Implement `adapters.MprisAdapter`
+Subclass `adapters.MprisAdapter` and implement each method. `get_metadata()` is optional to implement, only implement it if you don't want to implement `get_current_track()` and create `adapters.Track` objects.
 
 After subclassing, pass an instance to an instance of `server.Server`.
 
-### Implement `adapter.EventAdapter`
-Subclass `adapter.EventAdapter`. This interface has a good default implementation, only override its methods if your app calls for it.
+### Implement `adapters.EventAdapter`
+Subclass `adapters.EventAdapter`. This interface has a good default implementation, only override its methods if your app calls for it.
 
 Integrate the adapter with your application to listen for changes in your media player that MPRIS needs to be updated about.
 
