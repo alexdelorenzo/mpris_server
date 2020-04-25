@@ -57,7 +57,7 @@ class MyMediaAdapter(MprisAdapter):
     pass
 
 
-class ChromecastEventAdapter(EventAdapter):
+class MyAppEventAdapter(EventAdapter):
     # This is okay! EventAdapter has good default implementations for its methods.
     # Override the default implementation if it suits your app.
     pass
@@ -67,7 +67,7 @@ my_adapter = MyMediaAdapter()
 mpris = Server('MyMedia', adapter=my_adapter)
 mpris.publish()  # this announces your media player on DBUS
 
-event_listener = ChromecastEventAdapter()
+event_listener = MyAppEventAdapter()
 app.register_event_listener(event_listener)
 ```
 
