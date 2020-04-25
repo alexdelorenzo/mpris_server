@@ -22,14 +22,14 @@ class Server:
     self.player = Player(name, adapter)
     # self.playlists = Playlists(name, adapter)
 
-    self.loop = None
+    self._loop = None
     self._publication_token = None
 
   def __del__(self):
     self.unpublish()
 
-    if self.loop:
-      self.loop.quit()
+    if self._loop:
+      self._loop.quit()
 
   def publish(self):
     bus_type = BUS_TYPE
@@ -58,10 +58,10 @@ class Server:
     if not self._publication_token:
       self.publish()
 
-    self.loop = GLib.MainLoop()
+    self._loop = GLib.MainLoop()
 
     try:
-      self.loop.run()
+      self._loop.run()
     finally:
-      self.loop.quit()
-      self.loop = None
+      self._loop.quit()
+      self._loop = None
