@@ -27,7 +27,7 @@ Run `pip3 install -r requirements.txt`, followed by `python3 setup.py install`.
 
 ## Usage
 ### Implement `adapters.MprisAdapter`
-Subclass `adapters.MprisAdapter` and implement each method. `get_metadata()` is optional to implement, only implement it if you don't want to implement `get_current_track()` and create `adapters.Track` objects.
+Subclass `adapters.MprisAdapter` and implement each method. `metadata()` is optional to implement, only implement it if you don't want to implement `get_current_track()` and create `adapters.Track` objects.
 
 After subclassing, pass an instance to an instance of `server.Server`.
 
@@ -60,8 +60,8 @@ from my_app import app  # custom app you want to integrate
 
 
 class MyMediaAdapter(MprisAdapter):
-    # Make sure to implement all methods on MprisAdapter, not just get_metadata()
-    def get_metadata(self) -> Metadata:
+    # Make sure to implement all methods on MprisAdapter, not just metadata()
+    def metadata(self) -> Metadata:
         ...
     # and so on
 
