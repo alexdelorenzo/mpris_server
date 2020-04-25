@@ -1,4 +1,6 @@
 import logging
+
+from gi.repository import GLib
 import pydbus
 
 from .player import Player
@@ -47,3 +49,10 @@ class Server:
     if self._publication_token:
       self._publication_token.unpublish()
       self._publication_token = None
+
+  def loop(self):
+    if not self._publication_token:
+      self.publish()
+
+    loop = GLib.MainLoop()
+    loop.run()
