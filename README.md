@@ -20,7 +20,7 @@ Run `pip3 install -r requirements.txt`, followed by `python3 setup.py install`.
 
 ### Requirements
  - Linux
- - DBUS
+ - DBus
  - Python >= 3.6
  - python3-gi (Python GObject introspection)
  - `requirements.txt`
@@ -36,15 +36,17 @@ Subclass `adapters.EventAdapter`. This interface has a good default implementati
 
 If you choose to reimplement its methods, call `emit_changes()` with a `List[str]` of [properties](https://specifications.freedesktop.org/mpris-spec/2.2/Player_Interface.html) that changed.
 
-Integrate the adapter with your application to listen for changes in your media player that DBUS needs to know about. For example, if the user pauses the media player, be sure to call `EventAdapter.on_playpause()` in the app. DBUS won't know about the change otherwise.
+Integrate the adapter with your application to listen for changes in your media player that DBus needs to know about. For example, if the user pauses the media player, be sure to call `EventAdapter.on_playpause()` in the app. DBus won't know about the change otherwise.
 
 ### Create the Server and Publish!
-Create an instance of `server.Server`, pass it an instance of your `MprisAdapter`, and call `loop()` to publish your media player via DBUS.
+Create an instance of `server.Server`, pass it an instance of your `MprisAdapter`, and call `publish()` to publish your media player via DBus.
 
 ```python3
 mpris = Server('MyMedia', adapter=my_adapter)
 mpris.publish() 
 ```
+
+Call `loop()` to enter the DBus event loop. 
 
 ### Example
 ```python3
