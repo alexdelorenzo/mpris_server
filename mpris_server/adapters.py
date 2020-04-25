@@ -1,15 +1,12 @@
-from typing import List, NamedTuple, Optional, Dict, Union, Tuple
+from typing import List, NamedTuple, Optional, Tuple
 from abc import ABC
 from enum import Enum
 
-from .base import URI, MIME_TYPES, PlayState, dbus_emit_changes
+from .base import URI, MIME_TYPES, PlayState, dbus_emit_changes, ON_ENDED_PROPS, ON_VOLUME_PROPS, \
+  ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, ON_TITLE_PROPS, ON_OPTION_PROPS, DEFAULT_RATE, TimeInMicroseconds, \
+  VolumeAsDecimal, RateAsDecimal, Metadata
 from .player import Player
 from .root import Root
-
-
-TimeInMicroseconds = int
-VolumeAsDecimal = float
-Metadata = Dict[str, Union[str, float, int, bool]]
 
 
 class Artist(NamedTuple):
@@ -38,6 +35,9 @@ class Track(NamedTuple):
 class EventAdapter(ABC):
   """
   Notify DBUS of state-change events in the media player.
+
+  Implement this class and integrate it in your application to emit
+  DBUS signals when there are state changes in the media player.
   """
 
   def __init__(self, player: Player, root: Root):
@@ -49,25 +49,26 @@ class EventAdapter(ABC):
     dbus_emit_changes(self.player, changes)
 
   def on_ended(self):
-    self.emit_changes(['PlaybackStatus'])
+    self.emit_changes(ON_ENDED_PROPS)
 
   def on_volume(self):
-    self.emit_changes(['Volume', 'Metadata'])
+    self.emit_changes(ON_VOLUME_PROPS)
 
   def on_playback(self):
-    self.emit_changes(['PlaybackStatus', 'Metadata'])
+    self.emit_changes(ON_PLAYBACK_PROPS)
 
   def on_playpause(self):
-    self.emit_changes(['PlaybackStatus'])
+    self.emit_changes(ON_PLAYPAUSE_PROPS)
 
   def on_title(self):
-    self.emit_changes(['Metadata'])
+    self.emit_changes(ON_TITLE_PROPS)
 
-  def on_seek(self, position: int):
+  def on_seek(self, position: TimeInMicroseconds):
     self.player.Seeked(position)
 
   def on_options(self):
-    self.emit_changes(['LoopStatus', 'Shuffle', 'CanGoPrevious', 'CanGoNext'])
+    self.emit_changes(ON_OPTION_PROPS
+                      )
 
 
 class RootAdapter(ABC):
@@ -94,6 +95,29 @@ class RootAdapter(ABC):
 
 
 class PlayerAdapter(ABC):
+  def metadata(self) -> Metadata:
+    """
+    Implement this function to supply your own MPRIS Metadata.
+
+    If this function is implemented, there is no need to implement get_current_track().
+
+    See: https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
+    :return:
+    """
+    pass
+
+  def get_current_track(self) -> Track:
+    """
+    This will be ignored by the Player interface if metadata() is implemented.
+
+    This function is an artifact of forking the base MPRIS library to a generic interface.
+    The base library expected Track-like objects to build metadata. If you'd like to supply
+    your own, and not implement this more complicated interface, then override metadata().
+
+    :return:
+    """
+    pass
+
   def get_current_position(self) -> TimeInMicroseconds:
     pass
 
@@ -136,10 +160,10 @@ class PlayerAdapter(ABC):
   def set_loop_status(self, val: str):
     pass
 
-  def get_rate(self) -> float:
-    return 1.0
+  def get_rate(self) -> RateAsDecimal:
+    return DEFAULT_RATE
 
-  def set_rate(self, val: float):
+  def set_rate(self, val: RateAsDecimal):
     pass
 
   def get_shuffle(self) -> bool:
@@ -184,16 +208,10 @@ class PlayerAdapter(ABC):
   def get_stream_title(self) -> str:
     pass
 
-  def get_current_track(self) -> Track:
-    pass
-
   def get_previous_track(self) -> Track:
     pass
 
   def get_next_track(self) -> Track:
-    pass
-
-  def metadata(self) -> Metadata:
     pass
 
 

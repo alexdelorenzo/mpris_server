@@ -1,13 +1,8 @@
-"""Implementation of org.mpris.MediaPlayer2 interface.
-
-https://specifications.freedesktop.org/mpris-spec/2.2/Media_Player.html
-"""
-
-
 import logging
 
+from .base import INTERFACE as _INTERFACE, NAME
 from .interface import MprisInterface
-from .base import INTERFACE as _INTERFACE, MIME_TYPES, NAME
+
 
 logger = logging.getLogger(__name__)
 

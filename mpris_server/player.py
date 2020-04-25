@@ -1,14 +1,12 @@
-"""Implementation of org.mpris.MediaPlayer2.Player interface.
-
-https://specifications.freedesktop.org/mpris-spec/2.2/Player_Interface.html
-"""
 import logging
 
 from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
-from .base import PlayState
+from .base import PlayState, MUTE_VOL, MAX_VOL, PAUSE_RATE, BEGINNING, TimeInMicroseconds, RateAsDecimal, \
+  VolumeAsDecimal, MAX_RATE, MIN_RATE
 from .interface import MprisInterface
+
 
 logger = logging.getLogger(__name__)
 
@@ -58,8 +56,8 @@ class Player(MprisInterface):
   INTERFACE = "org.mpris.MediaPlayer2.Player"
 
   Seeked = signal()
-  MinimumRate = 1.0
-  MaximumRate = 1.0
+  MinimumRate = MIN_RATE
+  MaximumRate = MAX_RATE
 
   def Next(self):
     logger.debug("%s.Next called", self.INTERFACE)
@@ -123,7 +121,7 @@ class Player(MprisInterface):
     else:
       self.adapter.play()
 
-  def Seek(self, offset: int):
+  def Seek(self, offset: TimeInMicroseconds):
     logger.debug("%s.Seek called", self.INTERFACE)
 
     if not self.CanSeek:
@@ -133,12 +131,12 @@ class Player(MprisInterface):
     current_position = self.adapter.get_current_position()
     new_position = current_position + offset
 
-    if new_position < 0:
-      new_position = 0
+    if new_position < BEGINNING:
+      new_position = BEGINNING
 
     self.adapter.seek(new_position)
 
-  def SetPosition(self, track_id: str, position: int):
+  def SetPosition(self, track_id: str, position: TimeInMicroseconds):
     logger.debug("%s.SetPosition called", self.INTERFACE)
 
     if not self.CanSeek:
@@ -216,7 +214,7 @@ class Player(MprisInterface):
     return self.adapter.get_rate()
 
   @Rate.setter
-  def Rate(self, value: int):
+  def Rate(self, value: RateAsDecimal):
     if not self.CanControl:
       # NOTE The spec does not explicitly require this check, but it was
       # added to be consistent with all the other property setters.
@@ -226,7 +224,7 @@ class Player(MprisInterface):
     logger.debug("Setting %s.Rate to %s", self.INTERFACE, value)
     self.adapter.set_rate(value)
 
-    if value == 0:
+    if value == PAUSE_RATE:
       self.Pause()
 
   @property
@@ -245,7 +243,14 @@ class Player(MprisInterface):
 
   @property
   def Metadata(self):
-    self.log_trace("Getting %s.Metadata", self.INTERFACE)
+    # prefer adapter's metadata to building our own
+    metadata: dict = self.adapter.metadata()
+
+    if metadata is not None:
+      return metadata
+
+    # build metadata if no metadata supplied by adapter
+    self.log_trace("Building %s.Metadata", self.INTERFACE)
     track = self.adapter.get_current_track()
     stream_title = self.adapter.get_stream_title()
 
@@ -299,24 +304,28 @@ class Player(MprisInterface):
     volume = self.adapter.get_volume()
 
     if volume is None or mute is True:
-      return 0
+      return MUTE_VOL
 
     return volume
 
   @Volume.setter
-  def Volume(self, value: float):
+  def Volume(self, value: VolumeAsDecimal):
     if not self.CanControl:
       logger.debug("Setting %s.Volume not allowed", self.INTERFACE)
       return
     logger.debug("Setting %s.Volume to %s", self.INTERFACE, value)
+
     if value is None:
       return
-    if value < 0:
-      value = 0
-    elif value > 1:
-      value = 1
+
+    if value < MUTE_VOL:
+      value = MUTE_VOL
+    elif value > MAX_VOL:
+      value = MAX_VOL
+
     self.adapter.set_volume(value)
-    if value > 0:
+
+    if value > MUTE_VOL:
       self.adapter.set_mute(False)
 
   @property
