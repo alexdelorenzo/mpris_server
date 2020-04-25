@@ -5,7 +5,7 @@ Whereas [existing MPRIS libraries for Python](https://github.com/hugosenari/mpri
 
 `mpris_server` is a fork of [Mopidy-MPRIS](https://github.com/mopidy/mopidy-mpris) that provides a general library for any media player to add MPRIS support.
 
-Checkout [chromecast_mpris](https://github.com/alexdelorenzo/chromecast_mpris) for an app that uses this library.
+Checkout [📺chromecast_mpris](https://github.com/alexdelorenzo/chromecast_mpris) for an app that uses this library.
 
 ## Features
 Implements the following from the [MPRIS specification](https://specifications.freedesktop.org/mpris-spec/2.2/):
