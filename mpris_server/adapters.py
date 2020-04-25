@@ -98,7 +98,7 @@ class PlayerAdapter(ABC):
     """
     Implement this function to supply your own MPRIS Metadata.
 
-    If this function is implemented, there is no need to implement get_current_track().
+    If this function is implemented, metadata won't be built from get_current_track().
 
     See: https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
     :return:
@@ -107,12 +107,11 @@ class PlayerAdapter(ABC):
 
   def get_current_track(self) -> Track:
     """
-    This will be ignored by the Player interface if metadata() is implemented.
-
     This function is an artifact of forking the base MPRIS library to a generic interface.
     The base library expected Track-like objects to build metadata. If you'd like to supply
     your own, and not implement this more complicated interface, then override metadata().
 
+    If metadata() is implemented, this function won't be used to build MPRIS metadata.
     :return:
     """
     pass
