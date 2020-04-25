@@ -34,7 +34,9 @@ After subclassing, pass an instance to an instance of `server.Server`.
 ### Implement `adapters.EventAdapter`
 Subclass `adapters.EventAdapter`. This interface has a good default implementation, only override its methods if your app calls for it.
 
-Integrate the adapter with your application to listen for changes in your media player that MPRIS needs to be updated about.
+If you choose to reimplement its methods, call `emit_changes()` with a `List[str]` of [properties](https://specifications.freedesktop.org/mpris-spec/2.2/Player_Interface.html) that changed.
+
+Integrate the adapter with your application to listen for changes in your media player that DBUS needs to know about. For example, if the user pauses the media player, be sure to call `EventAdapter.on_playpause()` in the app. DBUS won't know about the change otherwise.
 
 ### Create the Server and Publish!
 Create an instance of `server.Server`, pass it an instance of your `MprisAdapter`, and call `publish()`.
@@ -46,18 +48,20 @@ mpris.publish()
 
 ### Example
 ```python3
-from mpris_server.adapters import MprisAdapter, EventAdapter
+from mpris_server.adapters import MprisAdapter, EventAdapter, Metadata
 from mpris_server.server import Server
 
 from my_app import app  # custom app you want to integrate
 
 
 class MyMediaAdapter(MprisAdapter):
-    # NOTE: don't do this! make sure to override methods in the MprisAdapter interface
-    pass
+    # Make sure to implement all methods on MprisAdapter, not just get_metadata()
+    def get_metadata(self) -> Metadata:
+        ...
+    # and so on
 
 
-class ChromecastEventAdapter(EventAdapter):
+class MyAppEventHandler(EventAdapter):
     # This is okay! EventAdapter has good default implementations for its methods.
     # Override the default implementation if it suits your app.
     pass
@@ -67,8 +71,8 @@ my_adapter = MyMediaAdapter()
 mpris = Server('MyMedia', adapter=my_adapter)
 mpris.publish()  # this announces your media player on DBUS
 
-event_listener = ChromecastEventAdapter()
-app.register_event_listener(event_listener)
+event_handler = MyAppEventHandler()
+app.register_event_handler(event_handler)
 ```
 
 ## License
