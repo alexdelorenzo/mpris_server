@@ -46,15 +46,17 @@ mpris.publish()
 
 ### Example
 ```python3
-from mpris_server.adapters import MprisAdapter, EventAdapter
+from mpris_server.adapters import MprisAdapter, EventAdapter, Metadata
 from mpris_server.server import Server
 
 from my_app import app  # custom app you want to integrate
 
 
 class MyMediaAdapter(MprisAdapter):
-    # NOTE: don't do this! make sure to override methods in the MprisAdapter interface
-    pass
+    # Make sure to implement all methods on MprisAdapter, not just get_metadata()
+    def get_metadata(self) -> Metadata:
+        ...
+    # and so on
 
 
 class MyAppEventHandler(EventAdapter):
