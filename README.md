@@ -3,7 +3,7 @@
 
 Whereas [existing MPRIS libraries for Python](https://github.com/hugosenari/mpris2) implement clients for MPRIS, `mpris_server` serves more as a "server" to supply MPRIS with information from, and control of, your media player. If you're looking to interact with applications that have MPRIS integration, use a client library. If you want to give your media player an MPRIS interface, use this library.
 
-`mpris_server` is a fork of [Mopidy-MPRIS](https://github.com/mopidy/mopidy-mpris) that provides a general library for any media player to add MPRIS support.
+`mpris_server` is a fork of [Mopidy-MPRIS](https://github.com/mopidy/mopidy-mpris), and provides a general purpose library to create MPRIS media player services.
 
 Checkout [📺chromecast_mpris](https://github.com/alexdelorenzo/chromecast_mpris) for an app that uses this library.
 
