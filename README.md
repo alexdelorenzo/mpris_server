@@ -38,7 +38,7 @@ If you choose to reimplement its methods, call `emit_changes()` with a `List[str
 
 Integrate the adapter with your application to listen for changes in your media player that DBus needs to know about. For example, if the user pauses the media player, be sure to call `EventAdapter.on_playpause()` in the app. DBus won't know about the change otherwise.
 
-### Create the Server and Publish!
+### Create the Server and Publish
 Create an instance of `server.Server`, pass it an instance of your `MprisAdapter`, and call `publish()` to publish your media player via DBus.
 
 ```python3
@@ -47,6 +47,9 @@ mpris.publish()
 ```
 
 Call `loop()` to enter the DBus event loop. 
+```python3
+mpris.loop() 
+```
 
 ### Example
 ```python3
