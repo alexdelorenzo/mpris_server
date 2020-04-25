@@ -13,7 +13,7 @@ Implements the following from the [MPRIS specification](https://specifications.f
   * [x] MediaPlayer2.Player
   * [ ] MediaPlayer2.Playlist
   
-The library also provides an event-listener that emits `org.freedesktop.DBus.Properties.PropertiesChanged` in response to changes in your media player. This allows for real-time updates from your media player to MPRIS.
+The library also provides an event-listener that emits `org.freedesktop.DBus.Properties.PropertiesChanged` in response to changes in your media player. This allows for real-time updates from your media player to DBus.
 
 ## Installation
 Run `pip3 install -r requirements.txt`, followed by `python3 setup.py install`. 
