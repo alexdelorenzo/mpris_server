@@ -68,7 +68,7 @@ mpris = Server('MyMedia', adapter=my_adapter)
 mpris.publish()  # this announces your media player on DBUS
 
 event_listener = ChromecastEventAdapter()
-my_app.register_event_listener(event_listener)
+app.register_event_listener(event_listener)
 ```
 
 ## License
