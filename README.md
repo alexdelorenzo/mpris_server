@@ -1,7 +1,7 @@
-# ▶️ Add MPRIS Integration to Your App
+# ▶️ Add MPRIS Integration to Media Players
 `mpris_server` provides an adapter and event-listener for your app to integrate MPRIS media control support into your media player.
 
-Whereas [existing MPRIS libraries for Python](https://github.com/hugosenari/mpris2) implement clients for MPRIS, `mpris_server` serves more as a "server" to supply MPRIS with information from and control of your media player. If you're looking to interact with applications that have MPRIS integration, use a client library. If you want to give your media player an MPRIS interface, use this library.
+Whereas [existing MPRIS libraries for Python](https://github.com/hugosenari/mpris2) implement clients for MPRIS, `mpris_server` serves more as a "server" to supply MPRIS with information from, and control of, your media player. If you're looking to interact with applications that have MPRIS integration, use a client library. If you want to give your media player an MPRIS interface, use this library.
 
 `mpris_server` is a fork of [Mopidy-MPRIS](https://github.com/mopidy/mopidy-mpris) that provides a general library for any media player to add MPRIS support.
 
@@ -68,7 +68,7 @@ mpris = Server('MyMedia', adapter=my_adapter)
 mpris.publish()  # this announces your media player on DBUS
 
 event_listener = ChromecastEventAdapter()
-my_app.register_event_listener(event_listener)
+app.register_event_listener(event_listener)
 ```
 
 ## License
