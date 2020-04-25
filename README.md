@@ -72,9 +72,14 @@ class MyMediaAdapter(MprisAdapter):
 
 class MyAppEventHandler(EventAdapter):
     # EventAdapter has good default implementations for its methods.
-    # Only override the default implementation if it suits your app.
-    pass
-
+    # Only override the default methods if it suits your app.
+    
+    def on_app_event(self, event: str):
+        # trigger DBus updates based on events in your app
+        if event == 'pause':
+            self.on_playpause()
+        ...
+    # and so on
 
 # create mpris adapter and initialize mpris server
 my_adapter = MyMediaAdapter()
