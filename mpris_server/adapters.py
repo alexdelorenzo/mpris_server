@@ -67,8 +67,7 @@ class EventAdapter(ABC):
     self.player.Seeked(position)
 
   def on_options(self):
-    self.emit_changes(ON_OPTION_PROPS
-                      )
+    self.emit_changes(ON_OPTION_PROPS)
 
 
 class RootAdapter(ABC):
