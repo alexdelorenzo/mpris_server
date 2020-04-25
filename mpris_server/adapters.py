@@ -108,8 +108,7 @@ class PlayerAdapter(ABC):
   def get_current_track(self) -> Track:
     """
     This function is an artifact of forking the base MPRIS library to a generic interface.
-    The base library expected Track-like objects to build metadata. If you'd like to supply
-    your own, and not implement this more complicated interface, then override metadata().
+    The base library expected Track-like objects to build metadata.
 
     If metadata() is implemented, this function won't be used to build MPRIS metadata.
     :return:
