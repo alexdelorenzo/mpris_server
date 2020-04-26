@@ -7,7 +7,7 @@ from .player import Player
 from .root import Root
 from .base import NAME, BUS_TYPE
 from .adapters import MprisAdapter
-
+from dbus.mainloop.glib import DBusGMainLoop
 
 logger = logging.getLogger(__name__)
 logger.debug("test")
@@ -58,6 +58,7 @@ class Server:
     if not self._publication_token:
       self.publish()
 
+    DBusGMainLoop(set_as_default=True)
     self._loop = GLib.MainLoop()
 
     try:
