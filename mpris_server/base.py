@@ -36,7 +36,7 @@ Metadata = Dict[str, DbusTypes]
 
 #  See https://docs.python.org/3/library/enum.html#using-automatic-values
 class AutoName(Enum):
-  def _generate_next_value_(name: str, *args):
+  def _generate_next_value_(name: str, *args, **kwargs) -> str:
     return name
 
 
