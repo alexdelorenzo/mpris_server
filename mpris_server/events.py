@@ -6,7 +6,7 @@ from mpris_server.base import dbus_emit_changes, ON_ENDED_PROPS, ON_VOLUME_PROPS
   Metadata
 from mpris_server.interface import MprisInterface
 from mpris_server.player import Player
-from mpris_server.playlist import Playlists
+from mpris_server.playlists import Playlists
 from mpris_server.root import Root
 from mpris_server.tracklist import TrackList
 

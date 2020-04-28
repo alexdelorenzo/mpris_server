@@ -20,7 +20,7 @@ class Album(NamedTuple):
 
 
 class Track(NamedTuple):
-  track_id: str = '/default/1'
+  track_id: DbusObj = '/default/1'
   name: str = "Default Track"
   track_no: int = None
   length: TimeInMicroseconds = 0
