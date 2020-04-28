@@ -36,10 +36,10 @@ Subclass `adapters.MprisAdapter` and implement each method.
 
 After subclassing, pass an instance to an instance of `server.Server`.
 
-### Implement `adapters.EventAdapter`
+### Implement `events.EventAdapter`
 Subclass `adapters.EventAdapter`. This interface has a good default implementation, only override its methods if your app calls for it.
 
-If you choose to reimplement its methods, call `emit_changes()` with a `List[str]` of [properties](https://specifications.freedesktop.org/mpris-spec/2.2/Player_Interface.html) that changed.
+If you choose to re-implement its methods, call `emit_changes()` with the corresponding interface and a `List[str]` of [properties](https://specifications.freedesktop.org/mpris-spec/2.2/Player_Interface.html) that changed.
 
 Integrate the adapter with your application to emitmpris = Server('MyMedia', adapter=my_adapter) changes in your media player that DBus needs to know about. For example, if the user pauses the media player, be sure to call `EventAdapter.on_playpause()` in the app. DBus won't know about the change otherwise.
 
@@ -59,6 +59,7 @@ mpris.loop()
 ### Example
 ```python3
 from mpris_server.adapters import MprisAdapter, EventAdapter, Track
+from mpris_server.events import EventAdapter
 from mpris_server.server import Server
 
 from my_app import app  # custom app you want to integrate
