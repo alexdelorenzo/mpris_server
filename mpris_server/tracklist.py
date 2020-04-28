@@ -72,8 +72,8 @@ class TrackList(MprisInterface):
 
     @property
     def Tracks(self) -> List[DbusObj]:
-        self.adapter.get_tracks()
+        return self.adapter.get_tracks()
 
     @property
     def CanEditTracks(self) -> bool:
-        self.adapter.can_edit_track()
+        return self.adapter.can_edit_track()
