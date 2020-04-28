@@ -37,7 +37,7 @@ class TrackList(MprisInterface):
           <arg name="AfterTrack" type="o"/>
         </signal>
         <signal name="TrackRemoved">
-          <arg name="TrackId" type="ao/>
+          <arg name="TrackId" type="ao"/>
         </signal>
         <signal name="TrackMetadataChanged">
           <arg name="TrackId" type="o"/>
@@ -49,7 +49,7 @@ class TrackList(MprisInterface):
     </node>
     """
 
-    INTERFACE = "org.mpris.MediaPlayer2.Playlists"
+    INTERFACE = "org.mpris.MediaPlayer2.TrackList"
     TrackListReplaced = signal()
     TrackAdded = signal()
     TrackRemoved = signal()
@@ -77,3 +77,5 @@ class TrackList(MprisInterface):
     @property
     def CanEditTracks(self) -> bool:
         self.adapter.can_edit_track()
+
+"""       """

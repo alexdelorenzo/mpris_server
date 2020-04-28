@@ -1,16 +1,18 @@
 import logging
 
+from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
 import pydbus
 
 from .player import Player
+from .playlists import Playlists
 from .root import Root
 from .base import NAME, BUS_TYPE
 from .adapters import MprisAdapter
-from dbus.mainloop.glib import DBusGMainLoop
+from .tracklist import TrackList
+
 
 logger = logging.getLogger(__name__)
-logger.debug("test")
 
 
 class Server:
@@ -20,7 +22,8 @@ class Server:
     self.name = name
     self.root = Root(name, adapter)
     self.player = Player(name, adapter)
-    # self.playlists = Playlists(name, adapter)
+    self.playlists = Playlists(name, adapter)
+    self.tracklist = TrackList(name, adapter)
 
     self._loop = None
     self._publication_token = None
@@ -46,7 +49,8 @@ class Server:
       f"org.mpris.MediaPlayer2.{self.name}",
       ("/org/mpris/MediaPlayer2", self.root),
       ("/org/mpris/MediaPlayer2", self.player),
-      # ("/org/mpris/MediaPlayer2", self.playlists),
+      ("/org/mpris/MediaPlayer2", self.playlists),
+      ("/org/mpris/MediaPlayer2", self.tracklist),
     )
 
   def unpublish(self):
