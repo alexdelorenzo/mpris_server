@@ -1,12 +1,10 @@
-from typing import Union, List, Tuple
-import base64
 import logging
+from typing import List
 
 from pydbus.generic import signal
 
 from .base import Metadata, DbusObj
 from .interface import MprisInterface
-
 
 logger = logging.getLogger(__name__)
 
