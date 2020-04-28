@@ -1,5 +1,5 @@
 # ▶️ Add MPRIS Integration to Media Players
-`mpris_server` provides an adapter and event handler for your app to integrate MPRIS media control support into your media player.
+`mpris_server` provides an adapters to integrate MPRIS support into your media player or device.
 
 Whereas [existing MPRIS libraries for Python](https://github.com/hugosenari/mpris2) implement clients for MPRIS, `mpris_server` exists more as a "server" to supply MPRIS with information from, and control of, your media player. If you want to give your media player an MPRIS interface, `mpris_server` is right for you.
 
