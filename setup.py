@@ -5,7 +5,7 @@ requirements = Path('requirements.txt').read_text().split('\n')
 readme = Path('README.md').read_text()
 
 setup(name="mpris_server",
-      version="0.0.4",
+      version="0.1.0",
       description="Publish a MediaPlayer2 MPRIS device to D-BUS.",
       long_description=readme,
       long_description_content_type="text/markdown",
@@ -15,5 +15,5 @@ setup(name="mpris_server",
       packages=['mpris_server'],
       zip_safe=True,
       install_requires=requirements,
-      python_requires='~=3.6',
+      python_requires='>=3.6',
 )
