@@ -2,11 +2,11 @@ from typing import List, NamedTuple, Optional, Tuple
 from abc import ABC
 from enum import Enum
 
-from .base import URI, MIME_TYPES, PlayState, dbus_emit_changes, ON_ENDED_PROPS, ON_VOLUME_PROPS, \
-  ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, ON_TITLE_PROPS, ON_OPTION_PROPS, DEFAULT_RATE, TimeInMicroseconds, \
-  VolumeAsDecimal, RateAsDecimal, Metadata
-from .player import Player
-from .root import Root
+from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, TimeInMicroseconds, \
+  VolumeAsDecimal, RateAsDecimal, Metadata, DbusObj, PlaylistEntry, PlaylistValidity, DEFAULT_PLAYLIST_COUNT, \
+  DEFAULT_ORDERINGS
+
+from .events import EventAdapter
 
 
 class Artist(NamedTuple):
@@ -30,44 +30,6 @@ class Track(NamedTuple):
   art_url: str = None
   disc_no: int = None
   type: Optional[Enum] = None
-
-
-class EventAdapter(ABC):
-  """
-  Notify DBUS of state-change events in the media player.
-
-  Implement this class and integrate it in your application to emit
-  DBUS signals when there are state changes in the media player.
-  """
-
-  def __init__(self, player: Player, root: Root):
-    self.player = player
-    self.root = root
-
-  def emit_changes(self, changes: List[str]):
-    # TODO: emit Root changes, too
-    dbus_emit_changes(self.player, changes)
-
-  def on_ended(self):
-    self.emit_changes(ON_ENDED_PROPS)
-
-  def on_volume(self):
-    self.emit_changes(ON_VOLUME_PROPS)
-
-  def on_playback(self):
-    self.emit_changes(ON_PLAYBACK_PROPS)
-
-  def on_playpause(self):
-    self.emit_changes(ON_PLAYPAUSE_PROPS)
-
-  def on_title(self):
-    self.emit_changes(ON_TITLE_PROPS)
-
-  def on_seek(self, position: TimeInMicroseconds):
-    self.player.Seeked(position)
-
-  def on_options(self):
-    self.emit_changes(ON_OPTION_PROPS)
 
 
 class RootAdapter(ABC):
@@ -212,12 +174,44 @@ class PlayerAdapter(ABC):
     pass
 
 
-# TODO: implement PlaylistAdapter interface
 class PlaylistAdapter(ABC):
-  pass
+  def activate_playlist(self, id: DbusObj):
+    pass
+
+  def get_playlists(self, index: int, max_count: int, order: str, reverse: bool) -> List[PlaylistEntry]:
+    pass
+
+  def get_playlist_count(self) -> int:
+    return DEFAULT_PLAYLIST_COUNT
+
+  def get_orderings(self) -> List[str]:
+    return DEFAULT_ORDERINGS
+
+  def get_active_playlist(self) -> Tuple[PlaylistValidity, PlaylistEntry]:
+    pass
 
 
-class MprisAdapter(RootAdapter, PlayerAdapter, PlaylistAdapter):
+class TrackListAdapter(ABC):
+  def get_tracks_metadata(self, track_ids: List[DbusObj]) -> Metadata:
+    pass
+
+  def add_track(self, uri: str, after_track: DbusObj, set_as_current: bool):
+    pass
+
+  def remove_track(self, track_id: DbusObj):
+    pass
+
+  def go_to(self, track_id: DbusObj):
+    pass
+
+  def get_tracks(self) -> List[DbusObj]:
+    pass
+
+  def can_edit_track(self) -> bool:
+    pass
+
+
+class MprisAdapter(RootAdapter, PlayerAdapter, PlaylistAdapter, TrackListAdapter):
   """
   MRPRIS interface for your application.
 
