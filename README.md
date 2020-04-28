@@ -1,5 +1,5 @@
 # ▶️ Add MPRIS Integration to Media Players
-`mpris_server` provides an adapter and event-listener for your app to integrate MPRIS media control support into your media player.
+`mpris_server` provides an adapter and event handler for your app to integrate MPRIS media control support into your media player.
 
 Whereas [existing MPRIS libraries for Python](https://github.com/hugosenari/mpris2) implement clients for MPRIS, `mpris_server` exists more as a "server" to supply MPRIS with information from, and control of, your media player. If you want to give your media player an MPRIS interface, `mpris_server` is right for you.
 
@@ -14,7 +14,7 @@ Implements the following from the [MPRIS specification](https://specifications.f
   * [ ] MediaPlayer2.Playlist
   * [ ] MediaPlayer2.TrackList
   
-The library also provides an event-listener that emits `org.freedesktop.DBus.Properties.PropertiesChanged` in response to changes in your media player. This allows for real-time updates from your media player to DBus.
+The library also provides an event handler that emits `org.freedesktop.DBus.Properties.PropertiesChanged` in response to changes in your media player. This allows for real-time updates from your media player to DBus.
 
 ## Installation
 ### Requirements
@@ -41,7 +41,7 @@ Subclass `adapters.EventAdapter`. This interface has a good default implementati
 
 If you choose to reimplement its methods, call `emit_changes()` with a `List[str]` of [properties](https://specifications.freedesktop.org/mpris-spec/2.2/Player_Interface.html) that changed.
 
-Integrate the adapter with your application to listen for changes in your media player that DBus needs to know about. For example, if the user pauses the media player, be sure to call `EventAdapter.on_playpause()` in the app. DBus won't know about the change otherwise.
+Integrate the adapter with your application to emitmpris = Server('MyMedia', adapter=my_adapter) changes in your media player that DBus needs to know about. For example, if the user pauses the media player, be sure to call `EventAdapter.on_playpause()` in the app. DBus won't know about the change otherwise.
 
 ### Create the Server and Publish
 Create an instance of `server.Server`, pass it an instance of your `MprisAdapter`, and call `publish()` to publish your media player via DBus.
