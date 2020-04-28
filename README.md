@@ -51,7 +51,7 @@ mpris = Server('MyMedia', adapter=my_adapter)
 mpris.publish() 
 ```
 
-Call `loop()` to enter the DBus event loop, or enter the Dbus event loop elsewhere in your code. 
+Call `loop()` to enter the DBus event loop, or enter the DBus event loop elsewhere in your code. 
 ```python3
 mpris.loop() 
 ```
