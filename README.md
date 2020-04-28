@@ -11,8 +11,8 @@ Checkout [📺chromecast_mpris](https://github.com/alexdelorenzo/chromecast_mpri
 Implements the following from the [MPRIS specification](https://specifications.freedesktop.org/mpris-spec/2.2/):
   * [x] MediaPlayer2
   * [x] MediaPlayer2.Player
-  * [ ] MediaPlayer2.Playlist
-  * [ ] MediaPlayer2.TrackList
+  * [x] MediaPlayer2.Playlist
+  * [x] MediaPlayer2.TrackList
   
 The library also provides an event handler that emits `org.freedesktop.DBus.Properties.PropertiesChanged` in response to changes in your media player. This allows for real-time updates from your media player to DBus.
 
