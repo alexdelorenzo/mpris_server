@@ -56,9 +56,9 @@ Call `loop()` to enter the DBus event loop, or enter the Dbus event loop elsewhe
 mpris.loop() 
 ```
 
+Or: 
 ```python3
 from gi.repository import GLib
-
 
 loop = GLib.MainLoop()
 loop.run()
