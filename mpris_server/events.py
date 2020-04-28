@@ -13,8 +13,8 @@ from mpris_server.tracklist import TrackList
 
 class BaseEventAdapter(ABC):
   def __init__(self,
-               root: Root,
                player: Player,
+               root: Root,
                playlist: Playlists = None,
                tracklist: TrackList = None):
     self.root = root
