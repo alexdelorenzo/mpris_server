@@ -50,7 +50,7 @@ class Server:
       ("/org/mpris/MediaPlayer2", self.root),
       ("/org/mpris/MediaPlayer2", self.player),
       ("/org/mpris/MediaPlayer2", self.playlists),
-      ("/org/mpris/MediaPlayer2", self.tracklist),
+      ("/org/mpris/MediaPlayer2", self.tracklist)
     )
 
   def unpublish(self):

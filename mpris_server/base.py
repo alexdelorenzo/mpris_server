@@ -1,11 +1,13 @@
 from enum import Enum, auto
 from typing import Iterable, Union, Dict, Tuple
 
+
 INTERFACE = "org.mpris.MediaPlayer2"
 NAME = "mprisServer"
 MIME_TYPES = ["audio/mpeg", "application/ogg", "video/mpeg"]
 BUS_TYPE = "session"
 URI = ["file"]
+DEFAULT_DESKTOP = ''
 
 # typically, these are the props that dbus needs to be notified about
 # upon specific state-change events.

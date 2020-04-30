@@ -162,9 +162,6 @@ class Player(MprisInterface):
   def OpenUri(self, uri: str):
     logger.debug("%s.OpenUri called", self.INTERFACE)
     if not self.CanControl:
-      # NOTE The spec does not explicitly require this check, but
-      # guarding the other methods doesn't help much if OpenUri is open
-      # for use.
       logger.debug("%s.OpenUri not allowed", self.INTERFACE)
       return
     # NOTE Check if URI has MIME type known to the backend, if MIME support
@@ -216,8 +213,6 @@ class Player(MprisInterface):
   @Rate.setter
   def Rate(self, value: RateAsDecimal):
     if not self.CanControl:
-      # NOTE The spec does not explicitly require this check, but it was
-      # added to be consistent with all the other property setters.
       logger.debug("Setting %s.Rate not allowed", self.INTERFACE)
       return
 

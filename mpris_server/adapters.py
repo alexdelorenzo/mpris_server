@@ -4,7 +4,7 @@ from enum import Enum
 
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, TimeInMicroseconds, \
   VolumeAsDecimal, RateAsDecimal, Metadata, DbusObj, PlaylistEntry, PlaylistValidity, DEFAULT_PLAYLIST_COUNT, \
-  DEFAULT_ORDERINGS
+  DEFAULT_ORDERINGS, DEFAULT_DESKTOP
 
 from .events import EventAdapter
 
@@ -52,7 +52,7 @@ class RootAdapter(ABC):
     pass
 
   def get_desktop_entry(self) -> str:
-    return ''
+    return DEFAULT_DESKTOP
 
 
 class PlayerAdapter(ABC):
@@ -211,7 +211,7 @@ class TrackListAdapter(ABC):
     pass
 
 
-class MprisAdapter(RootAdapter, PlayerAdapter, PlaylistAdapter, TrackListAdapter):
+class MprisAdapter(RootAdapter, PlayerAdapter, PlaylistAdapter, TrackListAdapter, ABC):
   """
   MRPRIS interface for your application.
 
