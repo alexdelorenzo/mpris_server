@@ -33,6 +33,18 @@ class Track(NamedTuple):
 
 
 class RootAdapter(ABC):
+  def can_quit(self) -> bool:
+    pass
+
+  def can_raise(self) -> bool:
+    pass
+
+  def can_fullscreent(self) -> bool:
+    pass
+
+  def has_tracklist(self) -> bool:
+    pass
+
   def get_uri_schemes(self) -> List[str]:
     return URI
 

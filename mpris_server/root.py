@@ -27,12 +27,6 @@ class Root(MprisInterface):
     """
 
     INTERFACE = _INTERFACE
-    Identity = NAME
-
-    CanSetFullscreen = False
-    CanRaise = False
-    HasTrackList = False
-    CanQuit = False
 
     def Raise(self):
         logger.debug("%s.Raise called", self.INTERFACE)
@@ -66,3 +60,23 @@ class Root(MprisInterface):
     def SupportedMimeTypes(self):
         self.log_trace("Getting %s.SupportedMimeTypes", self.INTERFACE)
         return self.adapter.get_mime_types()
+
+    @property
+    def Identity(self) -> str:
+        return self.name
+
+    @property
+    def CanQuit(self) -> bool:
+        return self.adapter.can_quit()
+
+    @property
+    def CanRaise(self) -> bool:
+        return self.adapter.can_raise()
+
+    @property
+    def CanSetFullscreen(self) -> bool:
+        return self.adapter.can_fullscreen()
+
+    @property
+    def HasTrackList(self) -> bool:
+        return self.adapter.has_tracklist()
