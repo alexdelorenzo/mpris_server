@@ -39,7 +39,7 @@ class RootAdapter(ABC):
   def can_raise(self) -> bool:
     pass
 
-  def can_fullscreent(self) -> bool:
+  def can_fullscreen(self) -> bool:
     pass
 
   def has_tracklist(self) -> bool:
