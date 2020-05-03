@@ -73,7 +73,7 @@ from mpris_server.server import Server
 from my_app import app  # custom app you want to integrate
 
 
-class MyMediaAdapter(MprisAdapter):
+class MyAppAdapter(MprisAdapter):
     # Make sure to implement all methods on MprisAdapter, not just get_current_track()
     def get_current_track(self) -> Track:
         ...
@@ -92,8 +92,8 @@ class MyAppEventHandler(EventAdapter):
     # and so on
 
 # create mpris adapter and initialize mpris server
-my_adapter = MyMediaAdapter()
-mpris = Server('MyMediaPlayer', adapter=my_adapter)
+my_adapter = MyAppAdapter()
+mpris = Server('MyApp', adapter=my_adapter)
 
 # initialize app integration with mpris
 event_handler = MyAppEventHandler()
