@@ -18,7 +18,7 @@ The library also provides an event handler that emits `org.freedesktop.DBus.Prop
 
 ## Installation
 ### Requirements
- - Linux
+ - Linux / *BSD / [macOS](https://github.com/zbentley/dbus-osx-examples)
  - DBus
  - Python >= 3.6
  - [PyGObject](https://pypi.org/project/PyGObject/)
