@@ -25,7 +25,7 @@ The library also provides an event handler that emits `org.freedesktop.DBus.Prop
  - `requirements.txt`
  
 #### Installing PyGObject
-On Debian-derived distributions like Ubuntu, install `python3-gi` with `apt`. On Arch, you'll want to install `python-gobject`.
+On Debian-derived distributions like Ubuntu, install `python3-gi` with `apt`. On Arch, you'll want to install `python-gobject`. On macOS, install `[pygobject3](https://formulae.brew.sh/formula/pygobject3)` via `brew`.
 
 Use `pip` to install `PyGObject>=3.34.0` if there are no installation candidates available in your vendor's package repositories.
 
