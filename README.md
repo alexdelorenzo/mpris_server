@@ -47,7 +47,7 @@ Integrate the adapter with your application to emitmpris = Server('MyMedia', ada
 Create an instance of `server.Server`, pass it an instance of your `MprisAdapter`, and call `publish()` to publish your media player via DBus.
 
 ```python3
-mpris = Server('MyMedia', adapter=my_adapter)
+mpris = Server('MyMediaPlayer', adapter=my_adapter)
 mpris.publish() 
 ```
 
@@ -66,7 +66,7 @@ loop.run()
 
 ### Example
 ```python3
-from mpris_server.adapters import MprisAdapter, EventAdapter, Track
+from mpris_server.adapters import MprisAdapter, Track
 from mpris_server.events import EventAdapter
 from mpris_server.server import Server
 
@@ -93,7 +93,7 @@ class MyAppEventHandler(EventAdapter):
 
 # create mpris adapter and initialize mpris server
 my_adapter = MyMediaAdapter()
-mpris = Server('MyMedia', adapter=my_adapter)
+mpris = Server('MyMediaPlayer', adapter=my_adapter)
 
 # initialize app integration with mpris
 event_handler = MyAppEventHandler()
