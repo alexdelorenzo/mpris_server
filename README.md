@@ -46,7 +46,7 @@ Subclass `adapters.EventAdapter`. This interface has a good default implementati
 
 If you choose to re-implement its methods, call `emit_changes()` with the corresponding interface and a `List[str]` of [properties](https://specifications.freedesktop.org/mpris-spec/2.2/Player_Interface.html) that changed.
 
-Integrate the adapter with your application to emitmpris = Server('MyMedia', adapter=my_adapter) changes in your media player that DBus needs to know about. For example, if the user pauses the media player, be sure to call `EventAdapter.on_playpause()` in the app. DBus won't know about the change otherwise.
+Integrate the adapter with your application to emit changes in your media player that DBus needs to know about. For example, if the user pauses the media player, be sure to call `EventAdapter.on_playpause()` in the app. DBus won't know about the change otherwise.
 
 ### Create the Server and Publish
 Create an instance of `server.Server`, pass it an instance of your `MprisAdapter`, and call `publish()` to publish your media player via DBus.
