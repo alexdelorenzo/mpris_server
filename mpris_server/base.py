@@ -1,6 +1,7 @@
 from enum import Enum, auto
+from random import choices
+from string import ascii_letters
 from typing import Iterable, Union, Dict, Tuple
-
 
 INTERFACE = "org.mpris.MediaPlayer2"
 NAME = "mprisServer"
@@ -34,6 +35,9 @@ BEGINNING = 0
 DEFAULT_PLAYLIST_COUNT = 1
 DEFAULT_ORDERINGS = ["Alphabetical", "User"]
 
+LETTERS = set(ascii_letters)
+DEFAULT_NAME_LEN = 10
+
 # type aliases
 TimeInMicroseconds = int
 VolumeAsDecimal = float
@@ -43,7 +47,6 @@ Metadata = Dict[str, DbusTypes]
 DbusObj = str
 PlaylistEntry = Tuple[str, str, str]
 PlaylistValidity = bool
-
 
 #  See https://docs.python.org/3/library/enum.html#using-automatic-values
 class AutoName(Enum):
@@ -64,4 +67,20 @@ def dbus_emit_changes(interface: 'MprisInterface',
 
   interface.PropertiesChanged(interface.INTERFACE, attr_vals, [])
 
+
+def random_name() -> str:
+  return ''.join(choices(LETTERS, k=DEFAULT_NAME_LEN))
+
+
+def get_dbus_name(name: str = None) -> str:
+  if not name:
+    return random_name()
+
+  new_name = name.replace(' ', '_')
+  new_name = ''.join(char for char in new_name if char in LETTERS)
+
+  if new_name:
+    return new_name
+
+  return random_name()
 

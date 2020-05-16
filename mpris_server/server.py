@@ -7,10 +7,9 @@ import pydbus
 from .player import Player
 from .playlists import Playlists
 from .root import Root
-from .base import NAME, BUS_TYPE
+from .base import NAME, BUS_TYPE, get_dbus_name
 from .adapters import MprisAdapter
 from .tracklist import TrackList
-
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +18,7 @@ class Server:
   def __init__(self,
                name: str = NAME,
                adapter: MprisAdapter = None):
-    self.name = name
+    self.name = get_dbus_name(name)
     self.root = Root(name, adapter)
     self.player = Player(name, adapter)
     self.playlists = Playlists(name, adapter)
