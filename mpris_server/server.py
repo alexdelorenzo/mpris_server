@@ -18,11 +18,13 @@ class Server:
   def __init__(self,
                name: str = NAME,
                adapter: MprisAdapter = None):
-    self.name = get_dbus_name(name)
-    self.root = Root(name, adapter)
-    self.player = Player(name, adapter)
-    self.playlists = Playlists(name, adapter)
-    self.tracklist = TrackList(name, adapter)
+    self.name = name
+    self.adapter = adapter
+    self.dbus_name = get_dbus_name(self.name)
+    self.root = Root(name, self.adapter)
+    self.player = Player(name, self.adapter)
+    self.playlists = Playlists(name, self.adapter)
+    self.tracklist = TrackList(name, self.adapter)
 
     self._loop = None
     self._publication_token = None
@@ -45,7 +47,7 @@ class Server:
     logger.info("MPRIS server connected to D-Bus %s bus", bus_type)
 
     self._publication_token = bus.publish(
-      f"org.mpris.MediaPlayer2.{self.name}",
+      f"org.mpris.MediaPlayer2.{self.dbus_name}",
       ("/org/mpris/MediaPlayer2", self.root),
       ("/org/mpris/MediaPlayer2", self.player),
       ("/org/mpris/MediaPlayer2", self.playlists),

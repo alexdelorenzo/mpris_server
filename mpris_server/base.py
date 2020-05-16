@@ -48,6 +48,7 @@ DbusObj = str
 PlaylistEntry = Tuple[str, str, str]
 PlaylistValidity = bool
 
+
 #  See https://docs.python.org/3/library/enum.html#using-automatic-values
 class AutoName(Enum):
   def _generate_next_value_(name: str, *args, **kwargs) -> str:
@@ -83,4 +84,3 @@ def get_dbus_name(name: str = None) -> str:
     return new_name
 
   return random_name()
-
