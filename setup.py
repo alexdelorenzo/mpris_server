@@ -5,7 +5,7 @@ requirements = Path('requirements.txt').read_text().split('\n')
 readme = Path('README.md').read_text()
 
 setup(name="mpris_server",
-      version="0.1.4",
+      version="0.1.5",
       description="Publish a MediaPlayer2 MPRIS device to D-BUS.",
       long_description=readme,
       long_description_content_type="text/markdown",
