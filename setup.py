@@ -1,7 +1,10 @@
 from setuptools import setup
 from pathlib import Path
 
-requirements = Path('requirements.txt').read_text().split('\n')
+requirements = \
+  Path('requirements.txt') \
+    .read_text() \
+    .split('\n')
 readme = Path('README.md').read_text()
 
 setup(name="mpris_server",

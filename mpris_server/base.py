@@ -1,7 +1,8 @@
 from enum import Enum, auto
 from random import choices
-from string import ascii_letters
+from string import ascii_letters, digits
 from typing import Iterable, Union, Dict, Tuple
+
 
 INTERFACE = "org.mpris.MediaPlayer2"
 NAME = "mprisServer"
@@ -35,8 +36,9 @@ BEGINNING = 0
 DEFAULT_PLAYLIST_COUNT = 1
 DEFAULT_ORDERINGS = ["Alphabetical", "User"]
 
-LETTERS = set(ascii_letters)
+VALID_CHARS = set(digits + ascii_letters + '_')
 DEFAULT_NAME_LEN = 10
+
 
 # type aliases
 TimeInMicroseconds = int
@@ -70,7 +72,7 @@ def dbus_emit_changes(interface: 'MprisInterface',
 
 
 def random_name() -> str:
-  return ''.join(choices(LETTERS, k=DEFAULT_NAME_LEN))
+  return ''.join(choices(VALID_CHARS, k=DEFAULT_NAME_LEN))
 
 
 def get_dbus_name(name: str = None) -> str:
@@ -78,7 +80,8 @@ def get_dbus_name(name: str = None) -> str:
     return random_name()
 
   new_name = name.replace(' ', '_')
-  new_name = ''.join(char for char in new_name if char in LETTERS)
+  new_name = ''.join(char for char in new_name
+                     if char in VALID_CHARS)
 
   if new_name:
     return new_name
