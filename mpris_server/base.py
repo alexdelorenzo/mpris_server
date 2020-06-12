@@ -37,7 +37,8 @@ DEFAULT_PLAYLIST_COUNT = 1
 DEFAULT_ORDERINGS = ["Alphabetical", "User"]
 
 VALID_CHARS = set(digits + ascii_letters + '_')
-DEFAULT_NAME_LEN = 10
+NAME_PREFIX = "Mpris_Server_"
+RAND_CHARS = 5
 
 DEFAULT_METADATA = {}
 
@@ -94,6 +95,5 @@ def dbus_emit_changes(interface: 'MprisInterface',
                  for attr in changes}
 
     interface.PropertiesChanged(interface.INTERFACE, attr_vals, [])
-
 
 

@@ -4,7 +4,8 @@ from random import choices
 
 from gi.repository.GLib import Variant
 
-from .base import VALID_CHARS, DEFAULT_NAME_LEN, Metadata, DbusMetadata, DbusTypes
+from .base import VALID_CHARS, Metadata, DbusMetadata, DbusTypes, \
+    RAND_CHARS, NAME_PREFIX
 
 # Python and DBus compatibility
 
@@ -24,9 +25,12 @@ METADATA_TYPES = {
     "xesam:comment": "as",
 }
 
+START_WITH = "_"
+FIRST_CHAR = 0
+
 
 def random_name() -> str:
-    return ''.join(choices(VALID_CHARS, k=DEFAULT_NAME_LEN))
+    return NAME_PREFIX + ''.join(choices(VALID_CHARS, k=RAND_CHARS))
 
 
 def get_dbus_name(name: str = None) -> str:
@@ -37,10 +41,13 @@ def get_dbus_name(name: str = None) -> str:
     new_name = ''.join(char for char in new_name
                        if char in VALID_CHARS)
 
-    if new_name:
+    if new_name and new_name[FIRST_CHAR].isnumeric():
+        return START_WITH + new_name
+
+    elif new_name:
         return new_name
 
-    return random_name()
+    return get_dbus_name(random_name())
 
 
 def is_null_list(obj: object) -> bool:
