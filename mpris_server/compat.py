@@ -4,9 +4,9 @@ from random import choices
 
 from gi.repository.GLib import Variant
 
-from .base import VALID_CHARS, DEFAULT_NAME_LEN, Metadata, DbusMetadata
+from .base import VALID_CHARS, DEFAULT_NAME_LEN, Metadata, DbusMetadata, DbusTypes
 
-# Python and DBus metadata compatibility
+# Python and DBus compatibility
 
 logger = logging.getLogger(__name__)
 
@@ -44,13 +44,18 @@ def get_dbus_name(name: str = None) -> str:
 
 
 def is_null_list(obj: object) -> bool:
-    if isinstance(obj, (list, tuple, set)):
+    if isinstance(obj, list):
         return all(item is None for item in obj)
+
     return False
 
 
+def is_dbus_type(obj: object) -> bool:
+    return isinstance(obj, DbusTypes.__args__)
+
+
 def is_valid_metadata(obj: object) -> bool:
-    return obj is not None and not is_null_list(obj)
+    return is_dbus_type(obj) and not is_null_list(obj)
 
 
 def get_dbus_metadata(metadata: Metadata) -> DbusMetadata:

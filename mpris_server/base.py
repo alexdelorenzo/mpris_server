@@ -1,6 +1,6 @@
 from enum import Enum, auto
 from string import ascii_letters, digits
-from typing import Iterable, Union, Dict, Tuple, Optional, NamedTuple
+from typing import Iterable, Union, Dict, Tuple, Optional, NamedTuple, List
 
 from gi.repository.GLib import Variant
 
@@ -45,7 +45,7 @@ DEFAULT_METADATA = {}
 Microseconds = int
 VolumeDecimal = float
 RateDecimal = float
-DbusTypes = Union[str, float, int, bool]
+DbusTypes = Union[str, float, int, bool, list]
 Metadata = Dict[str, DbusTypes]
 DbusMetadata = Dict[str, Variant]
 DbusObj = str
