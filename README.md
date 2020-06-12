@@ -71,16 +71,17 @@ loop.run()
 
 ### Example
 ```python3
-from mpris_server.adapters import MprisAdapter, Track
+from mpris_server.adapters import MprisAdapter
 from mpris_server.events import EventAdapter
 from mpris_server.server import Server
+from mpris_server import Metadata
 
 from my_app import app  # custom app you want to integrate
 
 
 class MyAppAdapter(MprisAdapter):
-    # Make sure to implement all methods on MprisAdapter, not just get_current_track()
-    def get_current_track(self) -> Track:
+    # Make sure to implement all methods on MprisAdapter, not just metadata()
+    def metadata(self) -> Metadata:
         ...
     # and so on
 
