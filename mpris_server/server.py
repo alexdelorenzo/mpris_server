@@ -7,7 +7,8 @@ import pydbus
 from .player import Player
 from .playlists import Playlists
 from .root import Root
-from .base import NAME, BUS_TYPE, get_dbus_name
+from .base import NAME, BUS_TYPE
+from .compat import get_dbus_name
 from .adapters import MprisAdapter
 from .tracklist import TrackList
 

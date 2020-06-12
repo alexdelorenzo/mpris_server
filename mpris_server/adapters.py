@@ -2,8 +2,8 @@ from typing import List, NamedTuple, Optional, Tuple
 from abc import ABC
 from enum import Enum
 
-from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, TimeInMicroseconds, \
-  VolumeAsDecimal, RateAsDecimal, Metadata, DbusObj, PlaylistEntry, PlaylistValidity, DEFAULT_PLAYLIST_COUNT, \
+from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
+  VolumeDecimal, RateDecimal, Metadata, DbusObj, PlaylistEntry, PlaylistValidity, DEFAULT_PLAYLIST_COUNT, \
   DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Artist, Track, Album
 
 from .events import EventAdapter
@@ -66,7 +66,7 @@ class PlayerAdapter(ABC):
     """
     pass
 
-  def get_current_position(self) -> TimeInMicroseconds:
+  def get_current_position(self) -> Microseconds:
     pass
 
   def next(self):
@@ -90,7 +90,7 @@ class PlayerAdapter(ABC):
   def get_playstate(self) -> PlayState:
     pass
 
-  def seek(self, time: TimeInMicroseconds):
+  def seek(self, time: Microseconds):
     pass
 
   def open_uri(self, uri: str):
@@ -108,10 +108,10 @@ class PlayerAdapter(ABC):
   def set_loop_status(self, val: str):
     pass
 
-  def get_rate(self) -> RateAsDecimal:
+  def get_rate(self) -> RateDecimal:
     return DEFAULT_RATE
 
-  def set_rate(self, val: RateAsDecimal):
+  def set_rate(self, val: RateDecimal):
     pass
 
   def get_shuffle(self) -> bool:
@@ -123,10 +123,10 @@ class PlayerAdapter(ABC):
   def get_art_url(self, track: int) -> str:
     pass
 
-  def get_volume(self) -> VolumeAsDecimal:
+  def get_volume(self) -> VolumeDecimal:
     pass
 
-  def set_volume(self, val: VolumeAsDecimal):
+  def set_volume(self, val: VolumeDecimal):
     pass
 
   def is_mute(self) -> bool:

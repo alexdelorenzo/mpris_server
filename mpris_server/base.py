@@ -1,8 +1,8 @@
 from enum import Enum, auto
-from random import choices
 from string import ascii_letters, digits
-from typing import Iterable, Union, Dict, Tuple
+from typing import Iterable, Union, Dict, Tuple, Optional, NamedTuple
 
+from gi.repository.GLib import Variant
 
 INTERFACE = "org.mpris.MediaPlayer2"
 NAME = "mprisServer"
@@ -39,75 +39,61 @@ DEFAULT_ORDERINGS = ["Alphabetical", "User"]
 VALID_CHARS = set(digits + ascii_letters + '_')
 DEFAULT_NAME_LEN = 10
 
+DEFAULT_METADATA = {}
 
 # type aliases
-TimeInMicroseconds = int
-VolumeAsDecimal = float
-RateAsDecimal = float
+Microseconds = int
+VolumeDecimal = float
+RateDecimal = float
 DbusTypes = Union[str, float, int, bool]
 Metadata = Dict[str, DbusTypes]
+DbusMetadata = Dict[str, Variant]
 DbusObj = str
 PlaylistEntry = Tuple[str, str, str]
 PlaylistValidity = bool
 
 
-
 #  See https://docs.python.org/3/library/enum.html#using-automatic-values
 class AutoName(Enum):
-  def _generate_next_value_(name: str, *args, **kwargs) -> str:
-    return name
+    def _generate_next_value_(name: str, *args, **kwargs) -> str:
+        return name
 
 
 class PlayState(AutoName):
-  PLAYING = auto()
-  PAUSED = auto()
-  STOPPED = auto()
+    PLAYING = auto()
+    PAUSED = auto()
+    STOPPED = auto()
 
 
 class Artist(NamedTuple):
-  name: str = "Default Artist"
+    name: str = "Default Artist"
 
 
 class Album(NamedTuple):
-  name: str = "Default Album"
-  artists: Tuple[Artist] = tuple()
-  art_url: str = None
+    name: str = "Default Album"
+    artists: Tuple[Artist] = tuple()
+    art_url: str = None
 
 
 class Track(NamedTuple):
-  track_id: DbusObj = '/default/1'
-  name: str = "Default Track"
-  track_no: int = None
-  length: TimeInMicroseconds = 0
-  uri: str = None
-  artists: Tuple[Artist] = tuple()
-  album: Optional[Album] = None
-  art_url: str = None
-  disc_no: int = None
-  type: Optional[Enum] = None
+    track_id: DbusObj = '/default/1'
+    name: str = "Default Track"
+    track_no: int = None
+    length: Microseconds = 0
+    uri: str = None
+    artists: Tuple[Artist] = tuple()
+    album: Optional[Album] = None
+    art_url: str = None
+    disc_no: int = None
+    type: Optional[Enum] = None
 
 
 def dbus_emit_changes(interface: 'MprisInterface',
                       changes: Iterable[str]):
-  attr_vals = {attr: getattr(interface, attr)
-               for attr in changes}
+    attr_vals = {attr: getattr(interface, attr)
+                 for attr in changes}
 
-  interface.PropertiesChanged(interface.INTERFACE, attr_vals, [])
-
-
-def random_name() -> str:
-  return ''.join(choices(VALID_CHARS, k=DEFAULT_NAME_LEN))
+    interface.PropertiesChanged(interface.INTERFACE, attr_vals, [])
 
 
-def get_dbus_name(name: str = None) -> str:
-  if not name:
-    return random_name()
 
-  new_name = name.replace(' ', '_')
-  new_name = ''.join(char for char in new_name
-                     if char in VALID_CHARS)
-
-  if new_name:
-    return new_name
-
-  return random_name()

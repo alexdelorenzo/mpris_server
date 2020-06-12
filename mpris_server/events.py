@@ -2,7 +2,7 @@ from abc import ABC
 from typing import List
 
 from mpris_server.base import dbus_emit_changes, ON_ENDED_PROPS, ON_VOLUME_PROPS, ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, \
-  ON_TITLE_PROPS, TimeInMicroseconds, ON_SEEK_PROPS, ON_OPTION_PROPS, DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, \
+  ON_TITLE_PROPS, Microseconds, ON_SEEK_PROPS, ON_OPTION_PROPS, DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, \
   Metadata
 from mpris_server.interface import MprisInterface
 from mpris_server.player import Player
@@ -45,7 +45,7 @@ class PlayerEventAdapter(BaseEventAdapter, ABC):
   def on_title(self):
     self.emit_player_changes(ON_TITLE_PROPS)
 
-  def on_seek(self, position: TimeInMicroseconds):
+  def on_seek(self, position: Microseconds):
     self.player.Seeked(position)
     self.emit_player_changes(ON_SEEK_PROPS)
 
