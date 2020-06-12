@@ -4,32 +4,9 @@ from enum import Enum
 
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, TimeInMicroseconds, \
   VolumeAsDecimal, RateAsDecimal, Metadata, DbusObj, PlaylistEntry, PlaylistValidity, DEFAULT_PLAYLIST_COUNT, \
-  DEFAULT_ORDERINGS, DEFAULT_DESKTOP
+  DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Artist, Track, Album
 
 from .events import EventAdapter
-
-
-class Artist(NamedTuple):
-  name: str = "Default Artist"
-
-
-class Album(NamedTuple):
-  name: str = "Default Album"
-  artists: Tuple[Artist] = tuple()
-  art_url: str = None
-
-
-class Track(NamedTuple):
-  track_id: DbusObj = '/default/1'
-  name: str = "Default Track"
-  track_no: int = None
-  length: TimeInMicroseconds = 0
-  uri: str = None
-  artists: Tuple[Artist] = tuple()
-  album: Optional[Album] = None
-  art_url: str = None
-  disc_no: int = None
-  type: Optional[Enum] = None
 
 
 class RootAdapter(ABC):

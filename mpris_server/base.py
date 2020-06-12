@@ -51,6 +51,7 @@ PlaylistEntry = Tuple[str, str, str]
 PlaylistValidity = bool
 
 
+
 #  See https://docs.python.org/3/library/enum.html#using-automatic-values
 class AutoName(Enum):
   def _generate_next_value_(name: str, *args, **kwargs) -> str:
@@ -61,6 +62,29 @@ class PlayState(AutoName):
   PLAYING = auto()
   PAUSED = auto()
   STOPPED = auto()
+
+
+class Artist(NamedTuple):
+  name: str = "Default Artist"
+
+
+class Album(NamedTuple):
+  name: str = "Default Album"
+  artists: Tuple[Artist] = tuple()
+  art_url: str = None
+
+
+class Track(NamedTuple):
+  track_id: DbusObj = '/default/1'
+  name: str = "Default Track"
+  track_no: int = None
+  length: TimeInMicroseconds = 0
+  uri: str = None
+  artists: Tuple[Artist] = tuple()
+  album: Optional[Album] = None
+  art_url: str = None
+  disc_no: int = None
+  type: Optional[Enum] = None
 
 
 def dbus_emit_changes(interface: 'MprisInterface',

@@ -4,7 +4,7 @@ from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from .base import PlayState, MUTE_VOL, MAX_VOL, PAUSE_RATE, BEGINNING, TimeInMicroseconds, RateAsDecimal, \
-  VolumeAsDecimal, MAX_RATE, MIN_RATE
+  VolumeAsDecimal, MAX_RATE, MIN_RATE, Track
 from .interface import MprisInterface
 
 
@@ -143,7 +143,18 @@ class Player(MprisInterface):
       logger.debug("%s.SetPosition not allowed", self.INTERFACE)
       return
 
-    current_track = self.adapter.get_current_track()
+    metadata = self.adapter.metadata()
+
+    # use metadata from adapter if available
+    if metadata:
+      current_track = Track(
+        track_id=metadata['mpris:trackid'],
+        length=metadata['mpris:length']
+      )
+
+    # if no metadata, build metadata from legacy Track interface
+    else:
+      current_track = self.adapter.get_current_track()
 
     if current_track is None:
       return
@@ -239,7 +250,7 @@ class Player(MprisInterface):
   @property
   def Metadata(self):
     # prefer adapter's metadata to building our own
-    metadata: dict = self.adapter.metadata()
+    metadata: Metadata = self.adapter.metadata()
 
     if metadata is not None:
       return metadata
