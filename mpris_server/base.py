@@ -4,6 +4,7 @@ from typing import Iterable, Union, Dict, Tuple, Optional, NamedTuple, List
 
 from gi.repository.GLib import Variant
 
+
 INTERFACE = "org.mpris.MediaPlayer2"
 NAME = "mprisServer"
 MIME_TYPES = ["audio/mpeg", "application/ogg", "video/mpeg"]
@@ -33,9 +34,11 @@ MUTE_VOL = 0
 MAX_VOL = 1
 BEGINNING = 0
 
+DEFAULT_TRACK_ID = '/default/1'
 DEFAULT_PLAYLIST_COUNT = 1
 DEFAULT_ORDERINGS = ["Alphabetical", "User"]
 
+# valid characters for a DBus name 
 VALID_CHARS = set(digits + ascii_letters + '_')
 NAME_PREFIX = "Mpris_Server_"
 RAND_CHARS = 5
@@ -54,7 +57,7 @@ PlaylistEntry = Tuple[str, str, str]
 PlaylistValidity = bool
 
 
-#  See https://docs.python.org/3/library/enum.html#using-automatic-values
+# See https://docs.python.org/3/library/enum.html#using-automatic-values
 class AutoName(Enum):
     def _generate_next_value_(name: str, *args, **kwargs) -> str:
         return name
@@ -77,7 +80,7 @@ class Album(NamedTuple):
 
 
 class Track(NamedTuple):
-    track_id: DbusObj = '/default/1'
+    track_id: DbusObj = DEFAULT_TRACK_ID
     name: str = "Default Track"
     track_no: int = None
     length: Microseconds = 0
