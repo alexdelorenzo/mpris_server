@@ -12,13 +12,13 @@ TRACE_LOG_LEVEL = 5
 class MprisInterface(ABC):
     INTERFACE = _INTERFACE
 
+    PropertiesChanged = signal()
+
     def __init__(self,
                  name: str = NAME,
                  adapter: 'MprisAdapter' = None):
         self.name = name
         self.adapter = adapter
-
-    PropertiesChanged = signal()
 
     def log_trace(self, *args, **kwargs):
         logger.log(TRACE_LOG_LEVEL, *args, **kwargs)
