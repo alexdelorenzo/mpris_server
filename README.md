@@ -102,7 +102,7 @@ my_adapter = MyAppAdapter()
 mpris = Server('MyApp', adapter=my_adapter)
 
 # initialize app integration with mpris
-event_handler = MyAppEventHandler()
+event_handler = MyAppEventHandler(root=mpris.root, player=mpris.player)
 app.register_event_handler(event_handler)
 
 # publish and serve
