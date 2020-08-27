@@ -258,7 +258,7 @@ class Player(MprisInterface):
         # prefer adapter's metadata to building our own
         metadata: DbusMetadata = self._dbus_metadata()
 
-        if metadata is not None:
+        if metadata:
             return metadata
 
         # build metadata if no metadata supplied by adapter
