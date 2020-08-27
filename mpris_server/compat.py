@@ -1,14 +1,15 @@
+# Python and DBus compatibility
 # See:  https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
 import logging
 from random import choices
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Any
 
 from gi.repository.GLib import Variant
+from unidecode import unidecode
 
 from .base import VALID_CHARS, Metadata, DbusMetadata, DbusTypes, \
     RAND_CHARS, NAME_PREFIX
 
-# Python and DBus compatibility
 
 logger = logging.getLogger(__name__)
 
@@ -29,16 +30,25 @@ METADATA_TYPES: Dict[str, str] = {
 
 START_WITH = "_"
 FIRST_CHAR = 0
-VALID_CHARS_SUBSCRIPTABLE: Tuple[str] = tuple(VALID_CHARS)
+
+# following must be subscriptable to be used with choices()
+VALID_CHARS_SUB: Tuple[str] = tuple(VALID_CHARS)
+
+
+def to_ascii(text: str) -> str:
+    return unidecode(text)
 
 
 def random_name() -> str:
-    return NAME_PREFIX + ''.join(choices(VALID_CHARS_SUBSCRIPTABLE, k=RAND_CHARS))
+    return NAME_PREFIX + ''.join(choices(VALID_CHARS_SUB, k=RAND_CHARS))
 
 
 def get_dbus_name(name: str = None) -> str:
     if not name:
         return random_name()
+    
+    # convert utf8 to ascii
+    new_name = to_ascii(name)
 
     # new name shouldn't have spaces
     new_name = name.replace(' ', '_')
@@ -61,18 +71,18 @@ def get_dbus_name(name: str = None) -> str:
     return get_dbus_name(random_name())
 
 
-def is_null_list(obj: object) -> bool:
+def is_null_list(obj: Any) -> bool:
     if isinstance(obj, list):
         return all(item is None for item in obj)
 
     return False
 
 
-def is_dbus_type(obj: object) -> bool:
+def is_dbus_type(obj: Any) -> bool:
     return isinstance(obj, DbusTypes.__args__)
 
 
-def is_valid_metadata(key: str, obj: object) -> bool:
+def is_valid_metadata(key: str, obj: Any) -> bool:
     if key not in METADATA_TYPES:
         return False
 
