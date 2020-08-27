@@ -51,7 +51,7 @@ def get_dbus_name(name: str = None) -> str:
     new_name = to_ascii(name)
 
     # new name shouldn't have spaces
-    new_name = name.replace(' ', '_')
+    new_name = new_name.replace(' ', '_')
 
     # new name should only contain DBus valid chars
     new_name = ''.join(char for char in new_name
