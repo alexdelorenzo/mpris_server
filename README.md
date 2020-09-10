@@ -19,7 +19,7 @@ The library also provides an event handler that emits `org.freedesktop.DBus.Prop
 ## Installation
 ### Requirements
  - Linux / *BSD / [macOS](https://github.com/zbentley/dbus-osx-examples)
- - DBus
+ - [D-Bus](https://www.freedesktop.org/wiki/Software/dbus/)
  - Python >= 3.6
  - [PyGObject](https://pypi.org/project/PyGObject/)
  - `requirements.txt`
@@ -32,7 +32,7 @@ Use `pip` to install `PyGObject>=3.34.0` if there are no installation candidates
 ### PyPI
 `pip3 install mpris_server`
 
-### Github
+### GitHub
 Clone the repo, run `pip3 install -r requirements.txt`, followed by `python3 setup.py install`. 
 
 ## Usage
