@@ -2,10 +2,12 @@
 # See:  https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
 import logging
 from random import choices
-from typing import Dict, Tuple, Any
+from typing import Dict, Tuple, Any, Callable
+from functools import wraps
 
 from gi.repository.GLib import Variant
 from unidecode import unidecode
+from emoji import emoji_count, demojize
 
 from .base import VALID_CHARS, Metadata, DbusMetadata, DbusTypes, \
     RAND_CHARS, NAME_PREFIX
@@ -28,6 +30,7 @@ METADATA_TYPES: Dict[str, str] = {
     "xesam:comment": "as",
 }
 
+DBUS_NAME_MAX = 255
 START_WITH = "_"
 FIRST_CHAR = 0
 
@@ -36,17 +39,32 @@ VALID_CHARS_SUB: Tuple[str] = tuple(VALID_CHARS)
 
 
 def to_ascii(text: str) -> str:
+    if emoji_count(text)
+      text = demojize(text)
+
     return unidecode(text)
 
 
 def random_name() -> str:
-    return NAME_PREFIX + ''.join(choices(VALID_CHARS_SUB, k=RAND_CHARS))
+    rand = ''.join(choices(VALID_CHARS_SUB, k=RAND_CHARS))
+    name = f"{NAME_PREFIX}{rand}"
+
+    return name
 
 
+def enforce_dbus_length(func: Callable) -> Callable:
+  @wraps(func)
+  def new_func(*args, **kwargs) -> str:
+    val = func(*args, **kwargs)
+    return val[:DBUS_NAME_MAX]
+  return new_func
+
+
+@enforce_dbus_length
 def get_dbus_name(name: str = None) -> str:
     if not name:
         return random_name()
-    
+
     # convert utf8 to ascii
     new_name = to_ascii(name)
 
