@@ -39,7 +39,7 @@ VALID_CHARS_SUB: Tuple[str] = tuple(VALID_CHARS)
 
 
 def to_ascii(text: str) -> str:
-    if emoji_count(text)
+    if emoji_count(text):
       text = demojize(text)
 
     return unidecode(text)
@@ -47,16 +47,17 @@ def to_ascii(text: str) -> str:
 
 def random_name() -> str:
     rand = ''.join(choices(VALID_CHARS_SUB, k=RAND_CHARS))
-    name = f"{NAME_PREFIX}{rand}"
 
-    return name
+    return NAME_PREFIX + rand
 
 
 def enforce_dbus_length(func: Callable) -> Callable:
   @wraps(func)
   def new_func(*args, **kwargs) -> str:
     val = func(*args, **kwargs)
+
     return val[:DBUS_NAME_MAX]
+
   return new_func
 
 
