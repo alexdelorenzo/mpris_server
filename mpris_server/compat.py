@@ -61,7 +61,7 @@ def enforce_dbus_length(func: Callable) -> Callable:
   return new_func
 
 
-#@enforce_dbus_length
+@enforce_dbus_length
 def get_dbus_name(name: str = None) -> str:
     if not name:
         return random_name()
