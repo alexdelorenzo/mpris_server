@@ -39,7 +39,7 @@ DEFAULT_PLAYLIST_COUNT = 1
 DEFAULT_ORDERINGS = ["Alphabetical", "User"]
 
 # valid characters for a DBus name 
-VALID_PUNC = '_-'
+VALID_PUNC = '_'
 VALID_CHARS = set(digits + ascii_letters + VALID_PUNC)
 NAME_PREFIX = "Mpris_Server_"
 RAND_CHARS = 5
