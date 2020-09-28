@@ -62,9 +62,19 @@ def enforce_dbus_length(func: Callable) -> Callable:
 
 
 @enforce_dbus_length
-def get_dbus_name(name: str = None) -> str:
+def get_dbus_name(
+  name: str = None,
+  is_interface: bool = False
+) -> str:
     if not name:
         return random_name()
+
+    # interface names can contain hyphens
+    if is_interface:
+      valid_chars = {*VALID_CHARS, '-'}
+
+    else:
+      valid_chars = VALID_CHARS
 
     # convert utf8 to ascii
     new_name = to_ascii(name)
@@ -74,7 +84,7 @@ def get_dbus_name(name: str = None) -> str:
 
     # new name should only contain DBus valid chars
     new_name = ''.join(char for char in new_name
-                       if char in VALID_CHARS)
+                       if char in valid_chars)
 
     # DBus names can't start with numbers
     if new_name and new_name[FIRST_CHAR].isnumeric():
