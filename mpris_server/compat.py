@@ -2,7 +2,7 @@
 # See:  https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
 import logging
 from random import choices
-from typing import Dict, Tuple, Any, Callable
+from typing import Dict, Tuple, Any, Callable, Optional
 from functools import wraps
 
 from gi.repository.GLib import Variant
@@ -63,7 +63,7 @@ def enforce_dbus_length(func: Callable[..., str]) -> Callable[..., str]:
 
 @enforce_dbus_length
 def get_dbus_name(
-  name: str = None,
+  name: Optional[str] = None,
   is_interface: bool = False
 ) -> str:
     if not name:
