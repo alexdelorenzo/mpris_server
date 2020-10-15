@@ -51,7 +51,7 @@ def random_name() -> str:
     return NAME_PREFIX + rand
 
 
-def enforce_dbus_length(func: Callable) -> Callable:
+def enforce_dbus_length(func: Callable[..., str]) -> Callable[..., str]:
   @wraps(func)
   def new_func(*args, **kwargs) -> str:
     val = func(*args, **kwargs)
