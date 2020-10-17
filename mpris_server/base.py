@@ -1,6 +1,6 @@
+from typing import Iterable, Union, Dict, Tuple, Optional, NamedTuple, List
 from enum import Enum, auto
 from string import ascii_letters, digits
-from typing import Iterable, Union, Dict, Tuple, Optional, NamedTuple, List
 
 from gi.repository.GLib import Variant
 
@@ -77,19 +77,19 @@ class Artist(NamedTuple):
 class Album(NamedTuple):
     name: str = "Default Album"
     artists: Tuple[Artist] = tuple()
-    art_url: str = None
+    art_url: Optional[str] = None
 
 
 class Track(NamedTuple):
     track_id: DbusObj = DEFAULT_TRACK_ID
     name: str = "Default Track"
-    track_no: int = None
+    track_no: Optional[int] = None
     length: Microseconds = 0
-    uri: str = None
+    uri: Optional[str] = None
     artists: Tuple[Artist] = tuple()
     album: Optional[Album] = None
-    art_url: str = None
-    disc_no: int = None
+    art_url: Optional[str] = None
+    disc_no: Optional[int] = None
     type: Optional[Enum] = None
 
 
