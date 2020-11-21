@@ -1,12 +1,10 @@
-from typing import List, NamedTuple, Optional, Tuple
+from typing import List, Tuple
 from abc import ABC
-from enum import Enum
 
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
-  VolumeDecimal, RateDecimal, Metadata, DbusObj, PlaylistEntry, PlaylistValidity, DEFAULT_PLAYLIST_COUNT, \
-  DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Artist, Track, Album
-
-from .events import EventAdapter
+  VolumeDecimal, RateDecimal, Metadata, DbusObj, PlaylistEntry, \
+  PlaylistValidity, DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, \
+  DEFAULT_DESKTOP, Track
 
 
 class RootAdapter(ABC):
@@ -196,7 +194,7 @@ class TrackListAdapter(ABC):
   def get_tracks(self) -> List[DbusObj]:
     pass
 
-  def can_edit_track(self) -> bool:
+  def can_edit_tracks(self) -> bool:
     pass
 
 

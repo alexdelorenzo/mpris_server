@@ -76,4 +76,4 @@ class TrackList(MprisInterface):
 
   @property
   def CanEditTracks(self) -> bool:
-    return self.adapter.can_edit_track()
+    return self.adapter.can_edit_tracks()
