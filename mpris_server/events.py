@@ -1,14 +1,14 @@
 from abc import ABC
 from typing import List, Optional
 
-from mpris_server.base import dbus_emit_changes, ON_ENDED_PROPS, ON_VOLUME_PROPS, ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, \
+from .base import dbus_emit_changes, ON_ENDED_PROPS, ON_VOLUME_PROPS, ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, \
   ON_TITLE_PROPS, Microseconds, ON_SEEK_PROPS, ON_OPTION_PROPS, DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, \
   Metadata
-from mpris_server.interface import MprisInterface
-from mpris_server.player import Player
-from mpris_server.playlists import Playlists
-from mpris_server.root import Root
-from mpris_server.tracklist import TrackList
+from .interface import MprisInterface
+from .player import Player
+from .playlists import Playlists
+from .root import Root
+from .tracklist import TrackList
 
 
 class BaseEventAdapter(ABC):
