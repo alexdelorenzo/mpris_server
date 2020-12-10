@@ -11,6 +11,7 @@ from .compat import get_dbus_name
 from .adapters import MprisAdapter
 from .tracklist import TrackList
 
+
 logger = logging.getLogger(__name__)
 
 
