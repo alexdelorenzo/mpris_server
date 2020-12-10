@@ -4,7 +4,9 @@ from abc import ABC
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
   VolumeDecimal, RateDecimal, Metadata, DbusObj, PlaylistEntry, \
   PlaylistValidity, DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, \
-  DEFAULT_DESKTOP, Track
+  DEFAULT_DESKTOP, Track, Album, Artist
+
+from .events import EventAdapter
 
 
 class RootAdapter(ABC):
