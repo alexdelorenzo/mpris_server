@@ -1,6 +1,5 @@
 import logging
 
-# from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
 import pydbus
 
@@ -42,6 +41,7 @@ class Server:
 
     if bus_type == "system":
       bus = pydbus.SystemBus()
+
     else:
       bus = pydbus.SessionBus()
 
@@ -64,7 +64,6 @@ class Server:
     if not self._publication_token:
       self.publish()
 
-    # DBusGMainLoop(set_as_default=True)
     self._loop = GLib.MainLoop()
 
     try:
