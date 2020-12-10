@@ -1,6 +1,6 @@
 import logging
 
-from dbus.mainloop.glib import DBusGMainLoop
+# from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
 import pydbus
 
@@ -64,11 +64,12 @@ class Server:
     if not self._publication_token:
       self.publish()
 
-    DBusGMainLoop(set_as_default=True)
+    # DBusGMainLoop(set_as_default=True)
     self._loop = GLib.MainLoop()
 
     try:
       self._loop.run()
+
     finally:
       self._loop.quit()
       self._loop = None
