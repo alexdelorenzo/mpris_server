@@ -38,7 +38,7 @@ class Server:
 
   def publish(self):
     bus_type = BUS_TYPE
-    logger.debug("Connecting to D-Bus %s bus...", bus_type)
+    logger.debug(f"Connecting to D-Bus {bus_type} bus...")
 
     if bus_type == "system":
       bus = pydbus.SystemBus()
@@ -46,7 +46,7 @@ class Server:
     else:
       bus = pydbus.SessionBus()
 
-    logger.info("MPRIS server connected to D-Bus %s bus", bus_type)
+    logger.info(f"MPRIS server connected to D-Bus {bus_type} bus")
 
     self._publication_token = bus.publish(
       f"org.mpris.MediaPlayer2.{self.dbus_name}",
