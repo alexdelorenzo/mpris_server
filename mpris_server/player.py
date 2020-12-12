@@ -1,3 +1,4 @@
+from typing import Optional
 import logging
 
 from gi.repository.GLib import Variant
@@ -60,8 +61,11 @@ class Player(MprisInterface):
     MinimumRate = MIN_RATE
     MaximumRate = MAX_RATE
 
-    def _dbus_metadata(self) -> DbusMetadata:
-        return get_dbus_metadata(self.adapter.metadata())
+    def _dbus_metadata(self) -> Optional[DbusMetadata]:
+        metadata = self.adapter.metadata()
+        
+        if metadata:
+            return get_dbus_metadata(metadata)
 
     def Next(self):
         logger.debug("%s.Next called", self.INTERFACE)
