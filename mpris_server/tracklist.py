@@ -37,7 +37,7 @@ class TrackList(MprisInterface):
         <arg name="AfterTrack" type="o"/>
       </signal>
       <signal name="TrackRemoved">
-        <arg name="TrackId" type="ao"/>
+        <arg name="TrackId" type="o"/>
       </signal>
       <signal name="TrackMetadataChanged">
         <arg name="TrackId" type="o"/>
