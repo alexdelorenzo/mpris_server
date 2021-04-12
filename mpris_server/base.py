@@ -99,5 +99,3 @@ def dbus_emit_changes(interface: 'MprisInterface',
                  for attr in changes}
 
     interface.PropertiesChanged(interface.INTERFACE, attr_vals, [])
-
-
