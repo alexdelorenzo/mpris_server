@@ -1,33 +1,33 @@
 # Python and DBus compatibility
 # See:  https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
-import logging
 from random import choices
 from typing import Dict, Tuple, Any, Callable, Optional
 from functools import wraps
+import logging
 
 from gi.repository.GLib import Variant
 from unidecode import unidecode
 from emoji import emoji_count, demojize
 
 from .base import VALID_CHARS, Metadata, DbusMetadata, DbusTypes, \
-    RAND_CHARS, NAME_PREFIX
+    RAND_CHARS, NAME_PREFIX, MprisMetadata, DbusTypes
 
 
 logger = logging.getLogger(__name__)
 
-# map of DBus metadata entries and their DBus types
+# map of D-Bus metadata entries and their D-Bus types
 METADATA_TYPES: Dict[str, str] = {
-    "mpris:trackid": "o",
-    "mpris:length": "x",
-    "mpris:artUrl": "s",
-    "xesam:url": "s",
-    "xesam:title": "s",
-    "xesam:artist": "as",
-    "xesam:album": "s",
-    "xesam:albumArtist": "as",
-    "xesam:discNumber": 'i',
-    "xesam:trackNumber": 'i',
-    "xesam:comment": "as",
+  MprisMetadata.TRACKID: DbusTypes.OBJ,
+  MprisMetadata.LENGTH: DbusTypes.INT64,
+  MprisMetadata.ART_URL: DbusTypes.STRING,
+  MprisMetadata.URL: DbusTypes.STRING,
+  MprisMetadata.TITLE: DbusTypes.STRING,
+  MprisMetadata.ARTIST: DbusTypes.STRING_ARRAY,
+  MprisMetadata.ALBUM: DbusTypes.STRING,
+  MprisMetadata.ALBUM_ARTIST: DbusTypes.STRING_ARRAY,
+  MprisMetadata.DISC_NUMBER: DbusTypes.INT32,
+  MprisMetadata.TRACK_NUMBER: DbusTypes.INT32,
+  MprisMetadata.COMMENT: DbusTypes.STRING_ARRAY,
 }
 
 DBUS_NAME_MAX = 255
@@ -67,7 +67,7 @@ def get_dbus_name(
   is_interface: bool = False
 ) -> str:
   if not name:
-    return random_name()
+    return get_dbus_name(random_name())
 
   # interface names can contain hyphens
   if is_interface:
@@ -83,8 +83,11 @@ def get_dbus_name(
   new_name = new_name.replace(' ', '_')
 
   # new name should only contain DBus valid chars
-  new_name = ''.join(char for char in new_name
-                      if char in valid_chars)
+  new_name = ''.join(
+    char
+    for char in new_name
+    if char in valid_chars
+  )
 
   # DBus names can't start with numbers
   if new_name and new_name[FIRST_CHAR].isnumeric():
@@ -112,13 +115,16 @@ def is_dbus_type(obj: Any) -> bool:
 
 
 def is_valid_metadata(key: str, obj: Any) -> bool:
-  if key not in METADATA_TYPES or obj is None:
+  if obj is None or key not in METADATA_TYPES:
     return False
 
   return is_dbus_type(obj) and not is_null_list(obj)
 
 
 def get_dbus_metadata(metadata: Metadata) -> DbusMetadata:
-  return {key: Variant(METADATA_TYPES[key], val)
-          for key, val in metadata.items()
-          if is_valid_metadata(key, val)}
+  return {
+    key: Variant(METADATA_TYPES[key], val)
+    for key, val in metadata.items()
+    if is_valid_metadata(key, val)
+  }
+

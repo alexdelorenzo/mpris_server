@@ -1,4 +1,5 @@
-from typing import Iterable, Union, Dict, Tuple, Optional, NamedTuple, List
+from typing import Iterable, Union, Dict, Tuple, \
+  Optional, NamedTuple, List, TypedDict
 from enum import Enum, auto
 from string import ascii_letters, digits
 
@@ -73,6 +74,28 @@ class PlayState(AutoName):
   PLAYING = auto()
   PAUSED = auto()
   STOPPED = auto()
+
+
+class MprisMetadata(NamedTuple):
+  TRACKID: str = "mpris:trackid"
+  LENGTH: str = "mpris:length"
+  ART_URL: str = "mpris:artUrl"
+  URL: str = "xesam:url"
+  TITLE: str = "xesam:title"
+  ARTIST: str = "xesam:artist"
+  ALBUM: str = "xesam:album"
+  ALBUM_ARTIST: str = "xesam:albumArtist"
+  DISC_NUMBER: str = "xesam:discNumber"
+  TRACK_NUMBER: str = "xesam:trackNumber"
+  COMMENT: str = "xesam:comment"
+
+
+class DbusTypes(NamedTuple):
+  OBJ: str = 'o'
+  STRING: str = 's'
+  INT32: str = 'i'
+  INT64: str = 'x'
+  STRING_ARRAY: str = 'as'
 
 
 class Artist(NamedTuple):
