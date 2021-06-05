@@ -15,6 +15,13 @@ from .base import VALID_CHARS, Metadata, DbusMetadata, DbusTypes, \
 
 logger = logging.getLogger(__name__)
 
+DBUS_NAME_MAX = 255
+START_WITH = "_"
+FIRST_CHAR = 0
+
+# following must be subscriptable to be used with choices()
+VALID_CHARS_SUB: Tuple[str] = tuple(VALID_CHARS)
+
 # map of D-Bus metadata entries and their D-Bus types
 METADATA_TYPES: Dict[str, str] = {
   MprisMetadata.TRACKID: DbusTypes.OBJ,
@@ -29,13 +36,6 @@ METADATA_TYPES: Dict[str, str] = {
   MprisMetadata.TRACK_NUMBER: DbusTypes.INT32,
   MprisMetadata.COMMENT: DbusTypes.STRING_ARRAY,
 }
-
-DBUS_NAME_MAX = 255
-START_WITH = "_"
-FIRST_CHAR = 0
-
-# following must be subscriptable to be used with choices()
-VALID_CHARS_SUB: Tuple[str] = tuple(VALID_CHARS)
 
 
 def to_ascii(text: str) -> str:
@@ -127,4 +127,3 @@ def get_dbus_metadata(metadata: Metadata) -> DbusMetadata:
     for key, val in metadata.items()
     if is_valid_metadata(key, val)
   }
-

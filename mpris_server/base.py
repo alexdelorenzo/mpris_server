@@ -76,7 +76,7 @@ class PlayState(AutoName):
   STOPPED = auto()
 
 
-class MprisMetadata(NamedTuple):
+class _MprisMetadata(NamedTuple):
   TRACKID: str = "mpris:trackid"
   LENGTH: str = "mpris:length"
   ART_URL: str = "mpris:artUrl"
@@ -90,12 +90,36 @@ class MprisMetadata(NamedTuple):
   COMMENT: str = "xesam:comment"
 
 
+MprisMetadata = _MprisMetadata()
+
+
 class DbusTypes(NamedTuple):
   OBJ: str = 'o'
   STRING: str = 's'
   INT32: str = 'i'
   INT64: str = 'x'
   STRING_ARRAY: str = 'as'
+
+
+class MetadataObj(NamedTuple):
+  track_id: Optional[str] = None
+  length: Optional[int] = None
+  art_url: Optional[str] = None
+  url: Optional[str] = None
+  title: Optional[str] = None
+  artist: Optional[List[str]] = None
+  album: Optional[str] = None
+  album_artist: Optional[List[str]] = None
+  disc_no: Optional[int] = None
+  track_no: Optional[str] = None
+  comment: Optional[List[str]] = None
+
+  def to_dict(self) -> Metadata:
+    return {
+      key: val
+      for key, val in zip(MprisMetadata, self)
+      if val is not None
+    }
 
 
 class Artist(NamedTuple):
