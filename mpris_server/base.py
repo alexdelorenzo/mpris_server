@@ -93,6 +93,28 @@ class _MprisMetadata(NamedTuple):
 MprisMetadata = _MprisMetadata()
 
 
+METADATA_PY_TYPES: Dict[str, type] = {
+  MprisMetadata.TRACKID: str,
+  MprisMetadata.LENGTH: int,
+  MprisMetadata.ART_URL: str,
+  MprisMetadata.URL: str,
+  MprisMetadata.TITLE: str,
+  MprisMetadata.ARTIST: List[str],
+  MprisMetadata.ALBUM: str,
+  MprisMetadata.ALBUM_ARTIST: List[str],
+  MprisMetadata.DISC_NUMBER: int,
+  MprisMetadata.TRACK_NUMBER: int,
+  MprisMetadata.COMMENT: List[str]
+}
+
+
+Metadata = TypedDict(
+  'Metadata',
+  fields=METADATA_PY_TYPES,
+  total=False
+)
+
+
 class DbusTypes(NamedTuple):
   OBJ: str = 'o'
   STRING: str = 's'
@@ -111,7 +133,7 @@ class MetadataObj(NamedTuple):
   album: Optional[str] = None
   album_artist: Optional[List[str]] = None
   disc_no: Optional[int] = None
-  track_no: Optional[str] = None
+  track_no: Optional[int] = None
   comment: Optional[List[str]] = None
 
   def to_dict(self) -> Metadata:
