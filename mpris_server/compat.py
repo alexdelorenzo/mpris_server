@@ -1,16 +1,17 @@
 # Python and DBus compatibility
 # See:  https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
 from random import choices
-from typing import Dict, Tuple, Any, Callable, Optional
+from typing import Dict, Tuple, Any, Callable, \
+  Optional, Set
 from functools import wraps
 import logging
 
-from gi.repository.GLib import Variant
 from unidecode import unidecode
 from emoji import emoji_count, demojize
 
-from .base import VALID_CHARS, Metadata, DbusMetadata, DbusTypes, \
-    RAND_CHARS, NAME_PREFIX, MprisMetadata, DbusTypes
+from .base import VALID_CHARS, RAND_CHARS, NAME_PREFIX
+from .metadata import Metadata, DbusMetadata, DbusTypes, \
+  MprisMetadata, DbusTypes, METADATA_TYPES
 
 
 logger = logging.getLogger(__name__)
@@ -21,21 +22,7 @@ FIRST_CHAR = 0
 
 # following must be subscriptable to be used with choices()
 VALID_CHARS_SUB: Tuple[str] = tuple(VALID_CHARS)
-
-# map of D-Bus metadata entries and their D-Bus types
-METADATA_TYPES: Dict[str, str] = {
-  MprisMetadata.TRACKID: DbusTypes.OBJ,
-  MprisMetadata.LENGTH: DbusTypes.INT64,
-  MprisMetadata.ART_URL: DbusTypes.STRING,
-  MprisMetadata.URL: DbusTypes.STRING,
-  MprisMetadata.TITLE: DbusTypes.STRING,
-  MprisMetadata.ARTIST: DbusTypes.STRING_ARRAY,
-  MprisMetadata.ALBUM: DbusTypes.STRING,
-  MprisMetadata.ALBUM_ARTIST: DbusTypes.STRING_ARRAY,
-  MprisMetadata.DISC_NUMBER: DbusTypes.INT32,
-  MprisMetadata.TRACK_NUMBER: DbusTypes.INT32,
-  MprisMetadata.COMMENT: DbusTypes.STRING_ARRAY,
-}
+INTERFACE_CHARS: Set[str] = {*VALID_CHARS, '-'}
 
 
 def to_ascii(text: str) -> str:
@@ -46,7 +33,8 @@ def to_ascii(text: str) -> str:
 
 
 def random_name() -> str:
-  rand = ''.join(choices(VALID_CHARS_SUB, k=RAND_CHARS))
+  chars = choices(VALID_CHARS_SUB, k=RAND_CHARS)
+  rand = ''.join(chars)
 
   return NAME_PREFIX + rand
 
@@ -101,29 +89,3 @@ def get_dbus_name(
   # if there is no name left after normalizing,
   # then make a random one and validate it
   return get_dbus_name(random_name())
-
-
-def is_null_list(obj: Any) -> bool:
-  if isinstance(obj, list):
-    return all(item is None for item in obj)
-
-  return False
-
-
-def is_dbus_type(obj: Any) -> bool:
-  return isinstance(obj, DbusTypes.__args__)
-
-
-def is_valid_metadata(key: str, obj: Any) -> bool:
-  if obj is None or key not in METADATA_TYPES:
-    return False
-
-  return is_dbus_type(obj) and not is_null_list(obj)
-
-
-def get_dbus_metadata(metadata: Metadata) -> DbusMetadata:
-  return {
-    key: Variant(METADATA_TYPES[key], val)
-    for key, val in metadata.items()
-    if is_valid_metadata(key, val)
-  }

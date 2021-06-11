@@ -2,9 +2,9 @@ from typing import List, Tuple
 from abc import ABC
 
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
-  VolumeDecimal, RateDecimal, Metadata, DbusObj, PlaylistEntry, \
-  PlaylistValidity, DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, \
-  DEFAULT_DESKTOP, Track
+  VolumeDecimal, RateDecimal, DbusObj, PlaylistEntry, PlaylistValidity, \
+  DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track
+from .metadata import Metadata
 
 
 class RootAdapter(ABC):

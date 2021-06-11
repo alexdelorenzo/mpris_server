@@ -4,12 +4,13 @@ from typing import List, Optional
 from .base import dbus_emit_changes, ON_ENDED_PROPS, \
   ON_VOLUME_PROPS, ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, \
   ON_TITLE_PROPS, Microseconds, ON_SEEK_PROPS, ON_OPTION_PROPS, \
-  DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, Metadata
+  DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS
 from .interface import MprisInterface
 from .player import Player
 from .playlists import Playlists
 from .root import Root
 from .tracklist import TrackList
+from .metadata import Metadata
 
 
 class BaseEventAdapter(ABC):

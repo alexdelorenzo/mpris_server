@@ -8,6 +8,7 @@ from .playlists import Playlists
 from .root import Root
 from .base import NAME, BUS_TYPE
 from .compat import get_dbus_name
+from .interface import MprisInterface
 from .adapters import MprisAdapter
 from .tracklist import TrackList
 
@@ -21,14 +22,14 @@ class Server:
                adapter: MprisAdapter = None):
     self.name = name
     self.adapter = adapter
-    self.dbus_name = get_dbus_name(self.name)
+    self.dbus_name: str = get_dbus_name(self.name)
     self.root = Root(name, self.adapter)
     self.player = Player(name, self.adapter)
     self.playlists = Playlists(name, self.adapter)
     self.tracklist = TrackList(name, self.adapter)
 
-    self._loop = None
-    self._publication_token = None
+    self._loop: Optional[GLib.MainLoop] = None
+    self._publication_token: Optional[str] = None
 
   def __del__(self):
     self.unpublish()
@@ -38,22 +39,22 @@ class Server:
 
   def publish(self):
     bus_type = BUS_TYPE
-    logger.debug(f"Connecting to D-Bus {bus_type} bus...")
+    logger.debug(f'Connecting to D-Bus {bus_type} bus...')
 
-    if bus_type == "system":
+    if bus_type == 'system':
       bus = pydbus.SystemBus()
 
     else:
       bus = pydbus.SessionBus()
 
-    logger.info(f"MPRIS server connected to D-Bus {bus_type} bus")
+    logger.info(f'MPRIS server connected to D-Bus {bus_type} bus')
 
     self._publication_token = bus.publish(
-      f"org.mpris.MediaPlayer2.{self.dbus_name}",
-      ("/org/mpris/MediaPlayer2", self.root),
-      ("/org/mpris/MediaPlayer2", self.player),
-      ("/org/mpris/MediaPlayer2", self.playlists),
-      ("/org/mpris/MediaPlayer2", self.tracklist)
+      f'org.mpris.MediaPlayer2.{self.dbus_name}',
+      ('/org/mpris/MediaPlayer2', self.root),
+      ('/org/mpris/MediaPlayer2', self.player),
+      ('/org/mpris/MediaPlayer2', self.playlists),
+      ('/org/mpris/MediaPlayer2', self.tracklist)
     )
 
   def unpublish(self):

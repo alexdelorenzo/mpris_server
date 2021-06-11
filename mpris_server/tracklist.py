@@ -3,8 +3,10 @@ from typing import List
 
 from pydbus.generic import signal
 
-from .base import Metadata, DbusObj
+from .base import DbusObj
 from .interface import MprisInterface
+from .metadata import Metadata
+
 
 logger = logging.getLogger(__name__)
 

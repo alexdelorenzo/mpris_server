@@ -1,9 +1,12 @@
 from typing import Iterable, Union, Dict, Tuple, \
-  Optional, NamedTuple, List, TypedDict
+  Optional, NamedTuple, List, TypedDict, TypeAlias, \
+  Set
 from enum import Enum, auto
 from string import ascii_letters, digits
 
 from gi.repository.GLib import Variant
+
+from .types import TypeAlias
 
 
 Props = List[str]
@@ -54,14 +57,11 @@ Microseconds = int
 VolumeDecimal = float
 RateDecimal = float
 DbusTypes = Union[str, float, int, bool, list]
-Metadata = Dict[str, DbusTypes]
+AttrVals = Dict[str, DbusTypes]
 DbusMetadata = Dict[str, Variant]
 DbusObj = str
 PlaylistEntry = Tuple[str, str, str]
 PlaylistValidity = bool
-
-
-DEFAULT_METADATA: Metadata = {}
 
 
 # See https://docs.python.org/3/library/enum.html#using-automatic-values
@@ -76,46 +76,7 @@ class PlayState(AutoName):
   STOPPED = auto()
 
 
-class _MprisMetadata(NamedTuple):
-  TRACKID: str = "mpris:trackid"
-  LENGTH: str = "mpris:length"
-  ART_URL: str = "mpris:artUrl"
-  URL: str = "xesam:url"
-  TITLE: str = "xesam:title"
-  ARTIST: str = "xesam:artist"
-  ALBUM: str = "xesam:album"
-  ALBUM_ARTIST: str = "xesam:albumArtist"
-  DISC_NUMBER: str = "xesam:discNumber"
-  TRACK_NUMBER: str = "xesam:trackNumber"
-  COMMENT: str = "xesam:comment"
-
-
-MprisMetadata = _MprisMetadata()
-
-
-METADATA_PY_TYPES: Dict[str, type] = {
-  MprisMetadata.TRACKID: str,
-  MprisMetadata.LENGTH: int,
-  MprisMetadata.ART_URL: str,
-  MprisMetadata.URL: str,
-  MprisMetadata.TITLE: str,
-  MprisMetadata.ARTIST: List[str],
-  MprisMetadata.ALBUM: str,
-  MprisMetadata.ALBUM_ARTIST: List[str],
-  MprisMetadata.DISC_NUMBER: int,
-  MprisMetadata.TRACK_NUMBER: int,
-  MprisMetadata.COMMENT: List[str]
-}
-
-
-Metadata = TypedDict(
-  'Metadata',
-  fields=METADATA_PY_TYPES,
-  total=False
-)
-
-
-class DbusTypes(NamedTuple):
+class _DbusTypes(NamedTuple):
   OBJ: str = 'o'
   STRING: str = 's'
   INT32: str = 'i'
@@ -123,25 +84,7 @@ class DbusTypes(NamedTuple):
   STRING_ARRAY: str = 'as'
 
 
-class MetadataObj(NamedTuple):
-  track_id: Optional[str] = None
-  length: Optional[int] = None
-  art_url: Optional[str] = None
-  url: Optional[str] = None
-  title: Optional[str] = None
-  artist: Optional[List[str]] = None
-  album: Optional[str] = None
-  album_artist: Optional[List[str]] = None
-  disc_no: Optional[int] = None
-  track_no: Optional[int] = None
-  comment: Optional[List[str]] = None
-
-  def to_dict(self) -> Metadata:
-    return {
-      key: val
-      for key, val in zip(MprisMetadata, self)
-      if val is not None
-    }
+DbusTypes = _DbusTypes()
 
 
 class Artist(NamedTuple):
@@ -171,7 +114,7 @@ def dbus_emit_changes(
   interface: 'MprisInterface',
   changes: Iterable[str]
 ):
-  attr_vals: Metadata = {
+  attr_vals: AttrVals = {
     attr: getattr(interface, attr)
     for attr in changes
   }

@@ -6,11 +6,18 @@ from pydbus.generic import signal
 
 from .base import PlayState, MUTE_VOL, MAX_VOL, PAUSE_RATE, BEGINNING, \
     Microseconds, RateDecimal, VolumeDecimal, MAX_RATE, MIN_RATE, \
-    Track, DbusMetadata, DEFAULT_METADATA
-from .compat import get_dbus_metadata
+    Track
 from .interface import MprisInterface
+from .metadata import Metadata, DbusMetadata, DbusTypes, \
+  get_dbus_metadata, METADATA_TYPES, DEFAULT_METADATA
 
 logger = logging.getLogger(__name__)
+
+
+class LoopStatus:
+  NONE: str = 'None'
+  TRACK: str = 'Track'
+  PLAYLIST: str = 'Playlist'
 
 
 class Player(MprisInterface):
@@ -63,9 +70,11 @@ class Player(MprisInterface):
 
     def _dbus_metadata(self) -> Optional[DbusMetadata]:
         metadata = self.adapter.metadata()
-        
+
         if metadata:
             return get_dbus_metadata(metadata)
+
+        return None
 
     def Next(self):
         logger.debug("%s.Next called", self.INTERFACE)
@@ -99,11 +108,13 @@ class Player(MprisInterface):
 
         state = self.adapter.get_playstate()
 
-        if state == PlayState.PLAYING:
+        if state is PlayState.PLAYING:
             self.adapter.pause()
-        elif state == PlayState.PAUSED:
+
+        elif state is PlayState.PAUSED:
             self.adapter.resume()
-        elif state == PlayState.STOPPED:
+
+        elif state is PlayState.STOPPED:
             self.adapter.play()
 
     def Stop(self):
@@ -154,9 +165,9 @@ class Player(MprisInterface):
         metadata = self.adapter.metadata()
 
         # use metadata from adapter if available
-        if metadata and \
-          'mpris:trackid' in metadata and \
-          'mpris:length' in metadata:
+        if metadata \
+          and 'mpris:trackid' in metadata \
+          and 'mpris:length' in metadata:
             current_track = Track(
                 track_id=metadata['mpris:trackid'],
                 length=metadata['mpris:length']
@@ -190,23 +201,23 @@ class Player(MprisInterface):
         self.adapter.open_uri(uri)
 
     @property
-    def PlaybackStatus(self):
+    def PlaybackStatus(self) -> str:
         self.log_trace("Getting %s.PlaybackStatus", self.INTERFACE)
         state = self.adapter.get_playstate()
         return state.value.title()
 
     @property
-    def LoopStatus(self):
+    def LoopStatus(self) -> str:
         self.log_trace("Getting %s.LoopStatus", self.INTERFACE)
         if not self.adapter.is_repeating():
-            return "None"
+            return LoopStatus.NONE
 
         else:
             if not self.adapter.is_playlist():
-                return "Track"
+                return LoopStatus.TRACK
 
             else:
-                return "Playlist"
+                return LoopStatus.PLAYLIST
 
     @LoopStatus.setter
     def LoopStatus(self, value: str):
@@ -227,7 +238,7 @@ class Player(MprisInterface):
         # self.core.tracklist.set_single(False)
 
     @property
-    def Rate(self):
+    def Rate(self) -> float:
         self.log_trace("Getting %s.Rate", self.INTERFACE)
         return self.adapter.get_rate()
 
@@ -244,7 +255,7 @@ class Player(MprisInterface):
             self.Pause()
 
     @property
-    def Shuffle(self):
+    def Shuffle(self) -> bool:
         self.log_trace("Getting %s.Shuffle", self.INTERFACE)
         return self.adapter.get_shuffle()
 
@@ -258,7 +269,7 @@ class Player(MprisInterface):
         self.adapter.set_shuffle(value)
 
     @property
-    def Metadata(self):
+    def Metadata(self) -> Metadata:
         # prefer adapter's metadata to building our own
         metadata: DbusMetadata = self._dbus_metadata()
 
@@ -310,11 +321,11 @@ class Player(MprisInterface):
 
         return res
 
-    def _get_art_url(self, track: 'Track'):
+    def _get_art_url(self, track: 'Track') -> str:
         return self.adapter.get_art_url(track)
 
     @property
-    def Volume(self):
+    def Volume(self) -> float:
         self.log_trace("Getting %s.Volume", self.INTERFACE)
         mute = self.adapter.is_mute()
         volume = self.adapter.get_volume()
@@ -336,6 +347,7 @@ class Player(MprisInterface):
 
         if value < MUTE_VOL:
             value = MUTE_VOL
+
         elif value > MAX_VOL:
             value = MAX_VOL
 
@@ -344,13 +356,16 @@ class Player(MprisInterface):
         if value > MUTE_VOL:
             self.adapter.set_mute(False)
 
+        elif value == MUTE_VAL:
+            self.adapter.set_mute(True)
+
     @property
-    def Position(self):
+    def Position(self) -> float:
         self.log_trace("Getting %s.Position", self.INTERFACE)
         return self.adapter.get_current_position()
 
     @property
-    def CanGoNext(self):
+    def CanGoNext(self) -> bool:
         self.log_trace("Getting %s.CanGoNext", self.INTERFACE)
         if not self.CanControl:
             return False
@@ -358,7 +373,7 @@ class Player(MprisInterface):
         return self.adapter.can_go_next()
 
     @property
-    def CanGoPrevious(self):
+    def CanGoPrevious(self) -> bool:
         self.log_trace("Getting %s.CanGoPrevious", self.INTERFACE)
         if not self.CanControl:
             return False
@@ -366,7 +381,7 @@ class Player(MprisInterface):
         return self.adapter.can_go_previous()
 
     @property
-    def CanPlay(self):
+    def CanPlay(self) -> bool:
         self.log_trace("Getting %s.CanPlay", self.INTERFACE)
         if not self.CanControl:
             return False
@@ -374,7 +389,7 @@ class Player(MprisInterface):
         return self.adapter.can_play()
 
     @property
-    def CanPause(self):
+    def CanPause(self) -> bool:
         self.log_trace("Getting %s.CanPause", self.INTERFACE)
         if not self.CanControl:
             return False
@@ -382,7 +397,7 @@ class Player(MprisInterface):
         return True
 
     @property
-    def CanSeek(self):
+    def CanSeek(self) -> bool:
         self.log_trace("Getting %s.CanSeek", self.INTERFACE)
         if not self.CanControl:
             return False
@@ -390,5 +405,5 @@ class Player(MprisInterface):
         return True
 
     @property
-    def CanControl(self):
+    def CanControl(self) -> bool:
         return self.adapter.can_control()
