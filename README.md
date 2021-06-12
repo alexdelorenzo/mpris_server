@@ -20,7 +20,7 @@ The library also provides an event handler that emits `org.freedesktop.DBus.Prop
 ### Requirements
  - Linux / *BSD / [macOS](https://github.com/zbentley/dbus-osx-examples)
  - [D-Bus](https://www.freedesktop.org/wiki/Software/dbus/)
- - Python >= 3.6
+ - Python >= 3.7
  - [PyGObject](https://pypi.org/project/PyGObject/)
  - `requirements.txt`
  
