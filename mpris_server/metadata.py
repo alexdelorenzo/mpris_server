@@ -62,34 +62,7 @@ MetadataBase = \
 
 
 class Metadata(MetadataBase):
-  @classmethod
-  def from_vals(
-    cls: type,
-    track_id: str = DEFAULT_TRACK_ID,
-    length: Optional[int] = None,
-    art_url: Optional[str] = None,
-    url: Optional[str] = None,
-    title: Optional[str] = None,
-    artist: Optional[List[str]] = None,
-    album: Optional[str] = None,
-    album_artist: Optional[List[str]] = None,
-    disc_no: Optional[int] = None,
-    track_no: Optional[int] = None,
-    comment: Optional[List[str]] = None,
-  ) -> Metadata:
-    return cls(
-      track_id=track_id,
-      length=length,
-      art_url=art_url,
-      url=url,
-      title=title,
-      artist=artist,
-      album=album,
-      album_artist=album_artist,
-      disc_no=disc_no,
-      track_no=track_no,
-      comment=comment,
-    )
+  pass
 
 
 class _DbusTypes(NamedTuple):
@@ -108,15 +81,15 @@ DBUS_PY_TYPES: Dict[str, type] = {
   DbusTypes.STRING: str,
   DbusTypes.INT32: int,
   DbusTypes.INT64: int,
-  DbusTypes.STRING_ARRAY: List[str]
+  DbusTypes.STRING_ARRAY: List[str],
 }
 
 
-DBUS_RUNTIME_TYPES: Tuple[type] = tuple(
+DBUS_RUNTIME_TYPES: Tuple[type] = tuple({
   val
   for val in DBUS_PY_TYPES.values()
   if isinstance(val, type)
-)
+})
 
 
 class MetadataObj(NamedTuple):
@@ -133,11 +106,11 @@ class MetadataObj(NamedTuple):
   comment: Optional[List[str]] = None
 
   def to_dict(self) -> Metadata:
-    return {
+    return Metadata({
       key: val
       for key, val in zip(MprisMetadata, self)
       if val is not None
-    }
+    })
 
 
 def is_null_list(obj: Any) -> bool:

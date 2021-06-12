@@ -25,6 +25,9 @@ VALID_CHARS_SUB: Tuple[str] = tuple(VALID_CHARS)
 INTERFACE_CHARS: Set[str] = {*VALID_CHARS, '-'}
 
 
+ReturnsStr = Callable[..., str]
+
+
 def to_ascii(text: str) -> str:
   if emoji_count(text):
     text = demojize(text)
@@ -39,11 +42,10 @@ def random_name() -> str:
   return NAME_PREFIX + rand
 
 
-def enforce_dbus_length(func: Callable[..., str]) -> Callable[..., str]:
+def enforce_dbus_length(func: ReturnsStr) -> ReturnsStr:
   @wraps(func)
   def new_func(*args, **kwargs) -> str:
-    val = func(*args, **kwargs)
-
+    val: str = func(*args, **kwargs)
     return val[:DBUS_NAME_MAX]
 
   return new_func
