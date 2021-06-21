@@ -27,19 +27,21 @@ class _MprisMetadata(NamedTuple):
 MprisMetadata = _MprisMetadata()
 
 
-METADATA_PY_TYPES: Dict[str, type] = {
-  MprisMetadata.TRACKID: str,
-  MprisMetadata.LENGTH: int,
-  MprisMetadata.ART_URL: str,
-  MprisMetadata.URL: str,
-  MprisMetadata.TITLE: str,
-  MprisMetadata.ARTIST: List[str],
-  MprisMetadata.ALBUM: str,
-  MprisMetadata.ALBUM_ARTIST: List[str],
-  MprisMetadata.DISC_NUMBER: int,
-  MprisMetadata.TRACK_NUMBER: int,
-  MprisMetadata.COMMENT: List[str]
-}
+class _DbusTypes(NamedTuple):
+  OBJ: str = 'o'
+  STRING: str = 's'
+  INT32: str = 'i'
+  INT64: str = 'x'
+  UINT32: str = 'u'
+  UINT64: str = 't'
+  DOUBLE: str = 'd'
+  BOOLEAN: str = 'b'
+  OBJ_ARRAY: str = 'ao'
+  STRING_ARRAY: str = 'as'
+
+
+DbusTypes = _DbusTypes()
+
 
 # map of D-Bus metadata entries and their D-Bus types
 METADATA_TYPES: Dict[str, str] = {
@@ -57,42 +59,38 @@ METADATA_TYPES: Dict[str, str] = {
 }
 
 
-MetadataBase = \
-  TypedDict('Metadata', METADATA_PY_TYPES, total=False)
-
-
-class Metadata(MetadataBase):
-  pass
-
-
-class _DbusTypes(NamedTuple):
-  OBJ: str = 'o'
-  STRING: str = 's'
-  INT32: str = 'i'
-  INT64: str = 'x'
-  UINT32: str = 'u'
-  UINT64: str = 't'
-  DOUBLE: str = 'd'
-  BOOLEAN: str = 'b'
-  OBJ_ARRAY: str = 'ao'
-  STRING_ARRAY: str = 'as'
-
-
-DbusTypes = _DbusTypes()
-
 
 DBUS_PY_TYPES: Dict[str, type] = {
   DbusTypes.OBJ: str,
   DbusTypes.STRING: str,
   DbusTypes.INT32: int,
   DbusTypes.INT64: int,
-  DbusTypes.DOUBLE: float,
   DbusTypes.UINT32: int,
   DbusTypes.UINT64: int,
+  DbusTypes.DOUBLE: float,
   DbusTypes.BOOLEAN: bool,
   DbusTypes.OBJ_ARRAY: List[str],
   DbusTypes.STRING_ARRAY: List[str],
 }
+
+
+METADATA_PY_TYPES: Dict[str, type] = {
+  MprisMetadata.TRACKID: DBUS_PY_TYPES[DbusTypes.OBJ],
+  MprisMetadata.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
+  MprisMetadata.ART_URL: DBUS_PY_TYPES[DbusTypes.STRING],
+  MprisMetadata.URL: DBUS_PY_TYPES[DbusTypes.STRING],
+  MprisMetadata.TITLE: DBUS_PY_TYPES[DbusTypes.STRING],
+  MprisMetadata.ARTIST: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MprisMetadata.ALBUM: DBUS_PY_TYPES[DbusTypes.STRING],
+  MprisMetadata.ALBUM_ARTIST: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MprisMetadata.DISC_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
+  MprisMetadata.TRACK_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
+  MprisMetadata.COMMENT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY]
+}
+
+
+Metadata = \
+  TypedDict('Metadata', METADATA_PY_TYPES, total=False)
 
 
 def get_runtime_types() -> Tuple[type]:
