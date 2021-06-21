@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "mpris_server"
-version = "0.2.18"
+version = "0.3.1"
 description = "Publish a MediaPlayer2 MPRIS device to D-Bus."
 license = "AGPL-3.0"
 homepage = "https://alexdelorenzo.dev"
