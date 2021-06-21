@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Set, List, Tuple, NamedTuple, Any, TypeAlias, \
-  Dict, TypedDict, Optional
+  Dict, TypedDict, Optional, _GenericAlias
 
 from gi.repository.GLib import Variant
 
@@ -71,6 +71,10 @@ class _DbusTypes(NamedTuple):
   INT32: str = 'i'
   INT64: str = 'x'
   STRING_ARRAY: str = 'as'
+  DOUBLE: str = 'd'
+  UINT32: str = 'u'
+  UINT64: str = 't'
+  BOOLEAN: str = 'b'
 
 
 DbusTypes = _DbusTypes()
@@ -82,14 +86,30 @@ DBUS_PY_TYPES: Dict[str, type] = {
   DbusTypes.INT32: int,
   DbusTypes.INT64: int,
   DbusTypes.STRING_ARRAY: List[str],
+  DbusTypes.DOUBLE: float,
+  DbusTypes.UINT32: int,
+  DbusTypes.UINT64: int,
+  DbusTypes.UINT64: bool,
 }
 
 
-DBUS_RUNTIME_TYPES: Tuple[type] = tuple({
-  val
-  for val in DBUS_PY_TYPES.values()
-  if isinstance(val, type)
-})
+def get_runtime_types() -> Tuple[type]:
+  types = {
+    val
+    for val in DBUS_PY_TYPES.values()
+    if isinstance(val, type)
+  }
+
+  generics = {
+    val.__origin__
+    for val in DBUS_PY_TYPES.values()
+    if isinstance(val, _GenericAlias)
+  }
+
+  return tuple({*types, *generics})
+
+
+DBUS_RUNTIME_TYPES: Tuple[type] = get_runtime_types()
 
 
 class MetadataObj(NamedTuple):
