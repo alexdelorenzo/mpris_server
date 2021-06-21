@@ -70,11 +70,12 @@ class _DbusTypes(NamedTuple):
   STRING: str = 's'
   INT32: str = 'i'
   INT64: str = 'x'
-  STRING_ARRAY: str = 'as'
-  DOUBLE: str = 'd'
   UINT32: str = 'u'
   UINT64: str = 't'
+  DOUBLE: str = 'd'
   BOOLEAN: str = 'b'
+  OBJ_ARRAY: str = 'ao'
+  STRING_ARRAY: str = 'as'
 
 
 DbusTypes = _DbusTypes()
@@ -85,11 +86,12 @@ DBUS_PY_TYPES: Dict[str, type] = {
   DbusTypes.STRING: str,
   DbusTypes.INT32: int,
   DbusTypes.INT64: int,
-  DbusTypes.STRING_ARRAY: List[str],
   DbusTypes.DOUBLE: float,
   DbusTypes.UINT32: int,
   DbusTypes.UINT64: int,
-  DbusTypes.UINT64: bool,
+  DbusTypes.BOOLEAN: bool,
+  DbusTypes.OBJ_ARRAY: List[str],
+  DbusTypes.STRING_ARRAY: List[str],
 }
 
 
