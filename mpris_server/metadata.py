@@ -59,7 +59,6 @@ METADATA_TYPES: Dict[str, str] = {
 }
 
 
-
 DBUS_PY_TYPES: Dict[str, type] = {
   DbusTypes.OBJ: str,
   DbusTypes.STRING: str,
@@ -89,6 +88,44 @@ METADATA_PY_TYPES: Dict[str, type] = {
 }
 
 
+class _MetadataTypes(NamedTuple):
+  TRACKID: str = METADATA_PY_TYPES[MprisMetadata.TRACKID]
+  LENGTH: str = METADATA_PY_TYPES[MprisMetadata.LENGTH]
+  ART_URL: str = METADATA_PY_TYPES[MprisMetadata.ART_URL]
+  URL: str = METADATA_PY_TYPES[MprisMetadata.URL]
+  TITLE: str = METADATA_PY_TYPES[MprisMetadata.TITLE]
+  ARTIST: str = METADATA_PY_TYPES[MprisMetadata.ARTIST]
+  ALBUM: str = METADATA_PY_TYPES[MprisMetadata.ALBUM]
+  ALBUM_ARTIST: str = METADATA_PY_TYPES[MprisMetadata.ALBUM_ARTIST]
+  DISC_NUMBER: str = METADATA_PY_TYPES[MprisMetadata.DISC_NO]
+  TRACK_NUMBER: str = METADATA_PY_TYPES[MprisMetadata.TRACK_NUMBER]
+  COMMENT: str = METADATA_PY_TYPES[MprisMetadata.COMMENT]
+
+
+MetadataTypes = _MetadataTypes()
+
+
+class MetadataObj(NamedTuple):
+  track_id: MetadataTypes.TRACKID = DEFAULT_TRACK_ID
+  length: Optional[MetadataTypes.LENGTH] = None
+  art_url: Optional[MetadataTypes.STRING] = None
+  url: Optional[MetadataTypes.STRING] = None
+  title: Optional[MetadataTypes.STRING] = None
+  artist: Optional[MetadataTypes.STRING_ARRAY] = None
+  album: Optional[MetadataTypes.STRING] = None
+  album_artist: Optional[MetadataTypes.STRING_ARRAY] = None
+  disc_no: Optional[MetadataTypes.INT32] = None
+  track_no: Optional[MetadataTypes.INT32] = None
+  comment: Optional[MetadataTypes.COMMENT] = None
+
+  def to_dict(self) -> Metadata:
+    return Metadata({
+      key: val
+      for key, val in zip(MprisMetadata, self)
+      if val is not None
+    })
+
+
 Metadata = \
   TypedDict('Metadata', METADATA_PY_TYPES, total=False)
 
@@ -110,27 +147,6 @@ def get_runtime_types() -> Tuple[type]:
 
 
 DBUS_RUNTIME_TYPES: Tuple[type] = get_runtime_types()
-
-
-class MetadataObj(NamedTuple):
-  track_id: str = DEFAULT_TRACK_ID
-  length: Optional[int] = None
-  art_url: Optional[str] = None
-  url: Optional[str] = None
-  title: Optional[str] = None
-  artist: Optional[List[str]] = None
-  album: Optional[str] = None
-  album_artist: Optional[List[str]] = None
-  disc_no: Optional[int] = None
-  track_no: Optional[int] = None
-  comment: Optional[List[str]] = None
-
-  def to_dict(self) -> Metadata:
-    return Metadata({
-      key: val
-      for key, val in zip(MprisMetadata, self)
-      if val is not None
-    })
 
 
 def is_null_list(obj: Any) -> bool:
