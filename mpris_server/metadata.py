@@ -1,105 +1,92 @@
 from __future__ import annotations
-from typing import Set, List, Tuple, NamedTuple, Any, TypeAlias, \
-  Dict, TypedDict, Optional, _GenericAlias
+from typing import List, Tuple, NamedTuple, Any, \
+  Dict, TypedDict, Optional, Union
 
 from gi.repository.GLib import Variant
 
-from .base import DbusTypes, DbusMetadata, DEFAULT_TRACK_ID
+from .base import DbusTypes, DbusMetadata, DEFAULT_TRACK_ID, \
+  DbusTypes, MprisTypes, DbusType, Types
+from .types import get_origin, TypeAlias, GenericAlias, _GenericAlias
 
 
 DEFAULT_METADATA: Metadata = {}
 
 
-class _MprisMetadata(NamedTuple):
-  TRACKID: str = "mpris:trackid"
-  LENGTH: str = "mpris:length"
-  ART_URL: str = "mpris:artUrl"
-  URL: str = "xesam:url"
-  TITLE: str = "xesam:title"
-  ARTIST: str = "xesam:artist"
-  ALBUM: str = "xesam:album"
-  ALBUM_ARTIST: str = "xesam:albumArtist"
-  DISC_NUMBER: str = "xesam:discNumber"
-  TRACK_NUMBER: str = "xesam:trackNumber"
-  COMMENT: str = "xesam:comment"
+MetadataEntry = str
 
 
-MprisMetadata = _MprisMetadata()
+class _MetadataEntries(NamedTuple):
+  TRACKID: MetadataEntry = "mpris:trackid"
+  LENGTH: MetadataEntry = "mpris:length"
+  ART_URL: MetadataEntry = "mpris:artUrl"
+  URL: MetadataEntry = "xesam:url"
+  TITLE: MetadataEntry = "xesam:title"
+  ARTIST: MetadataEntry = "xesam:artist"
+  ALBUM: MetadataEntry = "xesam:album"
+  ALBUM_ARTIST: MetadataEntry = "xesam:albumArtist"
+  DISC_NUMBER: MetadataEntry = "xesam:discNumber"
+  TRACK_NUMBER: MetadataEntry = "xesam:trackNumber"
+  COMMENT: MetadataEntry = "xesam:comment"
 
 
-class _DbusTypes(NamedTuple):
-  OBJ: str = 'o'
-  STRING: str = 's'
-  INT32: str = 'i'
-  INT64: str = 'x'
-  UINT32: str = 'u'
-  UINT64: str = 't'
-  DOUBLE: str = 'd'
-  BOOLEAN: str = 'b'
-  OBJ_ARRAY: str = 'ao'
-  STRING_ARRAY: str = 'as'
-
-
-DbusTypes = _DbusTypes()
+MetadataEntries = _MetadataEntries()
 
 
 # map of D-Bus metadata entries and their D-Bus types
-METADATA_TYPES: Dict[str, str] = {
-  MprisMetadata.TRACKID: DbusTypes.OBJ,
-  MprisMetadata.LENGTH: DbusTypes.INT64,
-  MprisMetadata.ART_URL: DbusTypes.STRING,
-  MprisMetadata.URL: DbusTypes.STRING,
-  MprisMetadata.TITLE: DbusTypes.STRING,
-  MprisMetadata.ARTIST: DbusTypes.STRING_ARRAY,
-  MprisMetadata.ALBUM: DbusTypes.STRING,
-  MprisMetadata.ALBUM_ARTIST: DbusTypes.STRING_ARRAY,
-  MprisMetadata.DISC_NUMBER: DbusTypes.INT32,
-  MprisMetadata.TRACK_NUMBER: DbusTypes.INT32,
-  MprisMetadata.COMMENT: DbusTypes.STRING_ARRAY,
+METADATA_TYPES: Dict[MetadataEntry, DbusType] = {
+  MetadataEntries.TRACKID: DbusTypes.OBJ,
+  MetadataEntries.LENGTH: DbusTypes.INT64,
+  MetadataEntries.ART_URL: DbusTypes.STRING,
+  MetadataEntries.URL: DbusTypes.STRING,
+  MetadataEntries.TITLE: DbusTypes.STRING,
+  MetadataEntries.ARTIST: DbusTypes.STRING_ARRAY,
+  MetadataEntries.ALBUM: DbusTypes.STRING,
+  MetadataEntries.ALBUM_ARTIST: DbusTypes.STRING_ARRAY,
+  MetadataEntries.DISC_NUMBER: DbusTypes.INT32,
+  MetadataEntries.TRACK_NUMBER: DbusTypes.INT32,
+  MetadataEntries.COMMENT: DbusTypes.STRING_ARRAY,
 }
 
-
-DBUS_PY_TYPES: Dict[str, type] = {
-  DbusTypes.OBJ: str,
-  DbusTypes.STRING: str,
-  DbusTypes.INT32: int,
-  DbusTypes.INT64: int,
-  DbusTypes.UINT32: int,
-  DbusTypes.UINT64: int,
-  DbusTypes.DOUBLE: float,
-  DbusTypes.BOOLEAN: bool,
-  DbusTypes.OBJ_ARRAY: List[str],
-  DbusTypes.STRING_ARRAY: List[str],
+DBUS_PY_TYPES: Dict[DbusType, Types] = {
+  DbusTypes.OBJ: MprisTypes.OBJ,
+  DbusTypes.STRING: MprisTypes.STRING,
+  DbusTypes.INT32: MprisTypes.INT32,
+  DbusTypes.INT64: MprisTypes.INT64,
+  DbusTypes.UINT32: MprisTypes.UINT32,
+  DbusTypes.UINT64: MprisTypes.UINT64,
+  DbusTypes.DOUBLE: MprisTypes.DOUBLE,
+  DbusTypes.BOOLEAN: MprisTypes.BOOLEAN,
+  DbusTypes.OBJ_ARRAY: MprisTypes.OBJ_ARRAY,
+  DbusTypes.STRING_ARRAY: MprisTypes.STRING_ARRAY,
 }
 
-
-METADATA_PY_TYPES: Dict[str, type] = {
-  MprisMetadata.TRACKID: DBUS_PY_TYPES[DbusTypes.OBJ],
-  MprisMetadata.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
-  MprisMetadata.ART_URL: DBUS_PY_TYPES[DbusTypes.STRING],
-  MprisMetadata.URL: DBUS_PY_TYPES[DbusTypes.STRING],
-  MprisMetadata.TITLE: DBUS_PY_TYPES[DbusTypes.STRING],
-  MprisMetadata.ARTIST: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MprisMetadata.ALBUM: DBUS_PY_TYPES[DbusTypes.STRING],
-  MprisMetadata.ALBUM_ARTIST: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MprisMetadata.DISC_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
-  MprisMetadata.TRACK_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
-  MprisMetadata.COMMENT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY]
+METADATA_PY_TYPES: Dict[MetadataEntry, Types] = {
+  MetadataEntries.TRACKID: DBUS_PY_TYPES[DbusTypes.OBJ],
+  MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
+  MetadataEntries.ART_URL: DBUS_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.URL: DBUS_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.TITLE: DBUS_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.ARTIST: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.ALBUM: DBUS_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.ALBUM_ARTIST: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.DISC_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
+  MetadataEntries.TRACK_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
+  MetadataEntries.COMMENT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY]
 }
 
 
 class _MetadataTypes(NamedTuple):
-  TRACKID: str = METADATA_PY_TYPES[MprisMetadata.TRACKID]
-  LENGTH: str = METADATA_PY_TYPES[MprisMetadata.LENGTH]
-  ART_URL: str = METADATA_PY_TYPES[MprisMetadata.ART_URL]
-  URL: str = METADATA_PY_TYPES[MprisMetadata.URL]
-  TITLE: str = METADATA_PY_TYPES[MprisMetadata.TITLE]
-  ARTIST: str = METADATA_PY_TYPES[MprisMetadata.ARTIST]
-  ALBUM: str = METADATA_PY_TYPES[MprisMetadata.ALBUM]
-  ALBUM_ARTIST: str = METADATA_PY_TYPES[MprisMetadata.ALBUM_ARTIST]
-  DISC_NUMBER: str = METADATA_PY_TYPES[MprisMetadata.DISC_NO]
-  TRACK_NUMBER: str = METADATA_PY_TYPES[MprisMetadata.TRACK_NUMBER]
-  COMMENT: str = METADATA_PY_TYPES[MprisMetadata.COMMENT]
+  TRACKID: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.TRACKID]
+  LENGTH: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.LENGTH]
+  ART_URL: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.ART_URL]
+  URL: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.URL]
+  TITLE: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.TITLE]
+  ARTIST: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.ARTIST]
+  ALBUM: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.ALBUM]
+  ALBUM_ARTIST: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.ALBUM_ARTIST]
+  DISC_NUMBER: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
+  TRACK_NUMBER: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.TRACK_NUMBER]
+  COMMENT: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.COMMENT]
 
 
 MetadataTypes = _MetadataTypes()
@@ -111,9 +98,9 @@ class MetadataObj(NamedTuple):
   art_url: Optional[MetadataTypes.STRING] = None
   url: Optional[MetadataTypes.STRING] = None
   title: Optional[MetadataTypes.STRING] = None
-  artist: Optional[MetadataTypes.STRING_ARRAY] = None
+  artists: Optional[MetadataTypes.STRING_ARRAY] = None
   album: Optional[MetadataTypes.STRING] = None
-  album_artist: Optional[MetadataTypes.STRING_ARRAY] = None
+  album_artists: Optional[MetadataTypes.STRING_ARRAY] = None
   disc_no: Optional[MetadataTypes.INT32] = None
   track_no: Optional[MetadataTypes.INT32] = None
   comment: Optional[MetadataTypes.COMMENT] = None
@@ -121,13 +108,16 @@ class MetadataObj(NamedTuple):
   def to_dict(self) -> Metadata:
     return Metadata({
       key: val
-      for key, val in zip(MprisMetadata, self)
+      for key, val in zip(MetadataEntries, self)
       if val is not None
     })
 
 
 Metadata = \
   TypedDict('Metadata', METADATA_PY_TYPES, total=False)
+
+
+ValidMetadata = Union[Metadata, MetadataObj]
 
 
 def get_runtime_types() -> Tuple[type]:
@@ -138,9 +128,9 @@ def get_runtime_types() -> Tuple[type]:
   }
 
   generics = {
-    val.__origin__
+    get_origin(val)
     for val in DBUS_PY_TYPES.values()
-    if isinstance(val, _GenericAlias)
+    if get_origin(val)
   }
 
   return tuple({*types, *generics})
@@ -167,7 +157,10 @@ def is_valid_metadata(key: str, obj: Any) -> bool:
   return is_dbus_type(obj) and not is_null_list(obj)
 
 
-def get_dbus_metadata(metadata: Metadata) -> DbusMetadata:
+def get_dbus_metadata(metadata: ValidMetadata) -> DbusMetadata:
+  if isinstance(metadata, MetadataObj):
+    metadata: Metadata = metadata.to_dict()
+
   return {
     key: Variant(METADATA_TYPES[key], val)
     for key, val in metadata.items()

@@ -6,7 +6,7 @@ from string import ascii_letters, digits
 
 from gi.repository.GLib import Variant
 
-from .types import TypeAlias
+from .types import TypeAlias, GenericAlias, _GenericAlias
 
 
 Props = List[str]
@@ -56,12 +56,14 @@ RAND_CHARS: int = 5
 Microseconds = int
 VolumeDecimal = float
 RateDecimal = float
-DbusTypes = Union[str, float, int, bool, list]
-AttrVals = Dict[str, DbusTypes]
-DbusMetadata = Dict[str, Variant]
-DbusObj = str
 PlaylistEntry = Tuple[str, str, str]
 PlaylistValidity = bool
+DbusType = str
+_DbusTypes = Union[str, float, int, bool, list]
+AttrVals = Dict[str, _DbusTypes]
+DbusMetadata = Dict[str, Variant]
+DbusObj = str
+Types = Union[type, GenericAlias, _GenericAlias]
 
 
 # See https://docs.python.org/3/library/enum.html#using-automatic-values
@@ -77,14 +79,35 @@ class PlayState(AutoName):
 
 
 class _DbusTypes(NamedTuple):
-  OBJ: str = 'o'
-  STRING: str = 's'
-  INT32: str = 'i'
-  INT64: str = 'x'
-  STRING_ARRAY: str = 'as'
+  OBJ: DbusType = 'o'
+  STRING: DbusType = 's'
+  INT32: DbusType = 'i'
+  INT64: DbusType = 'x'
+  UINT32: DbusType = 'u'
+  UINT64: DbusType = 't'
+  DOUBLE: DbusType = 'd'
+  BOOLEAN: DbusType = 'b'
+  OBJ_ARRAY: DbusType = 'ao'
+  STRING_ARRAY: DbusType = 'as'
 
 
 DbusTypes = _DbusTypes()
+
+
+class _MprisTypes(NamedTuple):
+  OBJ: Types = str
+  STRING: Types = str
+  INT32: Types = int
+  INT64: Types = int
+  UINT32: Types = int
+  UINT64: Types = int
+  DOUBLE: Types = float
+  BOOLEAN: Types = bool
+  OBJ_ARRAY: Types = List[str]
+  STRING_ARRAY: Types = List[str]
+
+
+MprisTypes = _MprisTypes()
 
 
 class Artist(NamedTuple):
