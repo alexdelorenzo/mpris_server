@@ -1,12 +1,13 @@
 from __future__ import annotations
 from typing import List, Tuple, NamedTuple, Any, \
-  Dict, TypedDict, Optional, Union
+  Dict, Optional, Union
 
 from gi.repository.GLib import Variant
 
 from .base import DbusTypes, DbusMetadata, DEFAULT_TRACK_ID, \
   DbusTypes, MprisTypes, DbusType, Types
-from .types import get_origin, TypeAlias, GenericAlias, _GenericAlias
+from .types import get_origin, TypeAlias, \
+  GenericAlias, _GenericAlias, TypedDict
 
 
 DEFAULT_METADATA: Metadata = {}

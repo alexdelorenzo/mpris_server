@@ -1,12 +1,12 @@
 from typing import Iterable, Union, Dict, Tuple, \
-  Optional, NamedTuple, List, TypedDict, TypeAlias, \
-  Set
+  Optional, NamedTuple, List, Set
 from enum import Enum, auto
 from string import ascii_letters, digits
 
 from gi.repository.GLib import Variant
 
-from .types import TypeAlias, GenericAlias, _GenericAlias
+from .types import \
+  TypedDict, TypeAlias, GenericAlias, _GenericAlias
 
 
 Props = List[str]
