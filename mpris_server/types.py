@@ -1,9 +1,14 @@
+# Python 3.10+
 try:
-  # Python 3.10+
   from typing import \
-    Protocol, runtime_checkable, Final, TypedDict, TypeAlias
+    Protocol, runtime_checkable, Final, TypedDict, TypeAlias, \
+    get_origin, GenericAlias, _GenericAlias, Union
 
+# Python 3.7 - 3.9
 except ImportError:
-  # Python 3.7 - 3.9
   from typing_extensions import \
-    Protocol, runtime_checkable, Final, TypedDict, TypeAlias
+    Protocol, runtime_checkable, Final, TypedDict, TypeAlias, \
+    get_origin, GenericAlias, _GenericAlias, Union
+
+
+GenericAliases = Union[GenericAlias, _GenericAlias]
