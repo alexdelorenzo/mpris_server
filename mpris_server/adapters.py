@@ -3,8 +3,9 @@ from abc import ABC
 
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
   VolumeDecimal, RateDecimal, DbusObj, PlaylistEntry, PlaylistValidity, \
-  DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track
-from .metadata import Metadata
+  DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track, \
+  MprisTypes
+from .metadata import Metadata, ValidMetadata
 
 
 class RootAdapter(ABC):
@@ -43,14 +44,13 @@ class RootAdapter(ABC):
 
 
 class PlayerAdapter(ABC):
-  def metadata(self) -> Metadata:
+  def metadata(self) -> ValidMetadata:
     """
     Implement this function to supply your own MPRIS Metadata.
 
     If this function is implemented, metadata won't be built from get_current_track().
 
     See: https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
-    :return:
     """
     pass
 
@@ -60,7 +60,6 @@ class PlayerAdapter(ABC):
     The base library expected Track-like objects to build metadata.
 
     If metadata() is implemented, this function won't be used to build MPRIS metadata.
-    :return:
     """
     pass
 
