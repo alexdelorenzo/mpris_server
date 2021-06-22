@@ -2,7 +2,7 @@ from typing import List
 from setuptools import setup
 from pathlib import Path
 
-from mpris_server import __version__
+#from mpris_server import __version__
 
 
 REQS: List[str] = Path('requirements.txt') \
@@ -20,7 +20,7 @@ README: str = Path('README.md').read_text()
 
 setup(
   name="mpris_server",
-  version=__version__,
+  version='0.3.2',
   description="Publish a MediaPlayer2 MPRIS device to D-Bus.",
   long_description=README,
   long_description_content_type="text/markdown",

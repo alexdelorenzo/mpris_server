@@ -47,7 +47,8 @@ DEFAULT_ORDERINGS: Props = ["Alphabetical", "User"]
 
 # valid characters for a DBus name 
 VALID_PUNC: str = '_'
-VALID_CHARS: Set[str] = set(digits + ascii_letters + VALID_PUNC)
+VALID_CHARS: Set[str] = \
+  set(digits + ascii_letters + VALID_PUNC)
 NAME_PREFIX: str = "Mpris_Server_"
 RAND_CHARS: int = 5
 
