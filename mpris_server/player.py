@@ -9,7 +9,9 @@ from .base import PlayState, MUTE_VOL, MAX_VOL, PAUSE_RATE, BEGINNING, \
     Track
 from .interface import MprisInterface
 from .metadata import Metadata, DbusMetadata, DbusTypes, \
-  get_dbus_metadata, METADATA_TYPES, DEFAULT_METADATA
+  get_dbus_metadata, METADATA_TYPES, DEFAULT_METADATA, \
+  ValidMetadata, MetadataObj
+
 
 logger = logging.getLogger(__name__)
 
