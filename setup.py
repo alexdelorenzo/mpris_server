@@ -1,24 +1,26 @@
+from typing import List
 from setuptools import setup
 from pathlib import Path
 
+from mpris_server import __version__
 
-REQS = \
-  Path('requirements.txt') \
-    .read_text() \
-    .split('\n')
 
-REQS = [
+REQS: List[str] = Path('requirements.txt') \
+  .read_text() \
+  .splitlines()
+
+REQS: List[str] = [
   req
   for req in REQS
   if not req.strip().startswith('#')
 ]
 
-README = Path('README.md').read_text()
+README: str = Path('README.md').read_text()
 
 
 setup(
   name="mpris_server",
-  version="0.3.1",
+  version=__version__,
   description="Publish a MediaPlayer2 MPRIS device to D-Bus.",
   long_description=README,
   long_description_content_type="text/markdown",
