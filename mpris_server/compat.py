@@ -11,7 +11,7 @@ from emoji import emoji_count, demojize
 
 from .base import VALID_CHARS, RAND_CHARS, NAME_PREFIX
 from .metadata import Metadata, DbusMetadata, DbusTypes, \
-  MprisMetadata, DbusTypes, METADATA_TYPES
+  DbusTypes, METADATA_TYPES
 
 
 logger = logging.getLogger(__name__)
