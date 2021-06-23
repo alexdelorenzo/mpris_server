@@ -1,16 +1,23 @@
-[tool]
-[tool.poetry]
-name = "mpris_server"
-version = "0.3.1"
-description = "Publish a MediaPlayer2 MPRIS device to D-Bus."
-license = "AGPL-3.0"
-homepage = "https://alexdelorenzo.dev"
-authors = ["Alex DeLorenzo"]
-readme = "README.md"
+#[build-system]
+  #requires = [
+    #"setuptools >= 40.9.0",
+    #"wheel",
+  #]
+  #build-backend = "setuptools.build_meta"
 
-[tool.poetry.dependencies]
-python = ">=3.6"
-emoji = "==1.2.0"
-pydbus = ">=0.6.0"
-pygobject = ">=3.34.0"
-unidecode = "==1.2.0"
+[tool]
+  [tool.poetry]
+    name = "mpris_server"
+    version = "0.3.3"
+    description = "Publish a MediaPlayer2 MPRIS device to D-Bus."
+    license = "AGPL-3.0"
+    homepage = "https://alexdelorenzo.dev"
+    authors = ["Alex DeLorenzo"]
+    readme = "README.md"
+
+  [tool.poetry.dependencies]
+    python = ">=3.6"
+    emoji = "==1.2.0"
+    pydbus = ">=0.6.0"
+    pygobject = ">=3.34.0"
+    unidecode = "==1.2.0"
