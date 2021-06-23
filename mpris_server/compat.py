@@ -1,8 +1,8 @@
 # Python and DBus compatibility
 # See:  https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
+from __future__ import annotations
 from random import choices
-from typing import Dict, Tuple, Any, Callable, \
-  Optional, Set
+from typing import Any, Callable, Optional
 from functools import wraps
 import logging
 
@@ -21,8 +21,8 @@ START_WITH = "_"
 FIRST_CHAR = 0
 
 # following must be subscriptable to be used with choices()
-VALID_CHARS_SUB: Tuple[str] = tuple(VALID_CHARS)
-INTERFACE_CHARS: Set[str] = {*VALID_CHARS, '-'}
+VALID_CHARS_SUB: tuple[str] = tuple(VALID_CHARS)
+INTERFACE_CHARS: set[str] = {*VALID_CHARS, '-'}
 
 
 ReturnsStr = Callable[..., str]

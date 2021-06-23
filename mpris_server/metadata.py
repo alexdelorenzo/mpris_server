@@ -1,6 +1,5 @@
 from __future__ import annotations
-from typing import List, Tuple, NamedTuple, Any, \
-  Dict, Optional, Union
+from typing import NamedTuple, Any, Optional, Union
 
 from gi.repository.GLib import Variant
 
@@ -34,7 +33,7 @@ MetadataEntries = _MetadataEntries()
 
 
 # map of D-Bus metadata entries and their D-Bus types
-METADATA_TYPES: Dict[MetadataEntry, DbusType] = {
+METADATA_TYPES: dict[MetadataEntry, DbusType] = {
   MetadataEntries.TRACKID: DbusTypes.OBJ,
   MetadataEntries.LENGTH: DbusTypes.INT64,
   MetadataEntries.ART_URL: DbusTypes.STRING,
@@ -48,7 +47,7 @@ METADATA_TYPES: Dict[MetadataEntry, DbusType] = {
   MetadataEntries.COMMENT: DbusTypes.STRING_ARRAY,
 }
 
-DBUS_PY_TYPES: Dict[DbusType, Types] = {
+DBUS_PY_TYPES: dict[DbusType, Types] = {
   DbusTypes.OBJ: MprisTypes.OBJ,
   DbusTypes.STRING: MprisTypes.STRING,
   DbusTypes.INT32: MprisTypes.INT32,
@@ -61,7 +60,7 @@ DBUS_PY_TYPES: Dict[DbusType, Types] = {
   DbusTypes.STRING_ARRAY: MprisTypes.STRING_ARRAY,
 }
 
-METADATA_PY_TYPES: Dict[MetadataEntry, Types] = {
+METADATA_PY_TYPES: dict[MetadataEntry, Types] = {
   MetadataEntries.TRACKID: DBUS_PY_TYPES[DbusTypes.OBJ],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
   MetadataEntries.ART_URL: DBUS_PY_TYPES[DbusTypes.STRING],
@@ -121,7 +120,7 @@ Metadata = \
 ValidMetadata = Union[Metadata, MetadataObj]
 
 
-def get_runtime_types() -> Tuple[type]:
+def get_runtime_types() -> tuple[type]:
   types = {
     val
     for val in DBUS_PY_TYPES.values()
@@ -137,7 +136,7 @@ def get_runtime_types() -> Tuple[type]:
   return tuple({*types, *generics})
 
 
-DBUS_RUNTIME_TYPES: Tuple[type] = get_runtime_types()
+DBUS_RUNTIME_TYPES: tuple[type] = get_runtime_types()
 
 
 def is_null_list(obj: Any) -> bool:
