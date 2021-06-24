@@ -5,7 +5,7 @@ from gi.repository.GLib import Variant
 
 from .base import DbusTypes, DbusMetadata, DEFAULT_TRACK_ID, \
   DbusTypes, MprisTypes, DbusType, Types
-from .types import get_origin, TypeAlias, \
+from .types import get_origin, TypeAlias, Final, \
   GenericAlias, _GenericAlias, TypedDict
 
 

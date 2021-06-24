@@ -164,32 +164,33 @@ class Player(MprisInterface):
             logger.debug("%s.SetPosition not allowed", self.INTERFACE)
             return
 
-        metadata = self.adapter.metadata()
+        #metadata = self.adapter.metadata()
+        #current_track: Optional[Track] = None
 
-        # use metadata from adapter if available
-        if metadata \
-          and 'mpris:trackid' in metadata \
-          and 'mpris:length' in metadata:
-            current_track = Track(
-                track_id=metadata['mpris:trackid'],
-                length=metadata['mpris:length']
-            )
+        ##use metadata from adapter if available
+        #if metadata \
+          #and 'mpris:trackid' in metadata \
+          #and 'mpris:length' in metadata:
+            #current_track = Track(
+                #track_id=metadata['mpris:trackid'],
+                #length=metadata['mpris:length']
+            #)
 
-        # if no metadata, build metadata from Track interface
-        else:
-            current_track = self.adapter.get_current_track()
+        ##if no metadata, build metadata from Track interface
+        #else:
+            #current_track = self.adapter.get_current_track()
 
-        if current_track is None:
-            return
+        #if current_track is None:
+            #return
 
-        if track_id != current_track.track_id:
-            return
+        #if track_id != current_track.track_id:
+            #return
 
-        if position < BEGINNING:
-            return
+        #if position < BEGINNING:
+            #return
 
-        if current_track.length < position:
-            return
+        #if current_track.length < position:
+            #return
 
         self.adapter.seek(position)
 
