@@ -1,3 +1,4 @@
+from future import __annotations__
 from typing import Iterable, Union, Dict, Tuple, \
   Optional, NamedTuple, List, Set
 from enum import Enum, auto
@@ -9,7 +10,8 @@ from .types import \
   TypedDict, TypeAlias, GenericAlias, _GenericAlias
 
 
-Props = List[str]
+Prop = str
+Props = List[Prop]
 
 
 INTERFACE: str = "org.mpris.MediaPlayer2"
@@ -28,6 +30,14 @@ ON_PLAYPAUSE_PROPS: Props = ['PlaybackStatus']
 ON_TITLE_PROPS: Props = ['Metadata']
 ON_OPTION_PROPS: Props = ['LoopStatus', 'Shuffle', 'CanGoPrevious', 'CanGoNext']
 ON_SEEK_PROPS: Props = ['Position']
+ON_PLAYER_PROPS: set[Prop] = {
+  *ON_ENDED_PROPS,
+  *ON_VOLUME_PROPS,
+  *ON_PLAYPAUSE_PROPS,
+  *ON_TITLE_PROPS,
+  *ON_OPTION_PROPS,
+  *ON_SEEK_PROPS
+}
 
 ON_TRACKS_PROPS: Props = ['Tracks']
 ON_PLAYLIST_PROPS: Props = ['PlaylistCount', 'Orderings', 'ActivePlaylist']

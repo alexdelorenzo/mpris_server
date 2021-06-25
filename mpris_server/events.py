@@ -1,10 +1,11 @@
+from __future__ import annotations
 from abc import ABC
-from typing import List, Optional
+from typing import Optional
 
 from .base import dbus_emit_changes, ON_ENDED_PROPS, \
   ON_VOLUME_PROPS, ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, \
   ON_TITLE_PROPS, Microseconds, ON_SEEK_PROPS, ON_OPTION_PROPS, \
-  DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS
+  DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, ON_PLAYER_PROPS
 from .interface import MprisInterface
 from .player import Player
 from .playlists import Playlists
@@ -26,12 +27,12 @@ class BaseEventAdapter(ABC):
     self.playlist = playlist
     self.tracklist = tracklist
 
-  def emit_changes(self, interface: MprisInterface, changes: List[str]):
+  def emit_changes(self, interface: MprisInterface, changes: list[str]):
     dbus_emit_changes(interface, changes)
 
 
 class PlayerEventAdapter(BaseEventAdapter, ABC):
-  def emit_player_changes(self, changes: List[str]):
+  def emit_player_changes(self, changes: list[str]):
     self.emit_changes(self.player, changes)
 
   def on_ended(self):
@@ -56,9 +57,12 @@ class PlayerEventAdapter(BaseEventAdapter, ABC):
   def on_options(self):
     self.emit_player_changes(ON_OPTION_PROPS)
 
+  def on_player_all(self):
+    self.emit_player_changes(ON_PLAYER_PROPS)
+
 
 class PlaylistsEventAdapter(BaseEventAdapter, ABC):
-  def emit_playlist_changes(self, changes: List[str]):
+  def emit_playlist_changes(self, changes: list[str]):
     self.emit_changes(self.playlist, changes)
 
   def on_playlist_change(self, playlist_id: DbusObj):
@@ -67,10 +71,10 @@ class PlaylistsEventAdapter(BaseEventAdapter, ABC):
 
 
 class TracklistEventAdapter(BaseEventAdapter, ABC):
-  def emit_tracklist_changes(self, changes: List[str]):
+  def emit_tracklist_changes(self, changes: list[str]):
     self.emit_changes(self.tracklist, changes)
 
-  def on_list_replaced(self, tracks: List[DbusObj], current_track: DbusObj):
+  def on_list_replaced(self, tracks: list[DbusObj], current_track: DbusObj):
     self.tracklist.TrackListReplaced(tracks, current_track)
     self.emit_tracklist_changes(ON_TRACKS_PROPS)
 
