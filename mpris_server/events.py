@@ -1,11 +1,12 @@
 from __future__ import annotations
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Optional
 
 from .base import dbus_emit_changes, ON_ENDED_PROPS, \
   ON_VOLUME_PROPS, ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, \
   ON_TITLE_PROPS, Microseconds, ON_SEEK_PROPS, ON_OPTION_PROPS, \
-  DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, ON_PLAYER_PROPS
+  DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, ON_PLAYER_PROPS, \
+  ON_ROOT_PROPS
 from .interface import MprisInterface
 from .player import Player
 from .playlists import Playlists
@@ -30,8 +31,28 @@ class BaseEventAdapter(ABC):
   def emit_changes(self, interface: MprisInterface, changes: list[str]):
     dbus_emit_changes(interface, changes)
 
+  @abstractmethod
+  def emit_all(self):
+    pass
+
+
+class RootEventAdapter(BaseEventAdapter, ABC):
+  def emit_all(self):
+    self.on_root_all()
+    super().emit_all()
+
+  def emit_root_changes(self, changes: list[str]):
+    self.emit_changes(self.root, changes)
+
+  def on_root_all(self):
+    self.emit_root_changes(ON_ROOT_PROPS)
+
 
 class PlayerEventAdapter(BaseEventAdapter, ABC):
+  def emit_all(self):
+    self.on_player_all()
+    super().emit_all()
+
   def emit_player_changes(self, changes: list[str]):
     self.emit_changes(self.player, changes)
 
@@ -91,11 +112,17 @@ class TracklistEventAdapter(BaseEventAdapter, ABC):
     self.emit_tracklist_changes(ON_TRACKS_PROPS)
 
 
-class EventAdapter(PlayerEventAdapter, TracklistEventAdapter, PlaylistsEventAdapter, ABC):
-  """
-  Notify DBUS of state-change events in the media player.
+class EventAdapter(
+  RootEventAdapter,
+  PlayerEventAdapter,
+  TracklistEventAdapter,
+  PlaylistsEventAdapter,
+  ABC,
+):
+  '''
+  Notify D-Bus of state-change events in the media player.
 
   Implement this class and integrate it in your application to emit
-  DBUS signals when there are state changes in the media player.
-  """
+  D-Bus signals when there are state changes in the media player.
+  '''
   pass
