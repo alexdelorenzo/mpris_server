@@ -5,8 +5,7 @@ from gi.repository.GLib import Variant
 
 from .base import DbusTypes, DbusMetadata, DEFAULT_TRACK_ID, \
   DbusTypes, MprisTypes, DbusType, Types
-from .types import get_origin, TypeAlias, Final, \
-  GenericAlias, _GenericAlias, TypedDict
+from .types import Final, TypedDict, is_type, get_type
 
 
 DEFAULT_METADATA: Metadata = {}
@@ -122,18 +121,12 @@ ValidMetadata = Union[Metadata, MetadataObj]
 
 def get_runtime_types() -> tuple[type]:
   types = {
-    val
+    get_type(val)
     for val in DBUS_PY_TYPES.values()
-    if isinstance(val, type)
+    if is_type(val)
   }
 
-  generics = {
-    get_origin(val)
-    for val in DBUS_PY_TYPES.values()
-    if get_origin(val)
-  }
-
-  return tuple({*types, *generics})
+  return tuple(types)
 
 
 DBUS_RUNTIME_TYPES: tuple[type] = get_runtime_types()
@@ -157,12 +150,16 @@ def is_valid_metadata(key: str, obj: Any) -> bool:
   return is_dbus_type(obj) and not is_null_list(obj)
 
 
+def get_dbus_var(entry: MetadataEntry, obj: DbusType) -> Variant:
+  return Variant(METADATA_TYPES[entry], obj)
+
+
 def get_dbus_metadata(metadata: ValidMetadata) -> DbusMetadata:
   if isinstance(metadata, MetadataObj):
     metadata: Metadata = metadata.to_dict()
 
   return {
-    key: Variant(METADATA_TYPES[key], val)
+    key: get_dbus_var(key, val)
     for key, val in metadata.items()
     if is_valid_metadata(key, val)
   }
