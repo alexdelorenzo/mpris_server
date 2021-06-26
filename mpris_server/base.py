@@ -1,6 +1,6 @@
-from future import __annotations__
-from typing import Iterable, Union, Dict, Tuple, \
-  Optional, NamedTuple, List, Set
+from __future__ import annotations
+from typing import Iterable, Union, Tuple, \
+  Optional, NamedTuple
 from enum import Enum, auto
 from string import ascii_letters, digits
 
@@ -11,33 +11,36 @@ from .types import \
 
 
 Prop = str
-Props = List[Prop]
+Props = list[Prop]
 
 
 INTERFACE: str = "org.mpris.MediaPlayer2"
 NAME: str = "mprisServer"
-MIME_TYPES: Props = ["audio/mpeg", "application/ogg", "video/mpeg"]
+MIME_TYPES: list[str] = ["audio/mpeg", "application/ogg", "video/mpeg"]
 BUS_TYPE: str = "session"
 URI: Props = ["file"]
 DEFAULT_DESKTOP: str = ''
 
-# typically, these are the props that dbus needs to be notified about
+# typically, these are the props that D-Bus needs to be notified about
 # upon specific state-change events.
 ON_ENDED_PROPS: Props = ['PlaybackStatus']
 ON_VOLUME_PROPS: Props = ['Volume', 'Metadata']
 ON_PLAYBACK_PROPS: Props = ['PlaybackStatus', 'Metadata']
 ON_PLAYPAUSE_PROPS: Props = ['PlaybackStatus']
 ON_TITLE_PROPS: Props = ['Metadata']
-ON_OPTION_PROPS: Props = ['LoopStatus', 'Shuffle', 'CanGoPrevious', 'CanGoNext']
+ON_OPTION_PROPS: Props = [
+  'LoopStatus', 'Shuffle', 'CanGoPrevious', 'CanGoNext',
+  'CanPlay', 'CanPause'
+]
 ON_SEEK_PROPS: Props = ['Position']
-ON_PLAYER_PROPS: set[Prop] = {
+ON_PLAYER_PROPS: Props = list({
   *ON_ENDED_PROPS,
   *ON_VOLUME_PROPS,
   *ON_PLAYPAUSE_PROPS,
   *ON_TITLE_PROPS,
   *ON_OPTION_PROPS,
   *ON_SEEK_PROPS
-}
+})
 
 ON_TRACKS_PROPS: Props = ['Tracks']
 ON_PLAYLIST_PROPS: Props = ['PlaylistCount', 'Orderings', 'ActivePlaylist']
@@ -55,10 +58,10 @@ DEFAULT_TRACK_ID: str = '/default/1'
 DEFAULT_PLAYLIST_COUNT: int = 1
 DEFAULT_ORDERINGS: Props = ["Alphabetical", "User"]
 
-# valid characters for a DBus name 
+# valid characters for a DBus name
 VALID_PUNC: str = '_'
-VALID_CHARS: Set[str] = \
-  set(digits + ascii_letters + VALID_PUNC)
+VALID_CHARS: set[str] = {*ascii_letters, *digits, *VALID_PUNC}
+
 NAME_PREFIX: str = "Mpris_Server_"
 RAND_CHARS: int = 5
 
@@ -67,12 +70,12 @@ RAND_CHARS: int = 5
 Microseconds = int
 VolumeDecimal = float
 RateDecimal = float
-PlaylistEntry = Tuple[str, str, str]
+PlaylistEntry = tuple[str, str, str]
 PlaylistValidity = bool
 DbusType = str
 _DbusTypes = Union[str, float, int, bool, list]
-AttrVals = Dict[str, _DbusTypes]
-DbusMetadata = Dict[str, Variant]
+AttrVals = dict[str, _DbusTypes]
+DbusMetadata = dict[str, Variant]
 DbusObj = str
 Types = Union[type, GenericAlias, _GenericAlias]
 
@@ -114,8 +117,8 @@ class _MprisTypes(NamedTuple):
   UINT64: Types = int
   DOUBLE: Types = float
   BOOLEAN: Types = bool
-  OBJ_ARRAY: Types = List[str]
-  STRING_ARRAY: Types = List[str]
+  OBJ_ARRAY: Types = list[str]
+  STRING_ARRAY: Types = list[str]
 
 
 MprisTypes = _MprisTypes()
@@ -127,7 +130,7 @@ class Artist(NamedTuple):
 
 class Album(NamedTuple):
   name: str = "Default Album"
-  artists: Tuple[Artist] = tuple()
+  artists: tuple[Artist] = tuple()
   art_url: Optional[str] = None
 
 
@@ -137,7 +140,7 @@ class Track(NamedTuple):
   track_no: Optional[int] = None
   length: Microseconds = 0
   uri: Optional[str] = None
-  artists: Tuple[Artist] = tuple()
+  artists: tuple[Artist] = tuple()
   album: Optional[Album] = None
   art_url: Optional[str] = None
   disc_no: Optional[int] = None
