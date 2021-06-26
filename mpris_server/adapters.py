@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from abc import ABC
 
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
@@ -87,7 +87,11 @@ class PlayerAdapter(ABC):
   def get_playstate(self) -> PlayState:
     pass
 
-  def seek(self, time: Microseconds):
+  def seek(
+    self,
+    time: Microseconds,
+    track_id: Optional[DbusObj] = None
+  ):
     pass
 
   def open_uri(self, uri: str):

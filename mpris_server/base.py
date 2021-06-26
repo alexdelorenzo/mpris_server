@@ -25,14 +25,17 @@ DEFAULT_DESKTOP: str = ''
 # upon specific state-change events.
 ON_ENDED_PROPS: Props = ['PlaybackStatus']
 ON_VOLUME_PROPS: Props = ['Volume', 'Metadata']
-ON_PLAYBACK_PROPS: Props = ['PlaybackStatus', 'Metadata']
+ON_PLAYBACK_PROPS: Props = [
+  'PlaybackStatus', 'Metadata', 'CanControl', 'Rate',
+  'MinimumRate', 'MaximumWait',
+]
 ON_PLAYPAUSE_PROPS: Props = ['PlaybackStatus']
 ON_TITLE_PROPS: Props = ['Metadata']
 ON_OPTION_PROPS: Props = [
   'LoopStatus', 'Shuffle', 'CanGoPrevious', 'CanGoNext',
-  'CanPlay', 'CanPause'
+  'CanPlay', 'CanPause',
 ]
-ON_SEEK_PROPS: Props = ['Position']
+ON_SEEK_PROPS: Props = ['Position', 'CanSeek',]
 ON_PLAYER_PROPS: Props = list({
   *ON_ENDED_PROPS,
   *ON_VOLUME_PROPS,
@@ -44,6 +47,11 @@ ON_PLAYER_PROPS: Props = list({
 
 ON_TRACKS_PROPS: Props = ['Tracks']
 ON_PLAYLIST_PROPS: Props = ['PlaylistCount', 'Orderings', 'ActivePlaylist']
+ON_ROOT_PROPS: Props = [
+  'CanQuit', 'Fullscreen', 'CanSetFullscreen', 'CanRaise',
+  'HasTrackList', 'Identity', 'DesktopEntry', 'SupportedUriSchemes',
+  'SupportedMimeTypes'
+]
 
 DEFAULT_RATE: float = 1.0
 PAUSE_RATE: int = 0

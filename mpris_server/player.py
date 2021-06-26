@@ -192,7 +192,7 @@ class Player(MprisInterface):
         #if current_track.length < position:
             #return
 
-        self.adapter.seek(position)
+        self.adapter.seek(position, track_id=track_id)
 
     def OpenUri(self, uri: str):
         logger.debug("%s.OpenUri called", self.INTERFACE)
@@ -370,42 +370,44 @@ class Player(MprisInterface):
     @property
     def CanGoNext(self) -> bool:
         self.log_trace("Getting %s.CanGoNext", self.INTERFACE)
-        if not self.CanControl:
-            return False
+        #if not self.CanControl:
+            #return False
 
         return self.adapter.can_go_next()
 
     @property
     def CanGoPrevious(self) -> bool:
         self.log_trace("Getting %s.CanGoPrevious", self.INTERFACE)
-        if not self.CanControl:
-            return False
+        #if not self.CanControl:
+            #return False
 
         return self.adapter.can_go_previous()
 
     @property
     def CanPlay(self) -> bool:
         self.log_trace("Getting %s.CanPlay", self.INTERFACE)
-        if not self.CanControl:
-            return False
+        #if not self.CanControl:
+            #return False
 
         return self.adapter.can_play()
 
     @property
     def CanPause(self) -> bool:
         self.log_trace("Getting %s.CanPause", self.INTERFACE)
-        if not self.CanControl:
-            return False
+        return self.adapter.can_pause()
+        #if not self.CanControl:
+            #return False
 
-        return True
+        #return True
 
     @property
     def CanSeek(self) -> bool:
         self.log_trace("Getting %s.CanSeek", self.INTERFACE)
-        if not self.CanControl:
-            return False
+        return self.adapter.can_seek()
+        #if not self.CanControl:
+            #return False
 
-        return True
+        #return True
 
     @property
     def CanControl(self) -> bool:
