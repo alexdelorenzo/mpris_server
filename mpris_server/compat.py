@@ -21,7 +21,7 @@ START_WITH: str = "_"
 FIRST_CHAR: int = 0
 
 # following must be subscriptable to be used with random.choices()
-VALID_CHARS_SUB: tuple[str] = tuple(VALID_CHARS)
+VALID_CHARS_SUB: tuple[str, ...] = tuple(VALID_CHARS)
 INTERFACE_CHARS: set[str] = {*VALID_CHARS, '-'}
 
 

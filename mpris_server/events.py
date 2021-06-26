@@ -21,7 +21,7 @@ class BaseEventAdapter(ABC):
     player: Player,
     root: Root,
     playlist: Optional[Playlists] = None,
-    tracklist: Optional[TrackList] = None
+    tracklist: Optional[TrackList] = None,
   ):
     self.root = root
     self.player = player

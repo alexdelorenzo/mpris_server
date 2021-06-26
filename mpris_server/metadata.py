@@ -119,7 +119,7 @@ Metadata = \
 ValidMetadata = Union[Metadata, MetadataObj]
 
 
-def get_runtime_types() -> tuple[type]:
+def get_runtime_types() -> tuple[type, ...]:
   types = {
     get_type(val)
     for val in DBUS_PY_TYPES.values()
@@ -129,7 +129,7 @@ def get_runtime_types() -> tuple[type]:
   return tuple(types)
 
 
-DBUS_RUNTIME_TYPES: tuple[type] = get_runtime_types()
+DBUS_RUNTIME_TYPES: tuple[type, ...] = get_runtime_types()
 
 
 def is_null_list(obj: Any) -> bool:
