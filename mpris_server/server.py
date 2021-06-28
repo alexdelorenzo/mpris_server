@@ -5,14 +5,14 @@ import logging
 from gi.repository import GLib
 import pydbus
 
-from .base import NAME, BUS_TYPE
-from .compat import get_dbus_name
 from .adapters import MprisAdapter
+from .base import NAME, BUS_TYPE
 from .interfaces.player import Player
 from .interfaces.playlists import Playlists
 from .interfaces.root import Root
 from .interfaces.interface import MprisInterface
 from .interfaces.tracklist import TrackList
+from .mpris.compat import get_dbus_name
 
 
 class Server:

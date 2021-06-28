@@ -9,7 +9,8 @@ import logging
 from unidecode import unidecode
 from emoji import emoji_count, demojize
 
-from ..base import VALID_CHARS, RAND_CHARS, NAME_PREFIX
+from ..base import VALID_CHARS, RAND_CHARS, NAME_PREFIX, \
+  DbusObj
 from .metadata import Metadata, DbusMetadata, DbusTypes, \
   DbusTypes, METADATA_TYPES
 
@@ -87,3 +88,8 @@ def get_dbus_name(
   # if there is no name left after normalizing,
   # then make a random one and validate it
   return get_dbus_name(random_name())
+
+
+@enforce_dbus_length
+def get_track_id(name: str) -> DbusObj:
+  return f'/track/{get_dbus_name(name)}'

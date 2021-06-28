@@ -35,14 +35,12 @@ ON_OPTION_PROPS: Props = [
   'LoopStatus', 'Shuffle', 'CanGoPrevious', 'CanGoNext',
   'CanPlay', 'CanPause',
 ]
-ON_SEEK_PROPS: Props = ['Position', 'CanSeek',]
+ON_SEEK_PROPS: Props = ['Position', 'CanSeek']
+
+# all props for each interface
 ON_PLAYER_PROPS: Props = list({
-  *ON_ENDED_PROPS,
-  *ON_VOLUME_PROPS,
-  *ON_PLAYPAUSE_PROPS,
-  *ON_TITLE_PROPS,
-  *ON_OPTION_PROPS,
-  *ON_SEEK_PROPS
+  *ON_ENDED_PROPS, *ON_VOLUME_PROPS, *ON_PLAYPAUSE_PROPS,
+  *ON_TITLE_PROPS, *ON_OPTION_PROPS, *ON_SEEK_PROPS,
 })
 ON_TRACKS_PROPS: Props = ['Tracks']
 ON_PLAYLIST_PROPS: Props = ['PlaylistCount', 'Orderings', 'ActivePlaylist']

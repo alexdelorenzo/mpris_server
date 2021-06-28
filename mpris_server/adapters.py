@@ -1,4 +1,5 @@
-from typing import List, Tuple, Optional
+from __future__ import annotations
+from typing import Optional
 from abc import ABC
 
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
@@ -6,6 +7,9 @@ from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
   DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track, \
   MprisTypes
 from .mpris.metadata import Metadata, ValidMetadata
+
+
+ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
 
 
 class RootAdapter(ABC):
@@ -21,10 +25,10 @@ class RootAdapter(ABC):
   def has_tracklist(self) -> bool:
     pass
 
-  def get_uri_schemes(self) -> List[str]:
+  def get_uri_schemes(self) -> list[str]:
     return URI
 
-  def get_mime_types(self) -> List[str]:
+  def get_mime_types(self) -> list[str]:
     return MIME_TYPES
 
   def set_raise(self, val: bool):
@@ -168,21 +172,21 @@ class PlaylistAdapter(ABC):
   def activate_playlist(self, id: DbusObj):
     pass
 
-  def get_playlists(self, index: int, max_count: int, order: str, reverse: bool) -> List[PlaylistEntry]:
+  def get_playlists(self, index: int, max_count: int, order: str, reverse: bool) -> list[PlaylistEntry]:
     pass
 
   def get_playlist_count(self) -> int:
     return DEFAULT_PLAYLIST_COUNT
 
-  def get_orderings(self) -> List[str]:
+  def get_orderings(self) -> list[str]:
     return DEFAULT_ORDERINGS
 
-  def get_active_playlist(self) -> Tuple[PlaylistValidity, PlaylistEntry]:
+  def get_active_playlist(self) -> ActivePlaylist:
     pass
 
 
 class TrackListAdapter(ABC):
-  def get_tracks_metadata(self, track_ids: List[DbusObj]) -> Metadata:
+  def get_tracks_metadata(self, track_ids: list[DbusObj]) -> Metadata:
     pass
 
   def add_track(self, uri: str, after_track: DbusObj, set_as_current: bool):
@@ -194,7 +198,7 @@ class TrackListAdapter(ABC):
   def go_to(self, track_id: DbusObj):
     pass
 
-  def get_tracks(self) -> List[DbusObj]:
+  def get_tracks(self) -> list[DbusObj]:
     pass
 
   def can_edit_tracks(self) -> bool:
