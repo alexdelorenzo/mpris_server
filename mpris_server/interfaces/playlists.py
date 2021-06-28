@@ -1,14 +1,12 @@
-from typing import Union, List, Tuple
+from __future__ import annotations
+from typing import Union
 import base64
 import logging
 
 from pydbus.generic import signal
 
-from .base import PlaylistEntry, PlaylistValidity
+from ..base import PlaylistEntry, PlaylistValidity
 from .interface import MprisInterface
-
-
-logger = logging.getLogger(__name__)
 
 
 class Playlists(MprisInterface):
@@ -40,7 +38,7 @@ class Playlists(MprisInterface):
 
     def ActivatePlaylist(self, playlist_id: str):
         self.adapter.activate_playlist(playlist_id)
-        # logger.debug(
+        # logging.debug(
         #     "%s.ActivatePlaylist(%r) called", self.INTERFACE, playlist_id
         # )
         # playlist_uri = get_playlist_uri(playlist_id)
@@ -49,9 +47,9 @@ class Playlists(MprisInterface):
         #     tl_tracks = self.core.tracklist.add(playlist.tracks).get()
         #     self.core.playback.play(tlid=tl_tracks[0].tlid).get()
 
-    def GetPlaylists(self, index: int, max_count: int, order: str, reverse: bool) -> List[Tuple]:
+    def GetPlaylists(self, index: int, max_count: int, order: str, reverse: bool) -> list[tuple]:
         return self.adapter.get_playlists(index, max_count, order, reverse)
-        # logger.debug(
+        # logging.debug(
         #     "%s.GetPlaylists(%r, %r, %r, %r) called",
         #     self.INTERFACE,
         #     index,
@@ -75,12 +73,12 @@ class Playlists(MprisInterface):
         return self.adapter.get_playlist_count()
 
     @property
-    def Orderings(self) -> List[str]:
+    def Orderings(self) -> list[str]:
         self.log_trace("Getting %s.Orderings", self.INTERFACE)
         return self.adapter.get_orderings()
 
     @property
-    def ActivePlaylist(self) -> Tuple[PlaylistValidity, PlaylistEntry]:
+    def ActivePlaylist(self) -> tuple[PlaylistValidity, PlaylistEntry]:
         return self.adapter.get_active_playlist()
         # self.log_trace("Getting %s.ActivePlaylist", self.INTERFACE)
         # playlist_is_valid = False

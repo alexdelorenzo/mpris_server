@@ -1,14 +1,11 @@
+from __future__ import annotations
 import logging
-from typing import List
 
 from pydbus.generic import signal
 
-from .base import DbusObj
+from ..base import DbusObj
+from ..mpris.metadata import Metadata
 from .interface import MprisInterface
-from .metadata import Metadata
-
-
-logger = logging.getLogger(__name__)
 
 
 class TrackList(MprisInterface):
@@ -57,13 +54,15 @@ class TrackList(MprisInterface):
   TrackRemoved = signal()
   TrackMetadataChanged = signal()
 
-  def GetTracksMetadata(self, track_ids: List[DbusObj]) -> Metadata:
+  def GetTracksMetadata(self, track_ids: list[DbusObj]) -> Metadata:
     return self.adapter.get_tracks_metadata(track_ids)
 
-  def AddTrack(self,
-               uri: str,
-               after_track: DbusObj,
-               set_as_current: bool):
+  def AddTrack(
+    self,
+    uri: str,
+    after_track: DbusObj,
+    set_as_current: bool
+  ):
     self.adapter.add_track(uri, after_track, set_as_current)
 
   def RemoveTrack(self, track_id: DbusObj):
@@ -73,7 +72,7 @@ class TrackList(MprisInterface):
     self.adapter.go_to(track_id)
 
   @property
-  def Tracks(self) -> List[DbusObj]:
+  def Tracks(self) -> list[DbusObj]:
     return self.adapter.get_tracks()
 
   @property

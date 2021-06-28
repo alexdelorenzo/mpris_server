@@ -7,12 +7,12 @@ from .base import dbus_emit_changes, ON_ENDED_PROPS, \
   ON_TITLE_PROPS, Microseconds, ON_SEEK_PROPS, ON_OPTION_PROPS, \
   DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, ON_PLAYER_PROPS, \
   ON_ROOT_PROPS
-from .interface import MprisInterface
-from .player import Player
-from .playlists import Playlists
-from .root import Root
-from .tracklist import TrackList
-from .metadata import Metadata
+from .mpris.metadata import Metadata
+from .interfaces.interface import MprisInterface
+from .interfaces.player import Player
+from .interfaces.playlists import Playlists
+from .interfaces.root import Root
+from .interfaces.tracklist import TrackList
 
 
 class BaseEventAdapter(ABC):

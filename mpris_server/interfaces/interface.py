@@ -4,10 +4,11 @@ import logging
 
 from pydbus.generic import signal
 
-from .base import NAME, INTERFACE as MPRIS_INTERFACE
+from ..base import NAME, INTERFACE as MPRIS_INTERFACE
 
 
 logger = logging.getLogger(__name__)
+
 
 TRACE_LOG_LEVEL = 5
 

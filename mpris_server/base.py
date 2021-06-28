@@ -44,7 +44,6 @@ ON_PLAYER_PROPS: Props = list({
   *ON_OPTION_PROPS,
   *ON_SEEK_PROPS
 })
-
 ON_TRACKS_PROPS: Props = ['Tracks']
 ON_PLAYLIST_PROPS: Props = ['PlaylistCount', 'Orderings', 'ActivePlaylist']
 ON_ROOT_PROPS: Props = [

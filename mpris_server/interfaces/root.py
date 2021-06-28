@@ -1,10 +1,7 @@
 import logging
 
-from .base import INTERFACE as _INTERFACE, NAME
+from ..base import INTERFACE as _INTERFACE, NAME
 from .interface import MprisInterface
-
-
-logger = logging.getLogger(__name__)
 
 
 class Root(MprisInterface):
@@ -29,11 +26,11 @@ class Root(MprisInterface):
     INTERFACE = _INTERFACE
 
     def Raise(self):
-        logger.debug("%s.Raise called", self.INTERFACE)
+        logging.debug("%s.Raise called", self.INTERFACE)
         self.adapter.set_raise(True)
 
     def Quit(self):
-        logger.debug("%s.Quit called", self.INTERFACE)
+        logging.debug("%s.Quit called", self.INTERFACE)
         self.adapter.quit()
 
     @property
@@ -43,7 +40,7 @@ class Root(MprisInterface):
 
     @Fullscreen.setter
     def Fullscreen(self, value):
-        logger.debug("Setting %s.Fullscreen to %s", self.INTERFACE, value)
+        logging.debug("Setting %s.Fullscreen to %s", self.INTERFACE, value)
         self.adapter.set_fullscreen(value)
 
     @property

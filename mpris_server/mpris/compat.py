@@ -9,7 +9,7 @@ import logging
 from unidecode import unidecode
 from emoji import emoji_count, demojize
 
-from .base import VALID_CHARS, RAND_CHARS, NAME_PREFIX
+from ..base import VALID_CHARS, RAND_CHARS, NAME_PREFIX
 from .metadata import Metadata, DbusMetadata, DbusTypes, \
   DbusTypes, METADATA_TYPES
 

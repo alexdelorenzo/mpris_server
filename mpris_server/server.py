@@ -1,25 +1,26 @@
+from typing import Optional
+from weakref import finalize
 import logging
 
 from gi.repository import GLib
 import pydbus
 
-from .player import Player
-from .playlists import Playlists
-from .root import Root
 from .base import NAME, BUS_TYPE
 from .compat import get_dbus_name
-from .interface import MprisInterface
 from .adapters import MprisAdapter
-from .tracklist import TrackList
-
-
-logger = logging.getLogger(__name__)
+from .interfaces.player import Player
+from .interfaces.playlists import Playlists
+from .interfaces.root import Root
+from .interfaces.interface import MprisInterface
+from .interfaces.tracklist import TrackList
 
 
 class Server:
-  def __init__(self,
-               name: str = NAME,
-               adapter: MprisAdapter = None):
+  def __init__(
+    self,
+    name: str = NAME,
+    adapter: Optional[MprisAdapter] = None
+  ):
     self.name = name
     self.adapter = adapter
     self.dbus_name: str = get_dbus_name(self.name)
@@ -31,15 +32,15 @@ class Server:
     self._loop: Optional[GLib.MainLoop] = None
     self._publication_token: Optional[str] = None
 
+    finalize(self, self.__del__)
+
   def __del__(self):
     self.unpublish()
-
-    if self._loop:
-      self._loop.quit()
+    self.quit_loop()
 
   def publish(self):
-    bus_type = BUS_TYPE
-    logger.debug(f'Connecting to D-Bus {bus_type} bus...')
+    bus_type: str = BUS_TYPE
+    logging.debug(f'Connecting to D-Bus {bus_type} bus...')
 
     if bus_type == 'system':
       bus = pydbus.SystemBus()
@@ -47,7 +48,7 @@ class Server:
     else:
       bus = pydbus.SessionBus()
 
-    logger.info(f'MPRIS server connected to D-Bus {bus_type} bus')
+    logging.info(f'MPRIS server connected to D-Bus {bus_type} bus')
 
     self._publication_token = bus.publish(
       f'org.mpris.MediaPlayer2.{self.dbus_name}',
@@ -59,8 +60,17 @@ class Server:
 
   def unpublish(self):
     if self._publication_token:
+      logging.debug('Unpublishing MPRIS interface.')
+
       self._publication_token.unpublish()
       self._publication_token = None
+
+  def quit_loop(self):
+    if self._loop:
+      logging.debug('Quitting GLib loop.')
+
+      self._loop.quit()
+      self._loop = None
 
   def loop(self):
     if not self._publication_token:
@@ -72,5 +82,4 @@ class Server:
       self._loop.run()
 
     finally:
-      self._loop.quit()
-      self._loop = None
+      self.quit_loop()

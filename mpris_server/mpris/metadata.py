@@ -3,9 +3,9 @@ from typing import NamedTuple, Any, Optional, Union
 
 from gi.repository.GLib import Variant
 
-from .base import DbusTypes, DbusMetadata, DEFAULT_TRACK_ID, \
+from ..base import DbusTypes, DbusMetadata, DEFAULT_TRACK_ID, \
   DbusTypes, MprisTypes, DbusType, Types
-from .types import Final, TypedDict, is_type, get_type
+from ..types import Final, TypedDict, is_type, get_type
 
 
 DEFAULT_METADATA: Metadata = {}
