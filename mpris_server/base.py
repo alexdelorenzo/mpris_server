@@ -6,69 +6,70 @@ from string import ascii_letters, digits
 
 from gi.repository.GLib import Variant
 
-from .types import \
-  TypedDict, TypeAlias, GenericAlias, _GenericAlias
+from .types import TypedDict, TypeAlias, \
+  GenericAlias, _GenericAlias, Final
 
 
 Prop = str
 Props = list[Prop]
 
 
-INTERFACE: str = "org.mpris.MediaPlayer2"
-NAME: str = "mprisServer"
-MIME_TYPES: list[str] = ["audio/mpeg", "application/ogg", "video/mpeg"]
-BUS_TYPE: str = "session"
-URI: Props = ["file"]
-DEFAULT_DESKTOP: str = ''
+INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
+NAME: Final[str] = "mprisServer"
+MIME_TYPES: Final[list[str]] = ["audio/mpeg", "application/ogg", "video/mpeg"]
+BUS_TYPE: Final[str] = "session"
+URI: Final[Props] = ["file"]
+DEFAULT_DESKTOP: Final[str] = ''
 
 # typically, these are the props that D-Bus needs to be notified about
 # upon specific state-change events.
-ON_ENDED_PROPS: Props = ['PlaybackStatus']
-ON_VOLUME_PROPS: Props = ['Volume', 'Metadata']
-ON_PLAYBACK_PROPS: Props = [
+ON_ENDED_PROPS: Final[Props] = ['PlaybackStatus']
+ON_VOLUME_PROPS: Final[Props] = ['Volume', 'Metadata']
+ON_PLAYBACK_PROPS: Final[Props] = [
   'PlaybackStatus', 'Metadata', 'CanControl', 'Rate',
   'MinimumRate', 'MaximumWait',
 ]
-ON_PLAYPAUSE_PROPS: Props = ['PlaybackStatus']
-ON_TITLE_PROPS: Props = ['Metadata']
-ON_OPTION_PROPS: Props = [
+ON_PLAYPAUSE_PROPS: Final[Props] = ['PlaybackStatus']
+ON_TITLE_PROPS: Final[Props] = ['Metadata']
+ON_OPTION_PROPS: Final[Props] = [
   'LoopStatus', 'Shuffle', 'CanGoPrevious', 'CanGoNext',
   'CanPlay', 'CanPause',
 ]
-ON_SEEK_PROPS: Props = ['Position', 'CanSeek']
+ON_SEEK_PROPS: Final[Props] = ['Position', 'CanSeek']
 
 # all props for each interface
-ON_PLAYER_PROPS: Props = list({
+ON_PLAYER_PROPS: Final[Props] = list({
   *ON_ENDED_PROPS, *ON_VOLUME_PROPS, *ON_PLAYPAUSE_PROPS,
   *ON_TITLE_PROPS, *ON_OPTION_PROPS, *ON_SEEK_PROPS,
 })
-ON_TRACKS_PROPS: Props = ['Tracks']
-ON_PLAYLIST_PROPS: Props = ['PlaylistCount', 'Orderings', 'ActivePlaylist']
-ON_ROOT_PROPS: Props = [
+ON_TRACKS_PROPS: Final[Props] = ['Tracks']
+ON_PLAYLIST_PROPS: Final[Props] = ['PlaylistCount', 'Orderings', 'ActivePlaylist']
+ON_ROOT_PROPS: Final[Props] = [
   'CanQuit', 'Fullscreen', 'CanSetFullscreen', 'CanRaise',
   'HasTrackList', 'Identity', 'DesktopEntry', 'SupportedUriSchemes',
   'SupportedMimeTypes'
 ]
 
-DEFAULT_RATE: float = 1.0
-PAUSE_RATE: int = 0
-MIN_RATE: float = 1.0
-MAX_RATE: float = 1.0
+DEFAULT_RATE: Final[float] = 1.0
+PAUSE_RATE: Final[int] = 0
+MIN_RATE: Final[float] = 1.0
+MAX_RATE: Final[float] = 1.0
 
-MUTE_VOL: int = 0
-MAX_VOL: int = 1
-BEGINNING: int = 0
+MUTE_VOL: Final[int] = 0
+MAX_VOL: Final[int] = 1
+BEGINNING: Final[int] = 0
 
-DEFAULT_TRACK_ID: str = '/default/1'
-DEFAULT_PLAYLIST_COUNT: int = 1
-DEFAULT_ORDERINGS: Props = ["Alphabetical", "User"]
+DEFAULT_TRACK_ID: Final[str] = '/default/1'
+DEFAULT_PLAYLIST_COUNT: Final[int] = 1
+DEFAULT_ORDERINGS: Final[Props] = ["Alphabetical", "User"]
 
 # valid characters for a DBus name
-VALID_PUNC: str = '_'
-VALID_CHARS: set[str] = {*ascii_letters, *digits, *VALID_PUNC}
+VALID_PUNC: Final[str] = '_'
+VALID_CHARS: Final[set[str]] = \
+  {*ascii_letters, *digits, *VALID_PUNC}
 
-NAME_PREFIX: str = "Mpris_Server_"
-RAND_CHARS: int = 5
+NAME_PREFIX: Final[str] = "Mpris_Server_"
+RAND_CHARS: Final[int] = 5
 
 
 # type aliases
@@ -110,7 +111,7 @@ class _DbusTypes(NamedTuple):
   STRING_ARRAY: DbusType = 'as'
 
 
-DbusTypes = _DbusTypes()
+DbusTypes: Final = _DbusTypes()
 
 
 class _MprisTypes(NamedTuple):
@@ -126,7 +127,7 @@ class _MprisTypes(NamedTuple):
   STRING_ARRAY: Types = list[str]
 
 
-MprisTypes = _MprisTypes()
+MprisTypes: Final = _MprisTypes()
 
 
 class Artist(NamedTuple):

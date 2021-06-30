@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Optional
 from abc import ABC
 import logging
@@ -5,16 +6,14 @@ import logging
 from pydbus.generic import signal
 
 from ..base import NAME, INTERFACE as MPRIS_INTERFACE
+from ..types import Final
 
 
-logger = logging.getLogger(__name__)
-
-
-TRACE_LOG_LEVEL = 5
+TRACE_LOG_LEVEL: Final[int] = logging.WARN
 
 
 class MprisInterface(ABC):
-    INTERFACE = MPRIS_INTERFACE
+    INTERFACE: Final[str] = MPRIS_INTERFACE
 
     PropertiesChanged = signal()
 
@@ -27,4 +26,4 @@ class MprisInterface(ABC):
         self.adapter = adapter
 
     def log_trace(self, *args, **kwargs):
-        logger.log(TRACE_LOG_LEVEL, *args, **kwargs)
+        logging.log(TRACE_LOG_LEVEL, *args, **kwargs)

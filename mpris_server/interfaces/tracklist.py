@@ -5,6 +5,7 @@ from pydbus.generic import signal
 
 from ..base import DbusObj
 from ..mpris.metadata import Metadata
+from ..types import Final
 from .interface import MprisInterface
 
 
@@ -48,7 +49,8 @@ class TrackList(MprisInterface):
   </node>
   """
 
-  INTERFACE = "org.mpris.MediaPlayer2.TrackList"
+  INTERFACE: Final[str] = "org.mpris.MediaPlayer2.TrackList"
+
   TrackListReplaced = signal()
   TrackAdded = signal()
   TrackRemoved = signal()

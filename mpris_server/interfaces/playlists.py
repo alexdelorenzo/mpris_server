@@ -7,6 +7,7 @@ from pydbus.generic import signal
 
 from ..base import PlaylistEntry, PlaylistValidity
 from .interface import MprisInterface
+from ..types import Final
 
 
 class Playlists(MprisInterface):
@@ -33,7 +34,7 @@ class Playlists(MprisInterface):
     </node>
     """
 
-    INTERFACE = "org.mpris.MediaPlayer2.Playlists"
+    INTERFACE: Final[str] = "org.mpris.MediaPlayer2.Playlists"
     PlaylistChanged = signal()
 
     def ActivatePlaylist(self, playlist_id: str):

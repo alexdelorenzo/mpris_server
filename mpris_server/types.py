@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # Python 3.10+
 try:
   from typing import \
@@ -13,7 +15,7 @@ except ImportError:
 from typing import Union, Optional
 
 
-ORIGIN: str = '__origin__'
+ORIGIN: Final[str] = '__origin__'
 
 
 GenericAliases = Union[GenericAlias, _GenericAlias]

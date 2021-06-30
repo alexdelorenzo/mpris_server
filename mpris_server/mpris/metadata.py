@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import NamedTuple, Any, Optional, Union
+from typing import NamedTuple, Any, Optional, Union, \
+  cast
 
 from gi.repository.GLib import Variant
 
@@ -8,7 +9,7 @@ from ..base import DbusTypes, DbusMetadata, DEFAULT_TRACK_ID, \
 from ..types import Final, TypedDict, is_type, get_type
 
 
-DEFAULT_METADATA: Metadata = {}
+DEFAULT_METADATA: Final[Metadata] = {}
 
 
 MetadataEntry = str
@@ -28,11 +29,11 @@ class _MetadataEntries(NamedTuple):
   COMMENT: MetadataEntry = "xesam:comment"
 
 
-MetadataEntries = _MetadataEntries()
+MetadataEntries: Final = _MetadataEntries()
 
 
 # map of D-Bus metadata entries and their D-Bus types
-METADATA_TYPES: dict[MetadataEntry, DbusType] = {
+METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.TRACKID: DbusTypes.OBJ,
   MetadataEntries.LENGTH: DbusTypes.INT64,
   MetadataEntries.ART_URL: DbusTypes.STRING,
@@ -46,7 +47,7 @@ METADATA_TYPES: dict[MetadataEntry, DbusType] = {
   MetadataEntries.COMMENT: DbusTypes.STRING_ARRAY,
 }
 
-DBUS_PY_TYPES: dict[DbusType, Types] = {
+DBUS_PY_TYPES: Final[dict[DbusType, Types]] = {
   DbusTypes.OBJ: MprisTypes.OBJ,
   DbusTypes.STRING: MprisTypes.STRING,
   DbusTypes.INT32: MprisTypes.INT32,
@@ -59,7 +60,7 @@ DBUS_PY_TYPES: dict[DbusType, Types] = {
   DbusTypes.STRING_ARRAY: MprisTypes.STRING_ARRAY,
 }
 
-METADATA_PY_TYPES: dict[MetadataEntry, Types] = {
+METADATA_PY_TYPES: Final[dict[MetadataEntry, Types]] = {
   MetadataEntries.TRACKID: DBUS_PY_TYPES[DbusTypes.OBJ],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
   MetadataEntries.ART_URL: DBUS_PY_TYPES[DbusTypes.STRING],
@@ -88,7 +89,7 @@ class _MetadataTypes(NamedTuple):
   COMMENT: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.COMMENT]
 
 
-MetadataTypes = _MetadataTypes()
+MetadataTypes: Final = _MetadataTypes()
 
 
 class MetadataObj(NamedTuple):
@@ -105,14 +106,14 @@ class MetadataObj(NamedTuple):
   comment: Optional[MetadataTypes.COMMENT] = None
 
   def to_dict(self) -> Metadata:
-    return Metadata({
+    return {
       key: val
       for key, val in zip(MetadataEntries, self)
       if val is not None
-    })
+    }
 
 
-Metadata = \
+Metadata: Final = \
   TypedDict('Metadata', METADATA_PY_TYPES, total=False)
 
 
@@ -129,7 +130,8 @@ def get_runtime_types() -> tuple[type, ...]:
   return tuple(types)
 
 
-DBUS_RUNTIME_TYPES: tuple[type, ...] = get_runtime_types()
+DBUS_RUNTIME_TYPES: Final[tuple[type, ...]] = \
+  get_runtime_types()
 
 
 def is_null_list(obj: Any) -> bool:
@@ -157,6 +159,8 @@ def get_dbus_var(entry: MetadataEntry, obj: DbusType) -> Variant:
 def get_dbus_metadata(metadata: ValidMetadata) -> DbusMetadata:
   if isinstance(metadata, MetadataObj):
     metadata: Metadata = metadata.to_dict()
+
+  metadata = cast(Metadata, metadata)
 
   return {
     key: get_dbus_var(key, val)

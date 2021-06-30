@@ -2,17 +2,17 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from .base import dbus_emit_changes, ON_ENDED_PROPS, \
+from .base import dbus_emit_changes, Microseconds, DbusObj, \
   ON_VOLUME_PROPS, ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, \
-  ON_TITLE_PROPS, Microseconds, ON_SEEK_PROPS, ON_OPTION_PROPS, \
-  DbusObj, ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, ON_PLAYER_PROPS, \
+  ON_TITLE_PROPS, ON_SEEK_PROPS, ON_OPTION_PROPS, ON_ENDED_PROPS, \
+  ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, ON_PLAYER_PROPS, \
   ON_ROOT_PROPS
 from .mpris.metadata import Metadata
 from .interfaces.interface import MprisInterface
-from .interfaces.player import Player
 from .interfaces.playlists import Playlists
-from .interfaces.root import Root
 from .interfaces.tracklist import TrackList
+from .interfaces.player import Player
+from .interfaces.root import Root
 
 
 class BaseEventAdapter(ABC):

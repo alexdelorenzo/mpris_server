@@ -13,17 +13,18 @@ from ..base import VALID_CHARS, RAND_CHARS, NAME_PREFIX, \
   DbusObj
 from .metadata import Metadata, DbusMetadata, DbusTypes, \
   DbusTypes, METADATA_TYPES
+from ..types import Final
 
 
-logger = logging.getLogger(__name__)
-
-DBUS_NAME_MAX: int = 255
-START_WITH: str = "_"
-FIRST_CHAR: int = 0
+DBUS_NAME_MAX: Final[int] = 255
+START_WITH: Final[str] = "_"
+FIRST_CHAR: Final[int] = 0
 
 # following must be subscriptable to be used with random.choices()
-VALID_CHARS_SUB: tuple[str, ...] = tuple(VALID_CHARS)
-INTERFACE_CHARS: set[str] = {*VALID_CHARS, '-'}
+VALID_CHARS_SUB: Final[tuple[str, ...]] = \
+  tuple(VALID_CHARS)
+INTERFACE_CHARS: Final[set[str]] = \
+  {*VALID_CHARS, '-'}
 
 
 ReturnsStr = Callable[..., str]

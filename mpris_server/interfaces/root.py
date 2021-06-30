@@ -1,3 +1,4 @@
+from __future__ import annotations
 import logging
 
 from ..base import INTERFACE as _INTERFACE, NAME

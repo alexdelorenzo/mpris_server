@@ -7,6 +7,7 @@ from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
   DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track, \
   MprisTypes
 from .mpris.metadata import Metadata, ValidMetadata
+from .types import Final
 
 
 ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
@@ -205,7 +206,13 @@ class TrackListAdapter(ABC):
     pass
 
 
-class MprisAdapter(RootAdapter, PlayerAdapter, PlaylistAdapter, TrackListAdapter, ABC):
+class MprisAdapter(
+  RootAdapter,
+  PlayerAdapter,
+  PlaylistAdapter,
+  TrackListAdapter,
+  ABC
+):
   """
   MRPRIS interface for your application.
 
