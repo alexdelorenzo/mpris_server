@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, Union
+from os import PathLike
 from abc import ABC
 
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
@@ -11,6 +12,7 @@ from .types import Final
 
 
 ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
+Paths = Union[PathLike, str]
 
 
 class RootAdapter(ABC):
@@ -44,7 +46,7 @@ class RootAdapter(ABC):
   def set_fullscreen(self, val: bool):
     pass
 
-  def get_desktop_entry(self) -> str:
+  def get_desktop_entry(self) -> Paths:
     return DEFAULT_DESKTOP
 
 

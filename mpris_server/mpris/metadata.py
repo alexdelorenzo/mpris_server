@@ -113,9 +113,8 @@ class MetadataObj(NamedTuple):
     }
 
 
-Metadata: Final = \
+Metadata = \
   TypedDict('Metadata', METADATA_PY_TYPES, total=False)
-
 
 ValidMetadata = Union[Metadata, MetadataObj]
 
@@ -145,8 +144,8 @@ def is_dbus_type(obj: Any) -> bool:
   return isinstance(obj, DBUS_RUNTIME_TYPES)
 
 
-def is_valid_metadata(key: str, obj: Any) -> bool:
-  if obj is None or key not in METADATA_TYPES:
+def is_valid_metadata(entry: str, obj: Any) -> bool:
+  if obj is None or entry not in METADATA_TYPES:
     return False
 
   return is_dbus_type(obj) and not is_null_list(obj)
@@ -163,7 +162,7 @@ def get_dbus_metadata(metadata: ValidMetadata) -> DbusMetadata:
   metadata = cast(Metadata, metadata)
 
   return {
-    key: get_dbus_var(key, val)
-    for key, val in metadata.items()
-    if is_valid_metadata(key, val)
+    entry: get_dbus_var(entry, val)
+    for entry, val in metadata.items()
+    if is_valid_metadata(entry, val)
   }

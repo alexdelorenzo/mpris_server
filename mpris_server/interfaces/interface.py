@@ -9,7 +9,7 @@ from ..base import NAME, INTERFACE as MPRIS_INTERFACE
 from ..types import Final
 
 
-TRACE_LOG_LEVEL: Final[int] = logging.WARN
+TRACE_LOG_LEVEL: Final[int] = logging.DEBUG
 
 
 class MprisInterface(ABC):
