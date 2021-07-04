@@ -2,8 +2,8 @@ from __future__ import annotations
 from os import PathLike
 import logging
 
-from ..base import INTERFACE as _INTERFACE, NAME
-from .interface import MprisInterface, Paths
+from ..base import ROOT_INTERFACE, NAME
+from .interface import MprisInterface, Paths, log_trace
 from ..types import Final
 
 
@@ -30,34 +30,34 @@ class Root(MprisInterface):
   </node>
   """
 
-  INTERFACE = _INTERFACE
+  INTERFACE: str = ROOT_INTERFACE
 
+  @log_trace
   def Raise(self):
-    logging.debug(f"{self.INTERFACE}.Raise called")
     self.adapter.set_raise(True)
 
+  @log_trace
   def Quit(self):
-    logging.debug(f"{self.INTERFACE}.Quit called")
     self.adapter.quit()
 
   @property
-  def Fullscreen(self):
-    logging.debug(f"Getting {self.INTERFACE}.Fullscreen")
+  @log_trace
+  def Fullscreen(self) -> bool:
     return self.adapter.get_fullscreen()
 
   @Fullscreen.setter
+  @log_trace
   def Fullscreen(self, value):
-    logging.debug(f"Setting {self.INTERFACE}.Fullscreen to {value}")
     self.adapter.set_fullscreen(value)
 
   @property
-  def DesktopEntry(self):
-    logging.debug(f"Getting {self.INTERFACE}.DesktopEntry")
+  @log_trace
+  def DesktopEntry(self) -> str:
     path: Paths = self.adapter.get_desktop_entry()
 
+    # mpris requires stripped suffix
     if isinstance(path, PathLike):
-      # mpris requires stripped suffix
-      path = path.with_suffix('')
+      path = path.with_suffix(NO_SUFFIX)
 
     name = str(path)
 
@@ -67,31 +67,36 @@ class Root(MprisInterface):
     return name
 
   @property
-  def SupportedUriSchemes(self):
-    logging.debug(f"Getting {self.INTERFACE}.SupportedUriSchemes")
+  @log_trace
+  def SupportedUriSchemes(self) -> list[str]:
     return self.adapter.get_uri_schemes()
 
   @property
-  def SupportedMimeTypes(self):
-    logging.debug(f"Getting {self.INTERFACE}.SupportedMimeTypes")
+  @log_trace
+  def SupportedMimeTypes(self) -> list[str]:
     return self.adapter.get_mime_types()
 
   @property
+  @log_trace
   def Identity(self) -> str:
     return self.name
 
   @property
+  @log_trace
   def CanQuit(self) -> bool:
     return self.adapter.can_quit()
 
   @property
+  @log_trace
   def CanRaise(self) -> bool:
     return self.adapter.can_raise()
 
   @property
+  @log_trace
   def CanSetFullscreen(self) -> bool:
     return self.adapter.can_fullscreen()
 
   @property
+  @log_trace
   def HasTrackList(self) -> bool:
     return self.adapter.has_tracklist()

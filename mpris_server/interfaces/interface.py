@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, Callable
+from functools import wraps
 from abc import ABC
 import logging
 
@@ -10,6 +11,16 @@ from ..types import Final
 
 
 TRACE_LOG_LEVEL: Final[int] = logging.DEBUG
+
+
+def log_trace(method: Callable) -> Callable:
+  @wraps(method)
+  def new_method(self, *args, **kwargs):
+    name = self.__name__
+    print(f'{self.INTERFACE}.{name}() called.')
+    return func(self, *args, **kwargs)
+
+  return new_method
 
 
 class MprisInterface(ABC):

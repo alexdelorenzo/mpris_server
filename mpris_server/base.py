@@ -15,6 +15,7 @@ Props = list[Prop]
 
 
 INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
+ROOT_INTERFACE: Final[str] = INTERFACE
 NAME: Final[str] = "mprisServer"
 MIME_TYPES: Final[list[str]] = ["audio/mpeg", "application/ogg", "video/mpeg"]
 BUS_TYPE: Final[str] = "session"

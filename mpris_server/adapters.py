@@ -122,6 +122,21 @@ class PlayerAdapter(ABC):
   def set_rate(self, val: RateDecimal):
     pass
 
+  def set_minimum_rate(self, val: RateDecimal):
+    pass
+
+  def set_maximum_rate(self, val: RateDecimal):
+    pass
+
+  def get_minimum_rate(self) -> RateDecimal:
+    pass
+
+  def get_maximum_rate(self) -> RateDecimal:
+    pass
+
+  def set_rate(self, val: RateDecimal):
+    pass
+
   def get_shuffle(self) -> bool:
     pass
 

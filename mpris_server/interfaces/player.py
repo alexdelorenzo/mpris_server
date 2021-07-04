@@ -7,17 +7,18 @@ from pydbus.generic import signal
 
 from ..base import PlayState, MUTE_VOL, MAX_VOL, PAUSE_RATE, BEGINNING, \
     Microseconds, RateDecimal, VolumeDecimal, MAX_RATE, MIN_RATE, \
-    Track
+    Track, ROOT_INTERFACE
 from ..mpris.metadata import Metadata, DbusMetadata, DbusTypes, \
   get_dbus_metadata, METADATA_TYPES, DEFAULT_METADATA, \
   ValidMetadata, MetadataObj
 from .interface import MprisInterface
+from ..types import Final
 
 
 class LoopStatus:
-  NONE: str = 'None'
-  TRACK: str = 'Track'
-  PLAYLIST: str = 'Playlist'
+  NONE: Final[str] = 'None'
+  TRACK: Final[str] = 'Track'
+  PLAYLIST: Final[str] = 'Playlist'
 
 
 class Player(MprisInterface):
@@ -62,11 +63,9 @@ class Player(MprisInterface):
     </node>
     """
 
-    INTERFACE = "org.mpris.MediaPlayer2.Player"
+    INTERFACE: Final[str] = f"{ROOT_INTERFACE}.Player"
 
     Seeked = signal()
-    MinimumRate = MIN_RATE
-    MaximumRate = MAX_RATE
 
     def _dbus_metadata(self) -> Optional[DbusMetadata]:
         metadata = self.adapter.metadata()
@@ -363,6 +362,24 @@ class Player(MprisInterface):
     def Position(self) -> float:
         self.log_trace("Getting %s.Position", self.INTERFACE)
         return self.adapter.get_current_position()
+
+    @property
+    def MinimumRate(self) -> float:
+      rate = self.adapter.get_minimum_rate()
+
+      if rate is None:
+        return MIN_RATE
+
+      return rate
+
+    @property
+    def MaximumRate(self) -> float:
+      rate = self.adapter.get_minimum_rate()
+
+      if rate is None:
+        return MAX_RATE
+
+      return rate
 
     @property
     def CanGoNext(self) -> bool:
