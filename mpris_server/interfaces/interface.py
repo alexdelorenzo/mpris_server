@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, Callable
+from typing import Optional, Callable, Any
 from functools import wraps
 from abc import ABC
 import logging
@@ -13,7 +13,10 @@ from ..types import Final
 TRACE_LOG_LEVEL: Final[int] = logging.DEBUG
 
 
-def log_trace(method: Callable) -> Callable:
+Method = Callable[[Any, ...], Optional]
+
+
+def log_trace(method: Method) -> Method:
   @wraps(method)
   def new_method(self, *args, **kwargs):
     name = self.__name__
@@ -24,17 +27,17 @@ def log_trace(method: Callable) -> Callable:
 
 
 class MprisInterface(ABC):
-    INTERFACE: Final[str] = MPRIS_INTERFACE
+  INTERFACE: Final[str] = MPRIS_INTERFACE
 
-    PropertiesChanged = signal()
+  PropertiesChanged: Final[signal] = signal()
 
-    def __init__(
-      self,
-      name: str = NAME,
-      adapter: Optional['MprisAdapter'] = None
-    ):
-        self.name = name
-        self.adapter = adapter
+  def __init__(
+    self,
+    name: str = NAME,
+    adapter: Optional['MprisAdapter'] = None
+  ):
+    self.name = name
+    self.adapter = adapter
 
-    def log_trace(self, *args, **kwargs):
-        logging.log(TRACE_LOG_LEVEL, *args, **kwargs)
+  def log_trace(self, *args, **kwargs):
+    logging.log(TRACE_LOG_LEVEL, *args, **kwargs)

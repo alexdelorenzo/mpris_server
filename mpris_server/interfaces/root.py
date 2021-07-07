@@ -1,5 +1,5 @@
 from __future__ import annotations
-from os import PathLike
+from pathlib import PurePath
 import logging
 
 from ..base import ROOT_INTERFACE, NAME
@@ -30,7 +30,7 @@ class Root(MprisInterface):
   </node>
   """
 
-  INTERFACE: str = ROOT_INTERFACE
+  INTERFACE: Final[str] = ROOT_INTERFACE
 
   @log_trace
   def Raise(self):
@@ -56,7 +56,7 @@ class Root(MprisInterface):
     path: Paths = self.adapter.get_desktop_entry()
 
     # mpris requires stripped suffix
-    if isinstance(path, PathLike):
+    if isinstance(path, PurePath):
       path = path.with_suffix(NO_SUFFIX)
 
     name = str(path)
