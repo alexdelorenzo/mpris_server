@@ -6,7 +6,7 @@ from string import ascii_letters, digits
 
 from gi.repository.GLib import Variant
 
-from .types import TypedDict, TypeAlias, \
+from .types import PyTypedDict, PyTypeAlias, \
   GenericAlias, _GenericAlias, Final
 
 
@@ -28,7 +28,7 @@ ON_ENDED_PROPS: Final[Props] = ['PlaybackStatus']
 ON_VOLUME_PROPS: Final[Props] = ['Volume', 'Metadata']
 ON_PLAYBACK_PROPS: Final[Props] = [
   'PlaybackStatus', 'Metadata', 'CanControl', 'Rate',
-  'MinimumRate', 'MaximumWait',
+  'MinimumRate', 'MaximumRate',
 ]
 ON_PLAYPAUSE_PROPS: Final[Props] = ['PlaybackStatus']
 ON_TITLE_PROPS: Final[Props] = ['Metadata']
@@ -52,7 +52,7 @@ ON_ROOT_PROPS: Final[Props] = [
 ]
 
 DEFAULT_RATE: Final[float] = 1.0
-PAUSE_RATE: Final[int] = 0
+PAUSE_RATE: Final[float] = 0.0
 MIN_RATE: Final[float] = 1.0
 MAX_RATE: Final[float] = 1.0
 
@@ -66,25 +66,27 @@ DEFAULT_ORDERINGS: Final[Props] = ["Alphabetical", "User"]
 
 # valid characters for a DBus name
 VALID_PUNC: Final[str] = '_'
-VALID_CHARS: Final[set[str]] = \
-  {*ascii_letters, *digits, *VALID_PUNC}
+VALID_CHARS: Final[set[str]] = {*ascii_letters, *digits, *VALID_PUNC}
 
 NAME_PREFIX: Final[str] = "Mpris_Server_"
 RAND_CHARS: Final[int] = 5
 
 
 # type aliases
+# units and convenience aliases
 Microseconds = int
 VolumeDecimal = float
 RateDecimal = float
 PlaylistEntry = tuple[str, str, str]
 PlaylistValidity = bool
+
+# python, d-bus and mpris types
+PyType = Union[type, GenericAlias, _GenericAlias]
 DbusType = str
-_DbusTypes = Union[str, float, int, bool, list]
-AttrVals = dict[str, _DbusTypes]
+DbusPyTypes = Union[str, float, int, bool, list]
+AttrVals = dict[str, DbusPyTypes]
 DbusMetadata = dict[str, Variant]
 DbusObj = str
-Types = Union[type, GenericAlias, _GenericAlias]
 
 
 # See https://docs.python.org/3/library/enum.html#using-automatic-values
@@ -116,16 +118,16 @@ DbusTypes: Final = _DbusTypes()
 
 
 class _MprisTypes(NamedTuple):
-  OBJ: Types = str
-  STRING: Types = str
-  INT32: Types = int
-  INT64: Types = int
-  UINT32: Types = int
-  UINT64: Types = int
-  DOUBLE: Types = float
-  BOOLEAN: Types = bool
-  OBJ_ARRAY: Types = list[str]
-  STRING_ARRAY: Types = list[str]
+  OBJ: PyType = str
+  STRING: PyType = str
+  INT32: PyType = int
+  INT64: PyType = int
+  UINT32: PyType = int
+  UINT64: PyType = int
+  DOUBLE: PyType = float
+  BOOLEAN: PyType = bool
+  OBJ_ARRAY: PyType = list[str]
+  STRING_ARRAY: PyType = list[str]
 
 
 MprisTypes: Final = _MprisTypes()

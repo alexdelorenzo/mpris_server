@@ -2,7 +2,7 @@ from typing import List
 from setuptools import setup
 from pathlib import Path
 
-#from mpris_server import __version__
+# from mpris_server import __version__
 
 
 PKGS: List[str] = [
