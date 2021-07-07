@@ -1,18 +1,16 @@
 from __future__ import annotations
 from typing import Optional, Union
-from os import PathLike
 from abc import ABC
 
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
   VolumeDecimal, RateDecimal, DbusObj, PlaylistEntry, PlaylistValidity, \
   DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track, \
-  MprisTypes
+  MprisTypes, Paths
 from .mpris.metadata import Metadata, ValidMetadata
 from .types import Final
 
 
 ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
-Paths = Union[PathLike, str]
 
 
 class RootAdapter(ABC):

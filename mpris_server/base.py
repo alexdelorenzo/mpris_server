@@ -3,10 +3,11 @@ from typing import Iterable, Union, Tuple, \
   Optional, NamedTuple
 from enum import Enum, auto
 from string import ascii_letters, digits
+from os import PathLike
 
 from gi.repository.GLib import Variant
 
-from .types import PyTypedDict, PyTypeAlias, \
+from .types import TypedDict, TypeAlias, \
   GenericAlias, _GenericAlias, Final
 
 
@@ -73,6 +74,8 @@ RAND_CHARS: Final[int] = 5
 
 
 # type aliases
+Paths = Union[PathLike, str]
+
 # units and convenience aliases
 Microseconds = int
 VolumeDecimal = float
@@ -82,10 +85,10 @@ PlaylistValidity = bool
 
 # python, d-bus and mpris types
 PyType = Union[type, GenericAlias, _GenericAlias]
-DbusType = str
 DbusPyTypes = Union[str, float, int, bool, list]
 AttrVals = dict[str, DbusPyTypes]
 DbusMetadata = dict[str, Variant]
+DbusType = str
 DbusObj = str
 
 

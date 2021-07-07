@@ -13,7 +13,7 @@ from ..types import Final
 TRACE_LOG_LEVEL: Final[int] = logging.DEBUG
 
 
-Method = Callable[[Any, ...], Optional]
+Method = Callable[[Any, ...], Optional[Any]]
 
 
 def log_trace(method: Method) -> Method:

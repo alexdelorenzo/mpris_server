@@ -2,9 +2,9 @@ from __future__ import annotations
 from pathlib import PurePath
 import logging
 
-from ..base import ROOT_INTERFACE, NAME
-from .interface import MprisInterface, Paths, log_trace
+from ..base import ROOT_INTERFACE, NAME, Paths
 from ..types import Final
+from .interface import MprisInterface, log_trace
 
 
 NO_SUFFIX: Final[str] = ''
