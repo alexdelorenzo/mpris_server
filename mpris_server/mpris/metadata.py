@@ -5,7 +5,7 @@ from typing import NamedTuple, Any, Optional, Union, \
 from gi.repository.GLib import Variant
 
 from ..base import DbusTypes, DbusMetadata, DEFAULT_TRACK_ID, \
-  DbusTypes, MprisTypes, DbusType, Types
+  DbusTypes, MprisTypes, DbusType, PyType
 from ..types import Final, TypedDict, is_type, get_type
 
 
@@ -47,7 +47,7 @@ METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.COMMENT: DbusTypes.STRING_ARRAY,
 }
 
-DBUS_PY_TYPES: Final[dict[DbusType, Types]] = {
+DBUS_PY_TYPES: Final[dict[DbusType, PyType]] = {
   DbusTypes.OBJ: MprisTypes.OBJ,
   DbusTypes.STRING: MprisTypes.STRING,
   DbusTypes.INT32: MprisTypes.INT32,
@@ -60,7 +60,7 @@ DBUS_PY_TYPES: Final[dict[DbusType, Types]] = {
   DbusTypes.STRING_ARRAY: MprisTypes.STRING_ARRAY,
 }
 
-METADATA_PY_TYPES: Final[dict[MetadataEntry, Types]] = {
+METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
   MetadataEntries.TRACKID: DBUS_PY_TYPES[DbusTypes.OBJ],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
   MetadataEntries.ART_URL: DBUS_PY_TYPES[DbusTypes.STRING],
@@ -103,7 +103,7 @@ class MetadataObj(NamedTuple):
   album_artists: Optional[MetadataTypes.STRING_ARRAY] = None
   disc_no: Optional[MetadataTypes.INT32] = None
   track_no: Optional[MetadataTypes.INT32] = None
-  comment: Optional[MetadataTypes.COMMENT] = None
+  comments: Optional[MetadataTypes.COMMENT] = None
 
   def to_dict(self) -> Metadata:
     return {
