@@ -54,17 +54,7 @@ class Root(MprisInterface):
   @log_trace
   def DesktopEntry(self) -> str:
     path: Paths = self.adapter.get_desktop_entry()
-
-    # mpris requires stripped suffix
-    if isinstance(path, PurePath):
-      path = path.with_suffix(NO_SUFFIX)
-
-    name = str(path)
-
-    if name.endswith(DESKTOP_EXT):
-      name = name.rstrip(DESKTOP_EXT)
-
-    return name
+    return get_desktop_entry(path)
 
   @property
   @log_trace
@@ -100,3 +90,16 @@ class Root(MprisInterface):
   @log_trace
   def HasTrackList(self) -> bool:
     return self.adapter.has_tracklist()
+
+
+def get_desktop_entry(path: Paths) -> str:
+  # mpris requires stripped suffix
+  if isinstance(path, PurePath):
+    path = path.with_suffix(NO_SUFFIX)
+
+  name = str(path)
+
+  if name.endswith(DESKTOP_EXT):
+    name = name.rstrip(DESKTOP_EXT)
+
+  return name
