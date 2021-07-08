@@ -362,7 +362,7 @@ class Player(MprisInterface):
     if value > MUTE_VOL:
       self.adapter.set_mute(False)
 
-    elif value == MUTE_VAL:
+    elif value == MUTE_VOL:
       self.adapter.set_mute(True)
 
   @property
