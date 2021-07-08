@@ -19,10 +19,10 @@ Method = Callable[[Any, ...], Optional[Any]]
 def log_trace(method: Method) -> Method:
   @wraps(method)
   def new_method(self, *args, **kwargs):
-    name = self.__name__
-    print(f'{self.INTERFACE}.{name}() called.')
-    return func(self, *args, **kwargs)
+    name = method.__name__
+    logging.debug(f'{self.INTERFACE}.{name}() called.')
 
+    return method(self, *args, **kwargs)
   return new_method
 
 
