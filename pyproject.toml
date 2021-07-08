@@ -17,7 +17,7 @@
 
   [tool.poetry.dependencies]
     python = ">=3.6"
-    emoji = "==1.2.0"
-    pydbus = ">=0.6.0"
+    emoji = ">=1.2.0, <2.0.0"
+    pydbus = ">=0.6.0, <0.7.0"
     pygobject = ">=3.34.0"
-    unidecode = "==1.2.0"
+    unidecode = ">=1.2.0, <2.0.0"
