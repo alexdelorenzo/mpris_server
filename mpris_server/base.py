@@ -115,7 +115,7 @@ class DbusTypes(StrEnum):
 # DbusTypes: Final = _DbusTypes()
 
 
-class MprisTypes(StrEnum):
+class _MprisTypes(NamedTuple):
   OBJ: PyType = str
   STRING: PyType = str
   INT32: PyType = int
@@ -128,7 +128,7 @@ class MprisTypes(StrEnum):
   STRING_ARRAY: PyType = list[str]
 
 
-# MprisTypes: Final = _MprisTypes()
+MprisTypes: Final = _MprisTypes()
 
 
 class Artist(NamedTuple):
