@@ -1,11 +1,12 @@
 from __future__ import annotations
 from typing import Iterable, Union, Tuple, \
   Optional, NamedTuple
-from enum import Enum, auto
+from enum import auto
 from string import ascii_letters, digits
 from os import PathLike
 
 from gi.repository.GLib import Variant
+from strenum import StrEnum
 
 from .types import TypedDict, TypeAlias, \
   GenericAlias, _GenericAlias, Final
@@ -92,13 +93,7 @@ DbusType = str
 DbusObj = str
 
 
-# See https://docs.python.org/3/library/enum.html#using-automatic-values
-class AutoName(Enum):
-  def _generate_next_value_(name: str, *args, **kwargs) -> str:
-    return name
-
-
-class PlayState(AutoName):
+class PlayState(StrEnum):
   PLAYING = auto()
   PAUSED = auto()
   STOPPED = auto()
