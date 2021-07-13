@@ -3,6 +3,7 @@ from typing import NamedTuple, Any, Optional, Union, \
   cast
 
 from gi.repository.GLib import Variant
+from strenum import StrEnum
 
 from ..base import DbusTypes, DbusMetadata, DEFAULT_TRACK_ID, \
   DbusTypes, MprisTypes, DbusType, PyType
@@ -15,7 +16,7 @@ DEFAULT_METADATA: Final[Metadata] = {}
 MetadataEntry = str
 
 
-class _MetadataEntries(NamedTuple):
+class MetadataEntries(StrEnum):
   TRACKID: MetadataEntry = "mpris:trackid"
   LENGTH: MetadataEntry = "mpris:length"
   ART_URL: MetadataEntry = "mpris:artUrl"
@@ -29,7 +30,7 @@ class _MetadataEntries(NamedTuple):
   COMMENT: MetadataEntry = "xesam:comment"
 
 
-MetadataEntries: Final = _MetadataEntries()
+# MetadataEntries: Final = _MetadataEntries()
 
 
 # map of D-Bus metadata entries and their D-Bus types

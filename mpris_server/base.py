@@ -99,7 +99,7 @@ class PlayState(StrEnum):
   STOPPED = auto()
 
 
-class _DbusTypes(NamedTuple):
+class DbusTypes(StrEnum):
   OBJ: DbusType = 'o'
   STRING: DbusType = 's'
   INT32: DbusType = 'i'
@@ -112,10 +112,10 @@ class _DbusTypes(NamedTuple):
   STRING_ARRAY: DbusType = 'as'
 
 
-DbusTypes: Final = _DbusTypes()
+# DbusTypes: Final = _DbusTypes()
 
 
-class _MprisTypes(NamedTuple):
+class MprisTypes(StrEnum):
   OBJ: PyType = str
   STRING: PyType = str
   INT32: PyType = int
@@ -128,7 +128,7 @@ class _MprisTypes(NamedTuple):
   STRING_ARRAY: PyType = list[str]
 
 
-MprisTypes: Final = _MprisTypes()
+# MprisTypes: Final = _MprisTypes()
 
 
 class Artist(NamedTuple):
