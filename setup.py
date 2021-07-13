@@ -27,7 +27,7 @@ README: str = Path('README.md').read_text()
 setup(
   name="mpris_server",
   version='0.4.3',
-  description="Publish a MediaPlayer2 MPRIS device to D-Bus.",
+  description="⏯️ Publish a MediaPlayer2 MPRIS device to D-Bus.",
   long_description=README,
   long_description_content_type="text/markdown",
   url="https://alexdelorenzo.dev",
