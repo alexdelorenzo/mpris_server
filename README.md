@@ -5,7 +5,7 @@ Whereas [existing MPRIS libraries for Python](https://github.com/hugosenari/mpri
 
 `mpris_server` is a fork of [Mopidy-MPRIS](https://github.com/mopidy/mopidy-mpris) that was extended and made into a general purpose library.
 
-Check out [📺chromecast_mpris](https://github.com/alexdelorenzo/chromecast_mpris) for an app that uses `mpris_server`.
+Check out [`📺 cast_control`](https://github.com/alexdelorenzo/cast_control) for an app that uses `mpris_server`.
 
 ## Features
 Implements the following from the [MPRIS specification](https://specifications.freedesktop.org/mpris-spec/2.2/):
@@ -89,7 +89,7 @@ class MyAppAdapter(MprisAdapter):
 class MyAppEventHandler(EventAdapter):
     # EventAdapter has good default implementations for its methods.
     # Only override the default methods if it suits your app.
-    
+
     def on_app_event(self, event: str):
         # trigger DBus updates based on events in your app
         if event == 'pause':
