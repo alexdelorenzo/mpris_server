@@ -6,11 +6,11 @@ import logging
 
 from pydbus.generic import signal
 
-from ..base import NAME, INTERFACE as MPRIS_INTERFACE
+from ..base import NAME, ROOT_INTERFACE
 from ..types import Final
 
 
-TRACE_LOG_LEVEL: Final[int] = logging.DEBUG
+TRACE_LOG_LEVEL: Final[int] = logging.NOTSET
 
 
 Method = Callable[[Any, ...], Optional[Any]]
@@ -23,11 +23,12 @@ def log_trace(method: Method) -> Method:
     logging.debug(f'{self.INTERFACE}.{name}() called.')
 
     return method(self, *args, **kwargs)
+
   return new_method
 
 
 class MprisInterface(ABC):
-  INTERFACE: Final[str] = MPRIS_INTERFACE
+  INTERFACE: Final[str] = ROOT_INTERFACE
 
   PropertiesChanged: Final[signal] = signal()
 

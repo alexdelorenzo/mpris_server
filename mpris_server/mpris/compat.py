@@ -9,11 +9,11 @@ import logging
 from unidecode import unidecode
 from emoji import emoji_count, demojize
 
+from ..types import Final
 from ..base import VALID_CHARS, RAND_CHARS, NAME_PREFIX, \
   DbusObj
 from .metadata import Metadata, DbusMetadata, DbusTypes, \
   DbusTypes, METADATA_TYPES
-from ..types import Final
 
 
 DBUS_NAME_MAX: Final[int] = 255

@@ -37,10 +37,11 @@ class Server:
     self.name = name
     self.adapter = adapter
     self.dbus_name: str = get_dbus_name(self.name)
-    self.root = Root(name, self.adapter)
-    self.player = Player(name, self.adapter)
-    self.playlists = Playlists(name, self.adapter)
-    self.tracklist = TrackList(name, self.adapter)
+
+    self.root = Root(self.name, self.adapter)
+    self.player = Player(self.name, self.adapter)
+    self.playlists = Playlists(self.name, self.adapter)
+    self.tracklist = TrackList(self.name, self.adapter)
 
     self._loop: Optional[GLib.MainLoop] = None
     self._publication_token: Optional[str] = None
@@ -77,13 +78,6 @@ class Server:
       self._publication_token.unpublish()
       self._publication_token = None
 
-  def quit_loop(self):
-    if self._loop:
-      logging.debug('Quitting GLib loop.')
-
-      self._loop.quit()
-      self._loop = None
-
   def loop(self, bus_type: BusType = DEFAULT_BUS_TYPE):
     if not self._publication_token:
       self.publish(bus_type)
@@ -95,3 +89,11 @@ class Server:
 
     finally:
       self.quit_loop()
+
+  def quit_loop(self):
+    if self._loop:
+      logging.debug('Quitting GLib loop.')
+
+      self._loop.quit()
+      self._loop = None
+

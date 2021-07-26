@@ -114,9 +114,6 @@ class DbusTypes(StrEnum):
   STRING_ARRAY: DbusType = 'as'
 
 
-# DbusTypes: Final = _DbusTypes()
-
-
 class _MprisTypes(NamedTuple):
   OBJ: PyType = str
   STRING: PyType = str

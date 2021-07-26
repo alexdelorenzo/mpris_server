@@ -94,17 +94,17 @@ MetadataTypes: Final = _MetadataTypes()
 
 
 class MetadataObj(NamedTuple):
-  track_id: MetadataTypes.TRACKID = DEFAULT_TRACK_ID
-  length: Optional[MetadataTypes.LENGTH] = None
-  art_url: Optional[MetadataTypes.STRING] = None
-  url: Optional[MetadataTypes.STRING] = None
   title: Optional[MetadataTypes.STRING] = None
   artists: Optional[MetadataTypes.STRING_ARRAY] = None
   album: Optional[MetadataTypes.STRING] = None
   album_artists: Optional[MetadataTypes.STRING_ARRAY] = None
+  length: Optional[MetadataTypes.LENGTH] = None
+  url: Optional[MetadataTypes.STRING] = None
+  art_url: Optional[MetadataTypes.STRING] = None
   disc_no: Optional[MetadataTypes.INT32] = None
   track_no: Optional[MetadataTypes.INT32] = None
   comments: Optional[MetadataTypes.COMMENT] = None
+  track_id: MetadataTypes.TRACKID = DEFAULT_TRACK_ID
 
   def to_dict(self) -> Metadata:
     return {
