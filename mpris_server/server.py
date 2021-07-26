@@ -1,19 +1,31 @@
 from __future__ import annotations
 from typing import Optional
 from weakref import finalize
+from enum import auto
 import logging
 
+from strenum import StrEnum
 from gi.repository import GLib
 import pydbus
 
+from .types import Final
 from .adapters import MprisAdapter
-from .base import NAME, BUS_TYPE
+from .base import NAME, BUS_TYPE, DBUS_PATH, \
+  ROOT_INTERFACE
 from .interfaces.player import Player
 from .interfaces.playlists import Playlists
 from .interfaces.root import Root
 from .interfaces.interface import MprisInterface
 from .interfaces.tracklist import TrackList
 from .mpris.compat import get_dbus_name
+
+
+class BusType(StrEnum):
+  session: str = auto()
+  system: str = auto()
+
+
+DEFAULT_BUS_TYPE: Final[BusType] = BusType.session
 
 
 class Server:
@@ -39,11 +51,10 @@ class Server:
     self.unpublish()
     self.quit_loop()
 
-  def publish(self):
-    bus_type: str = BUS_TYPE
+  def publish(self, bus_type: BusType = DEFAULT_BUS_TYPE):
     logging.debug(f'Connecting to D-Bus {bus_type} bus...')
 
-    if bus_type == 'system':
+    if bus_type == BusType.system:
       bus = pydbus.SystemBus()
 
     else:
@@ -52,11 +63,11 @@ class Server:
     logging.info(f'MPRIS server connected to D-Bus {bus_type} bus')
 
     self._publication_token = bus.publish(
-      f'org.mpris.MediaPlayer2.{self.dbus_name}',
-      ('/org/mpris/MediaPlayer2', self.root),
-      ('/org/mpris/MediaPlayer2', self.player),
-      ('/org/mpris/MediaPlayer2', self.playlists),
-      ('/org/mpris/MediaPlayer2', self.tracklist)
+      f'{ROOT_INTERFACE}.{self.dbus_name}',
+      (DBUS_PATH, self.root),
+      (DBUS_PATH, self.player),
+      (DBUS_PATH, self.playlists),
+      (DBUS_PATH, self.tracklist),
     )
 
   def unpublish(self):
@@ -73,9 +84,9 @@ class Server:
       self._loop.quit()
       self._loop = None
 
-  def loop(self):
+  def loop(self, bus_type: BusType = DEFAULT_BUS_TYPE):
     if not self._publication_token:
-      self.publish()
+      self.publish(bus_type)
 
     self._loop = GLib.MainLoop()
 
