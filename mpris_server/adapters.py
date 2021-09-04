@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, Union
+from typing import Optional, Union, Tuple
 from abc import ABC
 
 from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
@@ -10,7 +10,7 @@ from .mpris.metadata import Metadata, ValidMetadata
 from .types import Final
 
 
-ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
+ActivePlaylist = Tuple[PlaylistValidity, PlaylistEntry]
 
 
 class RootAdapter(ABC):

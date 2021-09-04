@@ -1,6 +1,7 @@
 from __future__ import annotations
+
 from typing import Iterable, Union, Tuple, \
-  Optional, NamedTuple
+  Optional, NamedTuple, List, Dict
 from enum import auto
 from string import ascii_letters, digits
 from os import PathLike
@@ -13,7 +14,7 @@ from .types import TypedDict, TypeAlias, \
 
 
 Prop = str
-Props = list[Prop]
+Props = List[Prop]
 
 
 INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
@@ -83,14 +84,14 @@ Paths = Union[PathLike, str]
 Microseconds = int
 VolumeDecimal = float
 RateDecimal = float
-PlaylistEntry = tuple[str, str, str]
+PlaylistEntry = Tuple[str, str, str]
 PlaylistValidity = bool
 
 # python, d-bus and mpris types
 PyType = Union[type, GenericAlias, _GenericAlias]
 DbusPyTypes = Union[str, float, int, bool, list]
-AttrVals = dict[str, DbusPyTypes]
-DbusMetadata = dict[str, Variant]
+AttrVals = Dict[str, DbusPyTypes]
+DbusMetadata = Dict[str, Variant]
 DbusType = str
 DbusObj = str
 
@@ -123,8 +124,8 @@ class _MprisTypes(NamedTuple):
   UINT64: PyType = int
   DOUBLE: PyType = float
   BOOLEAN: PyType = bool
-  OBJ_ARRAY: PyType = list[str]
-  STRING_ARRAY: PyType = list[str]
+  OBJ_ARRAY: PyType = List[str]
+  STRING_ARRAY: PyType = List[str]
 
 
 MprisTypes: Final = _MprisTypes()

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from . import adapters, base, types, server, mpris, interfaces
 from .interfaces import interface, player, root, playlists, tracklist
 from .mpris import metadata

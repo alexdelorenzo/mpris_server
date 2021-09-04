@@ -13,7 +13,8 @@ from ..types import Final
 TRACE_LOG_LEVEL: Final[int] = logging.NOTSET
 
 
-Method = Callable[[Any, ...], Optional[Any]]
+# python 3.7 does not like using Ellipsis with Callable
+Method = 'Callable[[Any, ...], Optional[Any]]'
 
 
 def log_trace(method: Method) -> Method:
