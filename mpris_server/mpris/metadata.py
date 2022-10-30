@@ -103,7 +103,7 @@ class MetadataObj(NamedTuple):
   art_url: Optional[MprisTypes.STRING] = None
   disc_no: Optional[MprisTypes.INT32] = None
   track_no: Optional[MprisTypes.INT32] = None
-  comments: Optional[MprisTypes.COMMENT] = None
+  comments: Optional[MprisTypes.STRING_ARRAY] = None
   track_id: MprisTypes.TRACKID = DEFAULT_TRACK_ID
 
   def to_dict(self) -> Metadata:
