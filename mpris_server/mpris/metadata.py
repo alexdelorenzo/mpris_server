@@ -77,34 +77,34 @@ METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
 
 
 class _MetadataTypes(NamedTuple):
-  TRACKID: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.TRACKID]
-  LENGTH: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.LENGTH]
-  ART_URL: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.ART_URL]
-  URL: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.URL]
-  TITLE: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.TITLE]
-  ARTIST: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.ARTIST]
-  ALBUM: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.ALBUM]
-  ALBUM_ARTIST: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.ALBUM_ARTIST]
-  DISC_NUMBER: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
-  TRACK_NUMBER: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.TRACK_NUMBER]
-  COMMENT: MetadataEntry = METADATA_PY_TYPES[MetadataEntries.COMMENT]
+  TRACKID: PyType = METADATA_PY_TYPES[MetadataEntries.TRACKID]
+  LENGTH: PyType = METADATA_PY_TYPES[MetadataEntries.LENGTH]
+  ART_URL: PyType = METADATA_PY_TYPES[MetadataEntries.ART_URL]
+  URL: PyType = METADATA_PY_TYPES[MetadataEntries.URL]
+  TITLE: PyType = METADATA_PY_TYPES[MetadataEntries.TITLE]
+  ARTIST: PyType = METADATA_PY_TYPES[MetadataEntries.ARTIST]
+  ALBUM: PyType = METADATA_PY_TYPES[MetadataEntries.ALBUM]
+  ALBUM_ARTIST: PyType = METADATA_PY_TYPES[MetadataEntries.ALBUM_ARTIST]
+  DISC_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
+  TRACK_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.TRACK_NUMBER]
+  COMMENT: PyType = METADATA_PY_TYPES[MetadataEntries.COMMENT]
 
 
 MetadataTypes: Final = _MetadataTypes()
 
 
 class MetadataObj(NamedTuple):
-  title: Optional[MetadataTypes.STRING] = None
-  artists: Optional[MetadataTypes.STRING_ARRAY] = None
-  album: Optional[MetadataTypes.STRING] = None
-  album_artists: Optional[MetadataTypes.STRING_ARRAY] = None
-  length: Optional[MetadataTypes.LENGTH] = None
-  url: Optional[MetadataTypes.STRING] = None
-  art_url: Optional[MetadataTypes.STRING] = None
-  disc_no: Optional[MetadataTypes.INT32] = None
-  track_no: Optional[MetadataTypes.INT32] = None
-  comments: Optional[MetadataTypes.COMMENT] = None
-  track_id: MetadataTypes.TRACKID = DEFAULT_TRACK_ID
+  title: Optional[MprisTypes.STRING] = None
+  artists: Optional[MprisTypes.STRING_ARRAY] = None
+  album: Optional[MprisTypes.STRING] = None
+  album_artists: Optional[MprisTypes.STRING_ARRAY] = None
+  length: Optional[MprisTypes.LENGTH] = None
+  url: Optional[MprisTypes.STRING] = None
+  art_url: Optional[MprisTypes.STRING] = None
+  disc_no: Optional[MprisTypes.INT32] = None
+  track_no: Optional[MprisTypes.INT32] = None
+  comments: Optional[MprisTypes.COMMENT] = None
+  track_id: MprisTypes.TRACKID = DEFAULT_TRACK_ID
 
   def to_dict(self) -> Metadata:
     return {
