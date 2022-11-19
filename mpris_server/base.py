@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from typing import Iterable, Union, Tuple, \
-  Optional, NamedTuple, List, Dict
-from enum import auto
+  Optional, NamedTuple, List, Dict, TYPE_CHECKING
+from enum import Enum, auto
 from string import ascii_letters, digits
 from os import PathLike
 
@@ -11,6 +11,9 @@ from strenum import StrEnum
 
 from .types import TypedDict, TypeAlias, \
   GenericAlias, _GenericAlias, Final
+
+if TYPE_CHECKING:
+  from .interfaces.interface import MprisInterface
 
 
 Prop = str
@@ -86,12 +89,14 @@ VolumeDecimal = float
 RateDecimal = float
 PlaylistEntry = Tuple[str, str, str]
 PlaylistValidity = bool
+ActivePlaylist = Tuple[PlaylistValidity, PlaylistEntry]
 
 # python, d-bus and mpris types
 PyType = Union[type, GenericAlias, _GenericAlias]
 DbusPyTypes = Union[str, float, int, bool, list]
-AttrVals = Dict[str, DbusPyTypes]
-DbusMetadata = Dict[str, Variant]
+Attr = str
+AttrVals = Dict[Attr, DbusPyTypes]
+DbusMetadata = Dict[Attr, Variant]
 DbusType = str
 DbusObj = str
 
@@ -155,7 +160,7 @@ class Track(NamedTuple):
 
 
 def dbus_emit_changes(
-  interface: 'MprisInterface',
+  interface: MprisInterface,
   changes: Iterable[str]
 ):
   attr_vals: AttrVals = {

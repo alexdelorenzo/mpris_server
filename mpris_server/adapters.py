@@ -1,16 +1,11 @@
 from __future__ import annotations
-from typing import Optional, Union, Tuple
+from typing import Optional
 from abc import ABC
 
-from .base import URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
-  VolumeDecimal, RateDecimal, DbusObj, PlaylistEntry, PlaylistValidity, \
-  DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track, \
-  MprisTypes, Paths
+from .base import ActivePlaylist, URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
+  VolumeDecimal, RateDecimal, DbusObj, PlaylistEntry, DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track, \
+  Paths
 from .mpris.metadata import Metadata, ValidMetadata
-from .types import Final
-
-
-ActivePlaylist = Tuple[PlaylistValidity, PlaylistEntry]
 
 
 class RootAdapter(ABC):
