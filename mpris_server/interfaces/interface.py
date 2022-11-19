@@ -1,7 +1,8 @@
 from __future__ import annotations
-from typing import Optional, Callable, Any
-from functools import wraps
+
 from abc import ABC
+from functools import wraps
+from typing import Any, Callable, Optional, TYPE_CHECKING
 import logging
 
 from pydbus.generic import signal
@@ -9,12 +10,16 @@ from pydbus.generic import signal
 from ..base import NAME, ROOT_INTERFACE
 from ..types import Final
 
+if TYPE_CHECKING:
+  from ..adapters import MprisAdapter
+
 
 TRACE_LOG_LEVEL: Final[int] = logging.NOTSET
 
 
 # python 3.7 does not like using Ellipsis with Callable
-Method = 'Callable[[Any, ...], Optional[Any]]'
+# oh well
+Method = Callable[[Any, ...], Optional[Any]]
 
 
 def log_trace(method: Method) -> Method:
@@ -36,10 +41,7 @@ class MprisInterface(ABC):
   def __init__(
     self,
     name: str = NAME,
-    adapter: Optional['MprisAdapter'] = None
+    adapter: Optional[MprisAdapter] = None
   ):
     self.name = name
     self.adapter = adapter
-
-  def log_trace(self, *args, **kwargs):
-    logging.log(TRACE_LOG_LEVEL, *args, **kwargs)

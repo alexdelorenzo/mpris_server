@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+from enum import StrEnum
 from typing import Optional
 import logging
 
@@ -15,10 +17,10 @@ from ..mpris.metadata import Metadata, DbusMetadata, DbusTypes, \
 from .interface import MprisInterface, log_trace
 
 
-class LoopStatus:
-  NONE: Final[str] = 'None'
-  TRACK: Final[str] = 'Track'
-  PLAYLIST: Final[str] = 'Playlist'
+class LoopStatus(StrEnum):
+  NONE: str = 'None'
+  TRACK: str = 'Track'
+  PLAYLIST: str = 'Playlist'
 
 
 class Player(MprisInterface):
@@ -283,7 +285,8 @@ class Player(MprisInterface):
       return metadata
 
     # build metadata if no metadata supplied by adapter
-    self.log_trace(f"Building {self.INTERFACE}.Metadata")
+    logging.debug(f"Building {self.INTERFACE}.Metadata")
+
     track = self.adapter.get_current_track()
     stream_title = self.adapter.get_stream_title()
 

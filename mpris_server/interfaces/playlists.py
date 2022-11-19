@@ -1,11 +1,8 @@
 from __future__ import annotations
-from typing import Union
-import base64
-import logging
 
 from pydbus.generic import signal
 
-from ..base import PlaylistEntry, PlaylistValidity, ROOT_INTERFACE
+from ..base import ActivePlaylist, PlaylistEntry, ROOT_INTERFACE
 from ..types import Final
 from .interface import MprisInterface, log_trace
 
@@ -51,7 +48,7 @@ class Playlists(MprisInterface):
     #     self.core.playback.play(tlid=tl_tracks[0].tlid).get()
 
   @log_trace
-  def GetPlaylists(self, index: int, max_count: int, order: str, reverse: bool) -> list[tuple]:
+  def GetPlaylists(self, index: int, max_count: int, order: str, reverse: bool) -> list[PlaylistEntry]:
     return self.adapter.get_playlists(index, max_count, order, reverse)
     # logging.debug(
     #     "%s.GetPlaylists(%r, %r, %r, %r) called",
@@ -83,7 +80,7 @@ class Playlists(MprisInterface):
 
   @property
   @log_trace
-  def ActivePlaylist(self) -> tuple[PlaylistValidity, PlaylistEntry]:
+  def ActivePlaylist(self) -> ActivePlaylist:
     return self.adapter.get_active_playlist()
     # self.log_trace("Getting %s.ActivePlaylist", self.INTERFACE)
     # playlist_is_valid = False
