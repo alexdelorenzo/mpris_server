@@ -70,9 +70,8 @@ class Player(MprisInterface):
   Seeked: Final[signal] = signal()
 
   def _dbus_metadata(self) -> Optional[DbusMetadata]:
-    metadata = self.adapter.metadata()
-
-    if metadata:
+    if metadata := self.adapter.metadata():
+      logging.debug(f"{metadata=}")
       return get_dbus_metadata(metadata)
 
     return None
