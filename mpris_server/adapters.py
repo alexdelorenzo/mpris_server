@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Optional
 from abc import ABC
 
-from .base import ActivePlaylist, URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
+from .base import ActivePlaylist, Position, URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
   Volume, Rate, DbusObj, PlaylistEntry, DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track, \
   Paths
 from .mpris.metadata import Metadata, ValidMetadata
@@ -63,7 +63,7 @@ class PlayerAdapter(ABC):
     """
     pass
 
-  def get_current_position(self) -> Microseconds:
+  def get_current_position(self) -> Position:
     pass
 
   def next(self):

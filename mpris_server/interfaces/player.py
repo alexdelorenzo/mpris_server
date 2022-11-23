@@ -10,7 +10,7 @@ from pydbus.generic import signal
 from ..types import Final
 from ..base import PlayState, MUTE_VOL, MAX_VOL, PAUSE_RATE, BEGINNING, \
   Microseconds, Rate, Volume, MAX_RATE, MIN_RATE, \
-  Track, ROOT_INTERFACE
+  Track, ROOT_INTERFACE, Position
 from ..mpris.metadata import Metadata, DbusMetadata, DbusTypes, \
   get_dbus_metadata, METADATA_TYPES, DEFAULT_METADATA, \
   ValidMetadata, MetadataObj
@@ -245,7 +245,7 @@ class Player(MprisInterface):
 
   @property
   @log_trace
-  def Rate(self) -> float:
+  def Rate(self) -> Rate:
       return self.adapter.get_rate()
 
   @Rate.setter
@@ -335,7 +335,7 @@ class Player(MprisInterface):
 
   @property
   @log_trace
-  def Volume(self) -> float:
+  def Volume(self) -> Volume:
     mute = self.adapter.is_mute()
     volume = self.adapter.get_volume()
 
@@ -370,12 +370,12 @@ class Player(MprisInterface):
 
   @property
   @log_trace
-  def Position(self) -> float:
+  def Position(self) -> Position:
     return self.adapter.get_current_position()
 
   @property
   @log_trace
-  def MinimumRate(self) -> float:
+  def MinimumRate(self) -> Rate:
     rate = self.adapter.get_minimum_rate()
 
     if rate is None:
@@ -385,7 +385,7 @@ class Player(MprisInterface):
 
   @property
   @log_trace
-  def MaximumRate(self) -> float:
+  def MaximumRate(self) -> Rate:
     rate = self.adapter.get_minimum_rate()
 
     if rate is None:

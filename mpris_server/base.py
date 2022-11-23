@@ -79,11 +79,17 @@ Paths = Union[PathLike, str]
 
 # units and convenience aliases
 Microseconds = int
-Volume = Decimal
-Rate = Decimal
-PlaylistEntry = Tuple[str, str, str]
+Position = Microseconds
+UnitInterval = Decimal
+Volume = UnitInterval
+Rate = UnitInterval
+
+PlaylistId = str
+PlaylistName = str
+PlaylistIcon = str
+PlaylistEntry = tuple[PlaylistId, PlaylistName, PlaylistIcon]
 PlaylistValidity = bool
-ActivePlaylist = Tuple[PlaylistValidity, PlaylistEntry]
+ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
 
 # python, d-bus and mpris types
 PyType = Union[type, GenericAlias, _GenericAlias]
