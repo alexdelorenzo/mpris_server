@@ -8,4 +8,4 @@ from .mpris.compat import get_dbus_name, enforce_dbus_length
 from .mpris.metadata import Metadata, MetadataObj, ValidMetadata
 
 
-__version__: types.Final[str] = '0.4.1'
+__version__: types.Final[str] = '0.6.0'
