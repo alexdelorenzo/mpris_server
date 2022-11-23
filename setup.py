@@ -5,17 +5,17 @@ from pathlib import Path
 # from mpris_server import __version__
 
 
-PKGS: List[str] = [
+PKGS: list[str] = [
   'mpris_server',
   'mpris_server.mpris',
   'mpris_server.interfaces'
 ]
 
-REQS: List[str] = Path('requirements.txt') \
+REQS: list[str] = Path('requirements.txt') \
   .read_text() \
   .splitlines()
 
-REQS: List[str] = [
+REQS: list[str] = [
   req
   for req in REQS
   if not req.strip().startswith('#')

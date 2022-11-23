@@ -1,24 +1,23 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Iterable, Union, Tuple, \
-  Optional, NamedTuple, List, Dict, TYPE_CHECKING
 from enum import Enum, auto
-from string import ascii_letters, digits
 from os import PathLike
+from string import ascii_letters, digits
+from typing import Iterable, NamedTuple, Optional, TYPE_CHECKING, Union
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
 
-from .types import TypedDict, TypeAlias, \
-  GenericAlias, _GenericAlias, Final
+from .types import Final, GenericAlias, _GenericAlias
+
 
 if TYPE_CHECKING:
   from .interfaces.interface import MprisInterface
 
 
 Prop = str
-Props = List[Prop]
+Props = list[Prop]
 
 
 INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
@@ -95,8 +94,8 @@ ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
 PyType = Union[type, GenericAlias, _GenericAlias]
 DbusPyTypes = Union[str, float, int, bool, list]
 Attr = str
-AttrVals = Dict[Attr, DbusPyTypes]
-DbusMetadata = Dict[Attr, Variant]
+AttrVals = dict[Attr, DbusPyTypes]
+DbusMetadata = dict[Attr, Variant]
 DbusType = str
 DbusObj = str
 
@@ -138,8 +137,8 @@ class _MprisTypes(NamedTuple):
   UINT64: PyType = int
   DOUBLE: PyType = float
   BOOLEAN: PyType = bool
-  OBJ_ARRAY: PyType = List[str]
-  STRING_ARRAY: PyType = List[str]
+  OBJ_ARRAY: PyType = list[str]
+  STRING_ARRAY: PyType = list[str]
 
 
 MprisTypes: Final = _MprisTypes()
