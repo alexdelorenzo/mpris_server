@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC
 from functools import wraps
-from typing import Optional, Self, TYPE_CHECKING
+from typing import ClassVar, Optional, Self, TYPE_CHECKING
 import logging
 
 from pydbus.generic import signal
@@ -26,7 +26,7 @@ def log_trace(method: Method) -> Method:
 
 
 class MprisInterface(ABC):
-  INTERFACE: Final[str] = ROOT_INTERFACE
+  INTERFACE: ClassVar[str] = ROOT_INTERFACE
 
   PropertiesChanged: Final[signal] = signal()
 

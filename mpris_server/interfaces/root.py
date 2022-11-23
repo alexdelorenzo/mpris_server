@@ -1,6 +1,7 @@
 from __future__ import annotations
 from pathlib import PurePath
 import logging
+from typing import ClassVar
 
 from ..base import ROOT_INTERFACE, NAME, Paths
 from ..types import Final
@@ -30,7 +31,7 @@ class Root(MprisInterface):
   </node>
   """
 
-  INTERFACE: Final[str] = ROOT_INTERFACE
+  INTERFACE: ClassVar[str] = ROOT_INTERFACE
 
   @log_trace
   def Raise(self):

@@ -65,7 +65,7 @@ class Player(MprisInterface):
   </node>
   """
 
-  INTERFACE: Final[str] = f"{ROOT_INTERFACE}.Player"
+  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.Player"
 
   Seeked: Final[signal] = signal()
 

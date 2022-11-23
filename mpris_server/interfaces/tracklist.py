@@ -1,5 +1,6 @@
 from __future__ import annotations
 import logging
+from typing import ClassVar
 
 from pydbus.generic import signal
 
@@ -49,7 +50,7 @@ class TrackList(MprisInterface):
   </node>
   """
 
-  INTERFACE: Final[str] = f"{ROOT_INTERFACE}.TrackList"
+  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.TrackList"
 
   TrackListReplaced = signal()
   TrackAdded = signal()
