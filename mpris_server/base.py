@@ -4,7 +4,7 @@ from decimal import Decimal
 from enum import Enum, auto
 from os import PathLike
 from string import ascii_letters, digits
-from typing import Iterable, NamedTuple, Optional, Self, TYPE_CHECKING, Union
+from typing import Callable, Concatenate, Iterable, NamedTuple, Optional, ParamSpec, Self, TYPE_CHECKING, TypeVar, Union
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
@@ -49,14 +49,21 @@ class Property(StrEnum):
 
 Properties = list[Property]
 
+
 INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
 ROOT_INTERFACE: Final[str] = INTERFACE
 DBUS_PATH: Final[str] = '/org/mpris/MediaPlayer2'
 NAME: Final[str] = "mprisServer"
 
-MIME_TYPES: Final[list[str]] = ["audio/mpeg", "application/ogg", "video/mpeg"]
+MIME_TYPES: Final[list[str]] = [
+  "audio/mpeg",
+  "application/ogg",
+  "video/mpeg",
+]
 BUS_TYPE: Final[str] = "session"
-URI: Final[list[str]] = ["file"]
+URI: Final[list[str]] = [
+  "file",
+]
 DEFAULT_DESKTOP: Final[str] = ''
 
 # typically, these are the props that D-Bus needs to be notified about
@@ -129,7 +136,10 @@ BEGINNING: Final[int] = 0
 
 DEFAULT_TRACK_ID: Final[str] = '/default/1'
 DEFAULT_PLAYLIST_COUNT: Final[int] = 1
-DEFAULT_ORDERINGS: Final[list[str]] = ["Alphabetical", "User"]
+DEFAULT_ORDERINGS: Final[list[str]] = [
+  "Alphabetical",
+  "User",
+]
 
 # valid characters for a DBus name
 VALID_PUNC: Final[str] = '_'
@@ -158,11 +168,17 @@ ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
 
 # python, d-bus and mpris types
 PyType = Union[type, GenericAlias, _GenericAlias]
-DbusPyTypes = Union[str, float, int, bool, list]
+DbusPyTypes = Union[str, float, int, bool, list, Decimal]
 PropVals = dict[Property, DbusPyTypes]
 DbusMetadata = dict[Property, Variant]
 DbusType = str
 DbusObj = str
+
+T = TypeVar('T')
+P = ParamSpec('P')
+
+Method = Callable[Concatenate[Self, P], T]
+
 
 DEFAULT_RATE: Final[Rate] = Rate(1.0)
 PAUSE_RATE: Final[Rate] = Rate(0.0)
