@@ -1,19 +1,16 @@
 # Python and DBus compatibility
 # See:  https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
 from __future__ import annotations
-from random import choices
-from typing import Any, Callable, Optional
+
 from functools import wraps
-import logging
+from random import choices
+from typing import Callable, Optional
 
+from emoji import demojize, emoji_count
 from unidecode import unidecode
-from emoji import emoji_count, demojize
 
+from ..base import DbusObj, NAME_PREFIX, P, RAND_CHARS, VALID_CHARS
 from ..types import Final
-from ..base import VALID_CHARS, RAND_CHARS, NAME_PREFIX, \
-  DbusObj
-from .metadata import Metadata, DbusMetadata, DbusTypes, \
-  DbusTypes, METADATA_TYPES
 
 
 DBUS_NAME_MAX: Final[int] = 255
@@ -21,13 +18,11 @@ START_WITH: Final[str] = "_"
 FIRST_CHAR: Final[int] = 0
 
 # following must be subscriptable to be used with random.choices()
-VALID_CHARS_SUB: Final[tuple[str, ...]] = \
-  tuple(VALID_CHARS)
-INTERFACE_CHARS: Final[set[str]] = \
-  {*VALID_CHARS, '-'}
+VALID_CHARS_SUB: Final[tuple[str, ...]] = tuple(VALID_CHARS)
+INTERFACE_CHARS: Final[set[str]] = {*VALID_CHARS, '-'}
 
 
-ReturnsStr = Callable[..., str]
+ReturnsStr = Callable[P, str]
 
 
 def to_ascii(text: str) -> str:
@@ -46,7 +41,7 @@ def random_name() -> str:
 
 def enforce_dbus_length(func: ReturnsStr) -> ReturnsStr:
   @wraps(func)
-  def new_func(*args, **kwargs) -> str:
+  def new_func(*args: P.args, **kwargs: P.kwargs) -> str:
     val: str = func(*args, **kwargs)
     return val[:DBUS_NAME_MAX]
 
