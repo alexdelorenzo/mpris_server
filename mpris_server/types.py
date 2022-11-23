@@ -33,9 +33,7 @@ def get_type(obj: type) -> Optional[type]:
   if hasattr(obj, ORIGIN):
     return getattr(obj, ORIGIN)
 
-  origin = get_origin(obj)
-
-  if origin:
+  if origin := get_origin(obj):
     return origin
 
   if isinstance(obj, type):
