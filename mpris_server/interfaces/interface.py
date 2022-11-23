@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC
 from functools import wraps
-from typing import Any, Callable, Optional, TYPE_CHECKING
+from typing import Any, Callable, Optional, Self, TYPE_CHECKING
 import logging
 
 from pydbus.generic import signal
@@ -19,7 +19,7 @@ TRACE_LOG_LEVEL: Final[int] = logging.NOTSET
 
 # python 3.7 does not like using Ellipsis with Callable
 # oh well
-Method = Callable[[Any, ...], Optional[Any]]
+Method = Callable[[Self, ...], Optional[Any]]
 
 
 def log_trace(method: Method) -> Method:
