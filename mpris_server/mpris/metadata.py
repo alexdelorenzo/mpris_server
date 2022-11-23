@@ -157,7 +157,7 @@ def is_valid_metadata(entry: str, obj: Any) -> bool:
 
 def get_dbus_var(entry: MetadataEntry, obj: DbusObj) -> Variant:
   metadata_type = METADATA_TYPES[entry]
-  logging.debug(f"{entry=}, {obj=}, {metadata_type=}")
+  logging.debug(f"Translating {entry=}, {obj=} to {metadata_type=}")
   return Variant(metadata_type, obj)
 
 
