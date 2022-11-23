@@ -144,7 +144,7 @@ class Player(MprisInterface):
       self.adapter.play()
 
   @log_trace
-  def Seek(self, offset: Microseconds):
+  def Seek(self, offset: Position):
     if not self.CanSeek:
       logging.debug(f"{self.INTERFACE}.Seek not allowed")
       return
@@ -158,7 +158,7 @@ class Player(MprisInterface):
     self.adapter.seek(new_position)
 
   @log_trace
-  def SetPosition(self, track_id: str, position: Microseconds):
+  def SetPosition(self, track_id: str, position: Position):
     if not self.CanSeek:
       logging.debug(f"{self.INTERFACE}.SetPosition not allowed")
       return

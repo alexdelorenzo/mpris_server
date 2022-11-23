@@ -89,7 +89,7 @@ class PlayerAdapter(ABC):
 
   def seek(
     self,
-    time: Microseconds,
+    time: Position,
     track_id: Optional[DbusObj] = None
   ):
     pass

@@ -2,7 +2,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from .base import dbus_emit_changes, Microseconds, DbusObj, \
+from .base import Position, dbus_emit_changes, Microseconds, DbusObj, \
   ON_VOLUME_PROPS, ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, \
   ON_TITLE_PROPS, ON_SEEK_PROPS, ON_OPTION_PROPS, ON_ENDED_PROPS, \
   ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, ON_PLAYER_PROPS, \
@@ -71,7 +71,7 @@ class PlayerEventAdapter(BaseEventAdapter, ABC):
   def on_title(self):
     self.emit_player_changes(ON_TITLE_PROPS)
 
-  def on_seek(self, position: Microseconds):
+  def on_seek(self, position: Position):
     self.player.Seeked(position)
     self.emit_player_changes(ON_SEEK_PROPS)
 
