@@ -1,15 +1,16 @@
 from typing import List
-from setuptools import setup
+from setuptools import setup, find_packages
 from pathlib import Path
 
 # from mpris_server import __version__
 
 
-PKGS: list[str] = [
+PKGS: list[str] = list({
   'mpris_server',
   'mpris_server.mpris',
-  'mpris_server.interfaces'
-]
+  'mpris_server.interfaces',
+  *find_packages(),
+})
 
 REQS: list[str] = Path('requirements.txt') \
   .read_text() \
