@@ -71,7 +71,6 @@ class Player(MprisInterface):
 
   def _dbus_metadata(self) -> Optional[DbusMetadata]:
     if metadata := self.adapter.metadata():
-      logging.debug(f"{metadata=}")
       return get_dbus_metadata(metadata)
 
     return None
@@ -293,44 +292,44 @@ class Player(MprisInterface):
       return DEFAULT_METADATA
 
     track_id = track.track_id
-    res = {"mpris:trackid": Variant("o", track_id)}
+    metadata = {"mpris:trackid": Variant("o", track_id)}
 
     if track.length:
-      res["mpris:length"] = Variant("x", track.length)
+      metadata["mpris:length"] = Variant("x", track.length)
 
     if track.uri:
-      res["xesam:url"] = Variant("s", track.uri)
+      metadata["xesam:url"] = Variant("s", track.uri)
 
     if stream_title or track.name:
-      res["xesam:title"] = Variant("s", stream_title or track.name)
+      metadata["xesam:title"] = Variant("s", stream_title or track.name)
 
     if track.artists:
       artists = list(track.artists)
       artists.sort(key=lambda a: a.name or "")
-      res["xesam:artist"] = Variant("as", [a.name for a in artists if a.name])
+      metadata["xesam:artist"] = Variant("as", [a.name for a in artists if a.name])
 
     if track.album and track.album.name:
-      res["xesam:album"] = Variant("s", track.album.name)
+      metadata["xesam:album"] = Variant("s", track.album.name)
 
     if track.album and track.album.artists:
       artists = list(track.album.artists)
       artists.sort(key=lambda a: a.name or "")
-      res["xesam:albumArtist"] = Variant(
+      metadata["xesam:albumArtist"] = Variant(
         "as", [a.name for a in artists if a.name]
       )
 
     art_url = self._get_art_url(track)
 
     if art_url:
-      res["mpris:artUrl"] = Variant("s", art_url)
+      metadata["mpris:artUrl"] = Variant("s", art_url)
 
     if track.disc_no:
-      res["xesam:discNumber"] = Variant("i", track.disc_no)
+      metadata["xesam:discNumber"] = Variant("i", track.disc_no)
 
     if track.track_no:
-      res["xesam:trackNumber"] = Variant("i", track.track_no)
+      metadata["xesam:trackNumber"] = Variant("i", track.track_no)
 
-    return res
+    return metadata
 
   @property
   @log_trace
