@@ -65,16 +65,16 @@ ON_ENDED_PROPS: Final[Properties] = [
   Property.PlaybackStatus,
 ]
 ON_VOLUME_PROPS: Final[Properties] = [
-  Property.Volume,
   Property.Metadata,
+  Property.Volume,
 ]
 ON_PLAYBACK_PROPS: Final[Properties] = [
-  Property.PlaybackStatus,
-  Property.Metadata,
   Property.CanControl,
-  Property.Rate,
-  Property.MinimumRate,
   Property.MaximumRate,
+  Property.Metadata,
+  Property.MinimumRate,
+  Property.PlaybackStatus,
+  Property.Rate,
 ]
 ON_PLAYPAUSE_PROPS: Final[Properties] = [
   Property.PlaybackStatus,
@@ -83,46 +83,46 @@ ON_TITLE_PROPS: Final[Properties] = [
   Property.Metadata,
 ]
 ON_OPTION_PROPS: Final[Properties] = [
+  Property.CanGoNext,
+  Property.CanGoPrevious,
+  Property.CanPause,
+  Property.CanPlay,
   Property.LoopStatus,
   Property.Shuffle,
-  Property.CanGoPrevious,
-  Property.CanGoNext,
-  Property.CanPlay,
-  Property.CanPause,
 ]
 ON_SEEK_PROPS: Final[Properties] = [
+  Property.CanSeek,
   Property.Position,
-  Property.CanSeek
 ]
 
 # all props for each interface
 ON_PLAYER_PROPS: Final[Properties] = list({
   *ON_ENDED_PROPS,
-  *ON_VOLUME_PROPS,
-  *ON_PLAYPAUSE_PROPS,
-  *ON_TITLE_PROPS,
   *ON_OPTION_PROPS,
-  *ON_SEEK_PROPS,
   *ON_PLAYBACK_PROPS,
+  *ON_PLAYPAUSE_PROPS,
+  *ON_SEEK_PROPS,
+  *ON_TITLE_PROPS,
+  *ON_VOLUME_PROPS,
 })
 ON_TRACKS_PROPS: Final[Properties] = [
   Property.Tracks
 ]
 ON_PLAYLIST_PROPS: Final[Properties] = [
-  Property.PlaylistCount,
+  Property.ActivePlaylist,
   Property.Orderings,
-  Property.ActivePlaylist
+  Property.PlaylistCount,
 ]
 ON_ROOT_PROPS: Final[Properties] = [
   Property.CanQuit,
-  Property.Fullscreen,
-  Property.CanSetFullscreen,
   Property.CanRaise,
+  Property.CanSetFullscreen,
+  Property.DesktopEntry,
+  Property.Fullscreen,
   Property.HasTrackList,
   Property.Identity,
-  Property.DesktopEntry,
-  Property.SupportedUriSchemes,
   Property.SupportedMimeTypes,
+  Property.SupportedUriSchemes,
 ]
 
 BEGINNING: Final[int] = 0
@@ -174,35 +174,35 @@ MAX_VOL: Final[Rate] = Rate(1)
 
 
 class PlayState(StrEnum):
-  PLAYING = auto()
   PAUSED = auto()
+  PLAYING = auto()
   STOPPED = auto()
 
 
 class DbusTypes(StrEnum):
-  OBJ: DbusType = 'o'
-  STRING: DbusType = 's'
+  BOOLEAN: DbusType = 'b'
+  DOUBLE: DbusType = 'd'
   INT32: DbusType = 'i'
   INT64: DbusType = 'x'
+  OBJ: DbusType = 'o'
+  OBJ_ARRAY: DbusType = 'ao'
+  STRING: DbusType = 's'
+  STRING_ARRAY: DbusType = 'as'
   UINT32: DbusType = 'u'
   UINT64: DbusType = 't'
-  DOUBLE: DbusType = 'd'
-  BOOLEAN: DbusType = 'b'
-  OBJ_ARRAY: DbusType = 'ao'
-  STRING_ARRAY: DbusType = 'as'
 
 
 class _MprisTypes(NamedTuple):
-  OBJ: PyType = str
-  STRING: PyType = str
+  BOOLEAN: PyType = bool
+  DOUBLE: PyType = float
   INT32: PyType = int
   INT64: PyType = int
+  OBJ: PyType = str
+  OBJ_ARRAY: PyType = list[str]
+  STRING: PyType = str
+  STRING_ARRAY: PyType = list[str]
   UINT32: PyType = int
   UINT64: PyType = int
-  DOUBLE: PyType = float
-  BOOLEAN: PyType = bool
-  OBJ_ARRAY: PyType = list[str]
-  STRING_ARRAY: PyType = list[str]
 
 
 MprisTypes: Final = _MprisTypes()
@@ -213,22 +213,22 @@ class Artist(NamedTuple):
 
 
 class Album(NamedTuple):
-  name: str = "Default Album"
-  artists: tuple[Artist] = tuple()
   art_url: Optional[str] = None
+  artists: tuple[Artist] = tuple()
+  name: str = "Default Album"
 
 
 class Track(NamedTuple):
-  track_id: DbusObj = DEFAULT_TRACK_ID
-  name: str = "Default Track"
-  track_no: Optional[int] = None
-  length: Duration = 0
-  uri: Optional[str] = None
-  artists: tuple[Artist] = tuple()
   album: Optional[Album] = None
   art_url: Optional[str] = None
+  artists: tuple[Artist] = tuple()
   disc_no: Optional[int] = None
+  length: Duration = 0
+  name: str = "Default Track"
+  track_id: DbusObj = DEFAULT_TRACK_ID
+  track_no: Optional[int] = None
   type: Optional[Enum] = None
+  uri: Optional[str] = None
 
 
 def dbus_emit_changes(
