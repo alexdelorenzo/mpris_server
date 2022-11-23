@@ -9,7 +9,7 @@ from pydbus.generic import signal
 
 from ..types import Final
 from ..base import PlayState, MUTE_VOL, MAX_VOL, PAUSE_RATE, BEGINNING, \
-  Microseconds, RateDecimal, VolumeDecimal, MAX_RATE, MIN_RATE, \
+  Microseconds, Rate, Volume, MAX_RATE, MIN_RATE, \
   Track, ROOT_INTERFACE
 from ..mpris.metadata import Metadata, DbusMetadata, DbusTypes, \
   get_dbus_metadata, METADATA_TYPES, DEFAULT_METADATA, \
@@ -250,7 +250,7 @@ class Player(MprisInterface):
 
   @Rate.setter
   @log_trace
-  def Rate(self, value: RateDecimal):
+  def Rate(self, value: Rate):
     if not self.CanControl:
       logging.debug(f"Setting {self.INTERFACE}.Rate not allowed")
       return
@@ -346,7 +346,7 @@ class Player(MprisInterface):
 
   @Volume.setter
   @log_trace
-  def Volume(self, value: VolumeDecimal):
+  def Volume(self, value: Volume):
     if not self.CanControl:
       logging.debug(f"Setting {self.INTERFACE}.Volume not allowed")
       return

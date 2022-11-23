@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from decimal import Decimal
 from typing import Iterable, Union, Tuple, \
   Optional, NamedTuple, List, Dict, TYPE_CHECKING
 from enum import Enum, auto
@@ -59,13 +60,6 @@ ON_ROOT_PROPS: Final[Props] = [
   'SupportedMimeTypes'
 ]
 
-DEFAULT_RATE: Final[float] = 1.0
-PAUSE_RATE: Final[float] = 0.0
-MIN_RATE: Final[float] = 1.0
-MAX_RATE: Final[float] = 1.0
-
-MUTE_VOL: Final[int] = 0
-MAX_VOL: Final[int] = 1
 BEGINNING: Final[int] = 0
 
 DEFAULT_TRACK_ID: Final[str] = '/default/1'
@@ -85,8 +79,8 @@ Paths = Union[PathLike, str]
 
 # units and convenience aliases
 Microseconds = int
-VolumeDecimal = float
-RateDecimal = float
+Volume = Decimal
+Rate = Decimal
 PlaylistEntry = Tuple[str, str, str]
 PlaylistValidity = bool
 ActivePlaylist = Tuple[PlaylistValidity, PlaylistEntry]
@@ -99,6 +93,15 @@ AttrVals = Dict[Attr, DbusPyTypes]
 DbusMetadata = Dict[Attr, Variant]
 DbusType = str
 DbusObj = str
+
+
+DEFAULT_RATE: Final[Rate] = Rate(1.0)
+PAUSE_RATE: Final[Rate] = Rate(0.0)
+MIN_RATE: Final[Rate] = Rate(1.0)
+MAX_RATE: Final[Rate] = Rate(1.0)
+
+MUTE_VOL: Final[Rate] = Rate(0)
+MAX_VOL: Final[Rate] = Rate(1)
 
 
 class PlayState(StrEnum):

@@ -3,7 +3,7 @@ from typing import Optional
 from abc import ABC
 
 from .base import ActivePlaylist, URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
-  VolumeDecimal, RateDecimal, DbusObj, PlaylistEntry, DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track, \
+  Volume, Rate, DbusObj, PlaylistEntry, DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track, \
   Paths
 from .mpris.metadata import Metadata, ValidMetadata
 
@@ -109,25 +109,25 @@ class PlayerAdapter(ABC):
   def set_loop_status(self, val: str):
     pass
 
-  def get_rate(self) -> RateDecimal:
+  def get_rate(self) -> Rate:
     return DEFAULT_RATE
 
-  def set_rate(self, val: RateDecimal):
+  def set_rate(self, val: Rate):
     pass
 
-  def set_minimum_rate(self, val: RateDecimal):
+  def set_minimum_rate(self, val: Rate):
     pass
 
-  def set_maximum_rate(self, val: RateDecimal):
+  def set_maximum_rate(self, val: Rate):
     pass
 
-  def get_minimum_rate(self) -> RateDecimal:
+  def get_minimum_rate(self) -> Rate:
     pass
 
-  def get_maximum_rate(self) -> RateDecimal:
+  def get_maximum_rate(self) -> Rate:
     pass
 
-  def set_rate(self, val: RateDecimal):
+  def set_rate(self, val: Rate):
     pass
 
   def get_shuffle(self) -> bool:
@@ -139,10 +139,10 @@ class PlayerAdapter(ABC):
   def get_art_url(self, track: int) -> str:
     pass
 
-  def get_volume(self) -> VolumeDecimal:
+  def get_volume(self) -> Volume:
     pass
 
-  def set_volume(self, val: VolumeDecimal):
+  def set_volume(self, val: Volume):
     pass
 
   def is_mute(self) -> bool:
