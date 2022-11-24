@@ -82,8 +82,9 @@ METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.USER_RATING: DbusTypes.DOUBLE,
 }
 
-DBUS_PY_TYPES: Final[dict[DbusType, PyType]] = {
+DBUS_TYPES_TO_PY_TYPES: Final[dict[DbusType, PyType]] = {
   DbusTypes.BOOLEAN: MprisTypes.BOOLEAN,
+  DbusTypes.DATETIME: MprisTypes.DATETIME,
   DbusTypes.DOUBLE: MprisTypes.DOUBLE,
   DbusTypes.INT32: MprisTypes.INT32,
   DbusTypes.INT64: MprisTypes.INT64,
@@ -95,58 +96,61 @@ DBUS_PY_TYPES: Final[dict[DbusType, PyType]] = {
   DbusTypes.UINT64: MprisTypes.UINT64,
 }
 
-METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
-  MetadataEntries.ALBUM: DBUS_PY_TYPES[DbusTypes.STRING],
-  MetadataEntries.ALBUM_ARTISTS: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MetadataEntries.ART_URL: DBUS_PY_TYPES[DbusTypes.STRING],
-  MetadataEntries.ARTISTS: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MetadataEntries.AS_TEXT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MetadataEntries.AUDIO_BPM: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MetadataEntries.AUTO_RATING: DBUS_PY_TYPES[DbusTypes.DOUBLE],
-  MetadataEntries.COMMENT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MetadataEntries.COMPOSER: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MetadataEntries.CONTENT_CREATED: DBUS_PY_TYPES[DbusTypes.STRING],
-  MetadataEntries.DISC_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
-  MetadataEntries.FIRST_USED: DBUS_PY_TYPES[DbusTypes.STRING],
-  MetadataEntries.GENRE: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MetadataEntries.LAST_USED: DBUS_PY_TYPES[DbusTypes.STRING],
-  MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
-  MetadataEntries.LYRICIST: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MetadataEntries.TITLE: DBUS_PY_TYPES[DbusTypes.STRING],
-  MetadataEntries.TRACK_ID: DBUS_PY_TYPES[DbusTypes.OBJ],
-  MetadataEntries.TRACK_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
-  MetadataEntries.URL: DBUS_PY_TYPES[DbusTypes.STRING],
-  MetadataEntries.USE_COUNT: DBUS_PY_TYPES[DbusTypes.INT32],
-  MetadataEntries.USER_RATING: DBUS_PY_TYPES[DbusTypes.DOUBLE],
+METADATA_TO_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
+  MetadataEntries.ALBUM: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.ALBUM_ARTISTS: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.ART_URL: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.ARTISTS: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.AS_TEXT: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.AUDIO_BPM: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.AUTO_RATING: DBUS_TYPES_TO_PY_TYPES[DbusTypes.DOUBLE],
+  MetadataEntries.COMMENT: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.COMPOSER: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.CONTENT_CREATED: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.DISC_NUMBER: DBUS_TYPES_TO_PY_TYPES[DbusTypes.INT32],
+  MetadataEntries.FIRST_USED: DBUS_TYPES_TO_PY_TYPES[DbusTypes.DATETIME],
+  MetadataEntries.GENRE: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.LAST_USED: DBUS_TYPES_TO_PY_TYPES[DbusTypes.DATETIME],
+  MetadataEntries.LENGTH: DBUS_TYPES_TO_PY_TYPES[DbusTypes.INT64],
+  MetadataEntries.LYRICIST: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.TITLE: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.TRACK_ID: DBUS_TYPES_TO_PY_TYPES[DbusTypes.OBJ],
+  MetadataEntries.TRACK_NUMBER: DBUS_TYPES_TO_PY_TYPES[DbusTypes.INT32],
+  MetadataEntries.URL: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.USE_COUNT: DBUS_TYPES_TO_PY_TYPES[DbusTypes.INT32],
+  MetadataEntries.USER_RATING: DBUS_TYPES_TO_PY_TYPES[DbusTypes.DOUBLE],
 }
 
 
 class _MetadataTypes(NamedTuple):
-  ALBUM: PyType = METADATA_PY_TYPES[MetadataEntries.ALBUM]
-  ALBUM_ARTISTS: PyType = METADATA_PY_TYPES[MetadataEntries.ALBUM_ARTISTS]
-  ART_URL: PyType = METADATA_PY_TYPES[MetadataEntries.ART_URL]
-  ARTISTS: PyType = METADATA_PY_TYPES[MetadataEntries.ARTISTS]
-  AS_TEXT: PyType = METADATA_PY_TYPES[MetadataEntries.AS_TEXT]
-  AUDIO_BPM: PyType = METADATA_PY_TYPES[MetadataEntries.AUDIO_BPM]
-  AUTO_RATING: PyType = METADATA_PY_TYPES[MetadataEntries.AUTO_RATING]
-  COMMENT: PyType = METADATA_PY_TYPES[MetadataEntries.COMMENT]
-  COMPOSER: PyType = METADATA_PY_TYPES[MetadataEntries.COMPOSER]
-  CONTENT_CREATED: PyType = METADATA_PY_TYPES[MetadataEntries.CONTENT_CREATED]
-  DISC_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
-  FIRST_USED: PyType = METADATA_PY_TYPES[MetadataEntries.FIRST_USED]
-  GENRE: PyType = METADATA_PY_TYPES[MetadataEntries.GENRE]
-  LAST_USED: PyType = METADATA_PY_TYPES[MetadataEntries.FIRST_USED]
-  LENGTH: PyType = METADATA_PY_TYPES[MetadataEntries.LENGTH]
-  LYRICIST: PyType = METADATA_PY_TYPES[MetadataEntries.LYRICIST]
-  TITLE: PyType = METADATA_PY_TYPES[MetadataEntries.TITLE]
-  TRACK_ID: PyType = METADATA_PY_TYPES[MetadataEntries.TRACK_ID]
-  TRACK_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.TRACK_NUMBER]
-  URL: PyType = METADATA_PY_TYPES[MetadataEntries.URL]
-  USE_COUNT: PyType = METADATA_PY_TYPES[MetadataEntries.USE_COUNT]
-  USER_RATING: PyType = METADATA_PY_TYPES[MetadataEntries.USER_RATING]
+  ALBUM: PyType = METADATA_TO_PY_TYPES[MetadataEntries.ALBUM]
+  ALBUM_ARTISTS: PyType = METADATA_TO_PY_TYPES[MetadataEntries.ALBUM_ARTISTS]
+  ART_URL: PyType = METADATA_TO_PY_TYPES[MetadataEntries.ART_URL]
+  ARTISTS: PyType = METADATA_TO_PY_TYPES[MetadataEntries.ARTISTS]
+  AS_TEXT: PyType = METADATA_TO_PY_TYPES[MetadataEntries.AS_TEXT]
+  AUDIO_BPM: PyType = METADATA_TO_PY_TYPES[MetadataEntries.AUDIO_BPM]
+  AUTO_RATING: PyType = METADATA_TO_PY_TYPES[MetadataEntries.AUTO_RATING]
+  COMMENT: PyType = METADATA_TO_PY_TYPES[MetadataEntries.COMMENT]
+  COMPOSER: PyType = METADATA_TO_PY_TYPES[MetadataEntries.COMPOSER]
+  CONTENT_CREATED: PyType = METADATA_TO_PY_TYPES[MetadataEntries.CONTENT_CREATED]
+  DISC_NUMBER: PyType = METADATA_TO_PY_TYPES[MetadataEntries.DISC_NUMBER]
+  FIRST_USED: PyType = METADATA_TO_PY_TYPES[MetadataEntries.FIRST_USED]
+  GENRE: PyType = METADATA_TO_PY_TYPES[MetadataEntries.GENRE]
+  LAST_USED: PyType = METADATA_TO_PY_TYPES[MetadataEntries.FIRST_USED]
+  LENGTH: PyType = METADATA_TO_PY_TYPES[MetadataEntries.LENGTH]
+  LYRICIST: PyType = METADATA_TO_PY_TYPES[MetadataEntries.LYRICIST]
+  TITLE: PyType = METADATA_TO_PY_TYPES[MetadataEntries.TITLE]
+  TRACK_ID: PyType = METADATA_TO_PY_TYPES[MetadataEntries.TRACK_ID]
+  TRACK_NUMBER: PyType = METADATA_TO_PY_TYPES[MetadataEntries.TRACK_NUMBER]
+  URL: PyType = METADATA_TO_PY_TYPES[MetadataEntries.URL]
+  USE_COUNT: PyType = METADATA_TO_PY_TYPES[MetadataEntries.USE_COUNT]
+  USER_RATING: PyType = METADATA_TO_PY_TYPES[MetadataEntries.USER_RATING]
 
 
 MetadataTypes: Final = _MetadataTypes()
+
+
+assert len(MetadataEntries) == len(METADATA_TYPES) == len(METADATA_TO_PY_TYPES) == len(MetadataTypes)
 
 
 class MetadataObj(NamedTuple):
@@ -161,7 +165,7 @@ class MetadataObj(NamedTuple):
   composer: Optional[MprisTypes.STRING_ARRAY] = None
   content_created: Optional[MprisTypes.STRING] = None
   disc_number: Optional[MprisTypes.INT32] = None
-  first_used: Optional[MprisTypes.STRING] = None
+  first_used: MetadataTypes.FIRST_USED = None
   genre: Optional[MprisTypes.STRING_ARRAY] = None
   last_used: MetadataTypes.LAST_USED | None = None
   length: Optional[MprisTypes.LENGTH] = None
@@ -193,7 +197,7 @@ class MetadataObj(NamedTuple):
 
 
 Metadata = \
-  TypedDict('Metadata', METADATA_PY_TYPES, total=False)
+  TypedDict('Metadata', METADATA_TO_PY_TYPES, total=False)
 
 ValidMetadata = Union[Metadata, MetadataObj]
 
@@ -201,7 +205,7 @@ ValidMetadata = Union[Metadata, MetadataObj]
 def get_runtime_types() -> tuple[type, ...]:
   types = {
     get_type(val)
-    for val in DBUS_PY_TYPES.values()
+    for val in DBUS_TYPES_TO_PY_TYPES.values()
     if is_type(val)
   }
 

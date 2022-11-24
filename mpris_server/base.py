@@ -203,6 +203,7 @@ class DbusTypes(StrEnum):
   OBJ: DbusType = 'o'
   OBJ_ARRAY: DbusType = 'ao'
   STRING: DbusType = 's'
+  DATETIME: DbusType = STRING
   STRING_ARRAY: DbusType = 'as'
   UINT32: DbusType = 'u'
   UINT64: DbusType = 't'
@@ -210,6 +211,7 @@ class DbusTypes(StrEnum):
 
 class _MprisTypes(NamedTuple):
   BOOLEAN: PyType = bool
+  DATETIME: PyType = str
   DOUBLE: PyType = float
   INT32: PyType = int
   INT64: PyType = int
