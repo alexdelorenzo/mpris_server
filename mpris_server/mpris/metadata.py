@@ -27,6 +27,7 @@ class MetadataEntries(StrEnum):
   ARTISTS: MetadataEntry = "xesam:artist"
   AS_TEXT: MetadataEntry = 'xesam:asText'
   AUDIO_BPM: MetadataEntry = 'xesam:audioBPM'
+  AUTO_RATING: MetadataEntry = 'xesam:autoRating'
   COMMENT: MetadataEntry = "xesam:comment"
   DISC_NUMBER: MetadataEntry = "xesam:discNumber"
   LENGTH: MetadataEntry = "mpris:length"
@@ -55,6 +56,7 @@ METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.ARTISTS: DbusTypes.STRING_ARRAY,
   MetadataEntries.AS_TEXT: DbusTypes.STRING_ARRAY,
   MetadataEntries.AUDIO_BPM: DbusTypes.INT32,
+  MetadataEntries.AUTO_RATING: DbusTypes.DOUBLE,
   MetadataEntries.COMMENT: DbusTypes.STRING_ARRAY,
   MetadataEntries.DISC_NUMBER: DbusTypes.INT32,
   MetadataEntries.LENGTH: DbusTypes.INT64,
@@ -84,6 +86,7 @@ METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
   MetadataEntries.ARTISTS: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.AS_TEXT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.AUDIO_BPM: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.AUTO_RATING: DBUS_PY_TYPES[DbusTypes.DOUBLE],
   MetadataEntries.COMMENT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.DISC_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
@@ -101,6 +104,7 @@ class _MetadataTypes(NamedTuple):
   ARTISTS: PyType = METADATA_PY_TYPES[MetadataEntries.ARTISTS]
   AS_TEXT: PyType = METADATA_PY_TYPES[MetadataEntries.AS_TEXT]
   AUDIO_BPM: PyType = METADATA_PY_TYPES[MetadataEntries.AUDIO_BPM]
+  AUTO_RATING: PyType = METADATA_PY_TYPES[MetadataEntries.AUTO_RATING]
   COMMENT: PyType = METADATA_PY_TYPES[MetadataEntries.COMMENT]
   DISC_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
   LENGTH: PyType = METADATA_PY_TYPES[MetadataEntries.LENGTH]
@@ -120,6 +124,7 @@ class MetadataObj(NamedTuple):
   artists: Optional[MprisTypes.STRING_ARRAY] = None
   as_text: Optional[MprisTypes.STRING_ARRAY] = None
   audio_bpm: Optional[MprisTypes.INT32] = None
+  auto_rating: Optional[MprisTypes.DOUBLE] = None
   comments: Optional[MprisTypes.STRING_ARRAY] = None
   disc_number: Optional[MprisTypes.INT32] = None
   length: Optional[MprisTypes.LENGTH] = None
