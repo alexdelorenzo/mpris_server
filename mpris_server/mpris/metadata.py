@@ -30,6 +30,7 @@ class MetadataEntries(StrEnum):
   AUTO_RATING: MetadataEntry = 'xesam:autoRating'
   COMMENT: MetadataEntry = "xesam:comment"
   COMPOSER: MetadataEntry = "xesam:composer"
+  CONTENT_CREATED: MetadataEntry = "xesam:contentCreated"
   DISC_NUMBER: MetadataEntry = "xesam:discNumber"
   LENGTH: MetadataEntry = "mpris:length"
   TITLE: MetadataEntry = "xesam:title"
@@ -60,6 +61,7 @@ METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.AUTO_RATING: DbusTypes.DOUBLE,
   MetadataEntries.COMMENT: DbusTypes.STRING_ARRAY,
   MetadataEntries.COMPOSER: DbusTypes.STRING_ARRAY,
+  MetadataEntries.CONTENT_CREATED: DbusTypes.STRING,
   MetadataEntries.DISC_NUMBER: DbusTypes.INT32,
   MetadataEntries.LENGTH: DbusTypes.INT64,
   MetadataEntries.TITLE: DbusTypes.STRING,
@@ -91,6 +93,7 @@ METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
   MetadataEntries.AUTO_RATING: DBUS_PY_TYPES[DbusTypes.DOUBLE],
   MetadataEntries.COMMENT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.COMPOSER: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.CONTENT_CREATED: DBUS_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.DISC_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
   MetadataEntries.TITLE: DBUS_PY_TYPES[DbusTypes.STRING],
@@ -110,6 +113,7 @@ class _MetadataTypes(NamedTuple):
   AUTO_RATING: PyType = METADATA_PY_TYPES[MetadataEntries.AUTO_RATING]
   COMMENT: PyType = METADATA_PY_TYPES[MetadataEntries.COMMENT]
   COMPOSER: PyType = METADATA_PY_TYPES[MetadataEntries.COMPOSER]
+  CONTENT_CREATED: PyType = METADATA_PY_TYPES[MetadataEntries.CONTENT_CREATED]
   DISC_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
   LENGTH: PyType = METADATA_PY_TYPES[MetadataEntries.LENGTH]
   TITLE: PyType = METADATA_PY_TYPES[MetadataEntries.TITLE]
@@ -131,6 +135,7 @@ class MetadataObj(NamedTuple):
   auto_rating: Optional[MprisTypes.DOUBLE] = None
   comments: Optional[MprisTypes.STRING_ARRAY] = None
   composer: Optional[MprisTypes.STRING_ARRAY] = None
+  content_created: Optional[MprisTypes.STRING] = None
   disc_number: Optional[MprisTypes.INT32] = None
   length: Optional[MprisTypes.LENGTH] = None
   title: Optional[MprisTypes.STRING] = None
