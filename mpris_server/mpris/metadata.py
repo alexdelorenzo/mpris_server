@@ -34,6 +34,7 @@ class MetadataEntries(StrEnum):
   DISC_NUMBER: MetadataEntry = "xesam:discNumber"
   FIRST_USED: MetadataEntry = "xesam:firstUsed"
   GENRE: MetadataEntry = "xesam:genre"
+  LAST_USED: MetadataEntry = "xesam:lastUsed"
   LENGTH: MetadataEntry = "mpris:length"
   TITLE: MetadataEntry = "xesam:title"
   TRACK_ID: MetadataEntry = "mpris:trackid"
@@ -67,6 +68,7 @@ METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.DISC_NUMBER: DbusTypes.INT32,
   MetadataEntries.FIRST_USED: DbusTypes.STRING,
   MetadataEntries.GENRE: DbusTypes.STRING_ARRAY,
+  MetadataEntries.LAST_USED: DbusTypes.STRING_ARRAY,
   MetadataEntries.LENGTH: DbusTypes.INT64,
   MetadataEntries.TITLE: DbusTypes.STRING,
   MetadataEntries.TRACK_ID: DbusTypes.STRING,
@@ -101,6 +103,7 @@ METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
   MetadataEntries.DISC_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
   MetadataEntries.FIRST_USED: DBUS_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.GENRE: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.LAST_USED: DBUS_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
   MetadataEntries.TITLE: DBUS_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.TRACK_ID: DBUS_PY_TYPES[DbusTypes.OBJ],
@@ -122,6 +125,7 @@ class _MetadataTypes(NamedTuple):
   CONTENT_CREATED: PyType = METADATA_PY_TYPES[MetadataEntries.CONTENT_CREATED]
   DISC_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
   FIRST_USED: PyType = METADATA_PY_TYPES[MetadataEntries.FIRST_USED]
+  LAST_USED: PyType = METADATA_PY_TYPES[MetadataEntries.FIRST_USED]
   GENRE: PyType = METADATA_PY_TYPES[MetadataEntries.GENRE]
   LENGTH: PyType = METADATA_PY_TYPES[MetadataEntries.LENGTH]
   TITLE: PyType = METADATA_PY_TYPES[MetadataEntries.TITLE]
@@ -147,9 +151,10 @@ class MetadataObj(NamedTuple):
   disc_number: Optional[MprisTypes.INT32] = None
   first_used: Optional[MprisTypes.STRING] = None
   genre: Optional[MprisTypes.STRING_ARRAY] = None
+  last_used: MetadataTypes.LAST_USED | None = None
   length: Optional[MprisTypes.LENGTH] = None
   title: Optional[MprisTypes.STRING] = None
-  track_id: MprisTypes.OBJ = DEFAULT_TRACK_ID
+  track_id: MetadataTypes.TRACK_ID = DEFAULT_TRACK_ID
   track_number: Optional[MprisTypes.INT32] = None
   url: Optional[MprisTypes.STRING] = None
 
