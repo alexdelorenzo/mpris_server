@@ -225,6 +225,7 @@ def is_dbus_type(obj: Any) -> bool:
 
 def is_valid_metadata(entry: str, obj: Any) -> bool:
   if obj is None or entry not in METADATA_TYPES:
+    logging.debug(f"({entry=}, {obj=}) isn't valid metadata, skipping.")
     return False
 
   return is_dbus_type(obj) and not is_null_list(obj)
