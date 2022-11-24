@@ -4,7 +4,7 @@ from typing import ClassVar
 
 from pydbus.generic import signal
 
-from ..base import DbusObj, ROOT_INTERFACE
+from ..base import DbusObj, ROOT_INTERFACE, NoTrack
 from ..mpris.metadata import Metadata
 from ..types import Final
 from .interface import MprisInterface
@@ -57,7 +57,7 @@ class TrackList(MprisInterface):
   TrackRemoved = signal()
   TrackMetadataChanged = signal()
 
-  def GetTracksMetadata(self, track_ids: list[DbusObj]) -> Metadata:
+  def GetTracksMetadata(self, track_ids: list[DbusObj]) -> list[Metadata]:
     return self.adapter.get_tracks_metadata(track_ids)
 
   def AddTrack(
@@ -76,7 +76,12 @@ class TrackList(MprisInterface):
 
   @property
   def Tracks(self) -> list[DbusObj]:
-    return self.adapter.get_tracks()
+    items = self.adapter.get_tracks()
+
+    if not items:
+      return [NoTrack]
+
+    return items
 
   @property
   def CanEditTracks(self) -> bool:

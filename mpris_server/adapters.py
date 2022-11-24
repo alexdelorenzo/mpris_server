@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import Optional
-from abc import ABC
 
-from .base import ActivePlaylist, Position, URI, MIME_TYPES, PlayState, DEFAULT_RATE, Microseconds, \
-  Volume, Rate, DbusObj, PlaylistEntry, DEFAULT_PLAYLIST_COUNT, DEFAULT_ORDERINGS, DEFAULT_DESKTOP, Track, \
-  Paths
+from abc import ABC
+from typing import Optional
+
+from .base import ActivePlaylist, DEFAULT_DESKTOP, DEFAULT_ORDERINGS, DEFAULT_PLAYLIST_COUNT, \
+  DEFAULT_RATE, DbusObj, MIME_TYPES, Paths, PlayState, PlaylistEntry, Position, Rate, Track, URI, \
+  Volume, NoTrack
 from .mpris.metadata import Metadata, ValidMetadata
 
 
@@ -197,7 +198,7 @@ class PlaylistAdapter(ABC):
 
 
 class TrackListAdapter(ABC):
-  def get_tracks_metadata(self, track_ids: list[DbusObj]) -> Metadata:
+  def get_tracks_metadata(self, track_ids: list[DbusObj]) -> list[Metadata]:
     pass
 
   def add_track(self, uri: str, after_track: DbusObj, set_as_current: bool):

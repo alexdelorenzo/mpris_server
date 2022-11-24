@@ -4,7 +4,8 @@ from decimal import Decimal
 from enum import Enum, auto
 from os import PathLike
 from string import ascii_letters, digits
-from typing import Callable, Concatenate, Iterable, NamedTuple, Optional, ParamSpec, Self, TYPE_CHECKING, TypeVar, Union
+from typing import Callable, Concatenate, Final, Iterable, NamedTuple, Optional, ParamSpec, Self, TYPE_CHECKING, \
+  TypeVar, Union
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
@@ -14,6 +15,9 @@ from .types import Final, GenericAlias, _GenericAlias
 
 if TYPE_CHECKING:
   from .interfaces.interface import MprisInterface
+
+
+NoTrack: Final[str] = '/org/mpris/MediaPlayer2/TrackList/NoTrack'
 
 
 class Property(StrEnum):
