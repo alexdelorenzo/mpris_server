@@ -25,6 +25,7 @@ class MetadataEntries(StrEnum):
   ALBUM_ARTISTS: MetadataEntry = "xesam:albumArtist"
   ART_URL: MetadataEntry = "mpris:artUrl"
   ARTISTS: MetadataEntry = "xesam:artist"
+  AS_TEXT: MetadataEntry = 'xesam:asText'
   COMMENT: MetadataEntry = "xesam:comment"
   DISC_NUMBER: MetadataEntry = "xesam:discNumber"
   LENGTH: MetadataEntry = "mpris:length"
@@ -51,6 +52,7 @@ METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.ALBUM_ARTISTS: DbusTypes.STRING_ARRAY,
   MetadataEntries.ART_URL: DbusTypes.STRING,
   MetadataEntries.ARTISTS: DbusTypes.STRING_ARRAY,
+  MetadataEntries.AS_TEXT: DbusTypes.STRING_ARRAY,
   MetadataEntries.COMMENT: DbusTypes.STRING_ARRAY,
   MetadataEntries.DISC_NUMBER: DbusTypes.INT32,
   MetadataEntries.LENGTH: DbusTypes.INT64,
@@ -78,6 +80,7 @@ METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
   MetadataEntries.ALBUM_ARTISTS: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.ART_URL: DBUS_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.ARTISTS: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.AS_TEXT: DbusTypes.STRING_ARRAY,
   MetadataEntries.COMMENT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.DISC_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
@@ -93,6 +96,7 @@ class _MetadataTypes(NamedTuple):
   ALBUM_ARTISTS: PyType = METADATA_PY_TYPES[MetadataEntries.ALBUM_ARTISTS]
   ART_URL: PyType = METADATA_PY_TYPES[MetadataEntries.ART_URL]
   ARTISTS: PyType = METADATA_PY_TYPES[MetadataEntries.ARTISTS]
+  AS_TEXT: PyType = METADATA_PY_TYPES[MetadataEntries.AS_TEXT]
   COMMENT: PyType = METADATA_PY_TYPES[MetadataEntries.COMMENT]
   DISC_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
   LENGTH: PyType = METADATA_PY_TYPES[MetadataEntries.LENGTH]
@@ -110,6 +114,7 @@ class MetadataObj(NamedTuple):
   album_artists: Optional[MprisTypes.STRING_ARRAY] = None
   art_url: Optional[MprisTypes.STRING] = None
   artists: Optional[MprisTypes.STRING_ARRAY] = None
+  as_text: Optional[MprisTypes.STRING_ARRAY] = None
   comments: Optional[MprisTypes.STRING_ARRAY] = None
   disc_number: Optional[MprisTypes.INT32] = None
   length: Optional[MprisTypes.LENGTH] = None
