@@ -41,6 +41,8 @@ class MetadataEntries(StrEnum):
   TRACK_ID: MetadataEntry = "mpris:trackid"
   TRACK_NUMBER: MetadataEntry = "xesam:trackNumber"
   URL: MetadataEntry = "xesam:url"
+  USE_COUNT: MetadataEntry = "xesam:useCount"
+  USER_RATING: MetadataEntry = "xesam:userRating"
 
   @classmethod
   def sorted(cls: type[Self]) -> list[Self]:
@@ -76,6 +78,8 @@ METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.TRACK_ID: DbusTypes.STRING,
   MetadataEntries.TRACK_NUMBER: DbusTypes.INT32,
   MetadataEntries.URL: DbusTypes.STRING,
+  MetadataEntries.USE_COUNT: DbusTypes.INT32,
+  MetadataEntries.USER_RATING: DbusTypes.DOUBLE,
 }
 
 DBUS_PY_TYPES: Final[dict[DbusType, PyType]] = {
@@ -107,11 +111,13 @@ METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
   MetadataEntries.GENRE: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.LAST_USED: DBUS_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
-  MetadataEntries.LYRICIST: DBUS_PY_TYPES[DbusTypes.DbusTypes.STRING_ARRAY],
+  MetadataEntries.LYRICIST: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.TITLE: DBUS_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.TRACK_ID: DBUS_PY_TYPES[DbusTypes.OBJ],
   MetadataEntries.TRACK_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
   MetadataEntries.URL: DBUS_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.USE_COUNT: DBUS_PY_TYPES[DbusTypes.INT32],
+  MetadataEntries.USER_RATING: DBUS_PY_TYPES[DbusTypes.DOUBLE],
 }
 
 
@@ -128,14 +134,16 @@ class _MetadataTypes(NamedTuple):
   CONTENT_CREATED: PyType = METADATA_PY_TYPES[MetadataEntries.CONTENT_CREATED]
   DISC_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
   FIRST_USED: PyType = METADATA_PY_TYPES[MetadataEntries.FIRST_USED]
-  LAST_USED: PyType = METADATA_PY_TYPES[MetadataEntries.FIRST_USED]
   GENRE: PyType = METADATA_PY_TYPES[MetadataEntries.GENRE]
+  LAST_USED: PyType = METADATA_PY_TYPES[MetadataEntries.FIRST_USED]
   LENGTH: PyType = METADATA_PY_TYPES[MetadataEntries.LENGTH]
   LYRICIST: PyType = METADATA_PY_TYPES[MetadataEntries.LYRICIST]
   TITLE: PyType = METADATA_PY_TYPES[MetadataEntries.TITLE]
   TRACK_ID: PyType = METADATA_PY_TYPES[MetadataEntries.TRACK_ID]
   TRACK_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.TRACK_NUMBER]
   URL: PyType = METADATA_PY_TYPES[MetadataEntries.URL]
+  USE_COUNT: PyType = METADATA_PY_TYPES[MetadataEntries.USE_COUNT]
+  USER_RATING: PyType = METADATA_PY_TYPES[MetadataEntries.USER_RATING]
 
 
 MetadataTypes: Final = _MetadataTypes()
@@ -162,6 +170,8 @@ class MetadataObj(NamedTuple):
   track_id: MetadataTypes.TRACK_ID = DEFAULT_TRACK_ID
   track_number: Optional[MprisTypes.INT32] = None
   url: Optional[MprisTypes.STRING] = None
+  use_count: MetadataTypes.USE_COUNT | None = None
+  user_rating: MetadataTypes.USER_RATING | None = None
 
   def sorted(self) -> SortedMetadata:
     items: Iterable[NameMetadata] = self._asdict().items()
