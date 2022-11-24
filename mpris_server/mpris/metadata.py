@@ -1,29 +1,30 @@
 from __future__ import annotations
 
 import logging
-from typing import NamedTuple, Any, Optional, Union, \
-  cast
+from typing import Any, Iterable, NamedTuple, Optional, Self, Union, cast
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
-from rich import print
 
-from ..base import DbusObj, DbusTypes, DbusMetadata, DEFAULT_TRACK_ID, \
-  DbusTypes, MprisTypes, DbusType, PyType
-from ..types import Final, TypedDict, is_type, get_type
+from ..base import DEFAULT_TRACK_ID, DbusMetadata, DbusObj, DbusPyTypes, \
+  DbusType, DbusTypes, MprisTypes, PyType
+from ..types import Final, TypedDict, get_type, is_type
 
 
 DEFAULT_METADATA: Final[Metadata] = {}
 
 
+Name = str
 MetadataEntry = str
+NameMetadata = tuple[Name, DbusPyTypes]
+SortedMetadata = dict[Name, DbusPyTypes]
 
 
 class MetadataEntries(StrEnum):
   ALBUM: MetadataEntry = "xesam:album"
-  ALBUM_ARTIST: MetadataEntry = "xesam:albumArtist"
+  ALBUM_ARTISTS: MetadataEntry = "xesam:albumArtist"
   ART_URL: MetadataEntry = "mpris:artUrl"
-  ARTIST: MetadataEntry = "xesam:artist"
+  ARTISTS: MetadataEntry = "xesam:artist"
   COMMENT: MetadataEntry = "xesam:comment"
   DISC_NUMBER: MetadataEntry = "xesam:discNumber"
   LENGTH: MetadataEntry = "mpris:length"
@@ -32,16 +33,24 @@ class MetadataEntries(StrEnum):
   TRACK_NUMBER: MetadataEntry = "xesam:trackNumber"
   URL: MetadataEntry = "xesam:url"
 
+  @classmethod
+  def sorted(cls: type[Self]) -> list[Self]:
+    return sorted(cls, key=lambda e: e.name.casefold())
 
-# MetadataEntries: Final = _MetadataEntries()
+  @classmethod
+  def to_dict(cls: type[Self]) -> dict[str, Self]:
+    return {
+      enum.name: enum.value
+      for enum in cls.sorted()
+    }
 
 
 # map of D-Bus metadata entries and their D-Bus types
 METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.ALBUM: DbusTypes.STRING,
-  MetadataEntries.ALBUM_ARTIST: DbusTypes.STRING_ARRAY,
+  MetadataEntries.ALBUM_ARTISTS: DbusTypes.STRING_ARRAY,
   MetadataEntries.ART_URL: DbusTypes.STRING,
-  MetadataEntries.ARTIST: DbusTypes.STRING_ARRAY,
+  MetadataEntries.ARTISTS: DbusTypes.STRING_ARRAY,
   MetadataEntries.COMMENT: DbusTypes.STRING_ARRAY,
   MetadataEntries.DISC_NUMBER: DbusTypes.INT32,
   MetadataEntries.LENGTH: DbusTypes.INT64,
@@ -66,9 +75,9 @@ DBUS_PY_TYPES: Final[dict[DbusType, PyType]] = {
 
 METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
   MetadataEntries.ALBUM: DBUS_PY_TYPES[DbusTypes.STRING],
-  MetadataEntries.ALBUM_ARTIST: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.ALBUM_ARTISTS: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.ART_URL: DBUS_PY_TYPES[DbusTypes.STRING],
-  MetadataEntries.ARTIST: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.ARTISTS: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.COMMENT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.DISC_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
@@ -81,15 +90,15 @@ METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
 
 class _MetadataTypes(NamedTuple):
   ALBUM: PyType = METADATA_PY_TYPES[MetadataEntries.ALBUM]
-  ALBUM_ARTIST: PyType = METADATA_PY_TYPES[MetadataEntries.ALBUM_ARTIST]
+  ALBUM_ARTISTS: PyType = METADATA_PY_TYPES[MetadataEntries.ALBUM_ARTISTS]
   ART_URL: PyType = METADATA_PY_TYPES[MetadataEntries.ART_URL]
-  ARTIST: PyType = METADATA_PY_TYPES[MetadataEntries.ARTIST]
+  ARTISTS: PyType = METADATA_PY_TYPES[MetadataEntries.ARTISTS]
   COMMENT: PyType = METADATA_PY_TYPES[MetadataEntries.COMMENT]
   DISC_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
   LENGTH: PyType = METADATA_PY_TYPES[MetadataEntries.LENGTH]
   TITLE: PyType = METADATA_PY_TYPES[MetadataEntries.TITLE]
+  TRACK_ID: PyType = METADATA_PY_TYPES[MetadataEntries.TRACK_ID]
   TRACK_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.TRACK_NUMBER]
-  TRACKID: PyType = METADATA_PY_TYPES[MetadataEntries.TRACK_ID]
   URL: PyType = METADATA_PY_TYPES[MetadataEntries.URL]
 
 
@@ -102,18 +111,29 @@ class MetadataObj(NamedTuple):
   art_url: Optional[MprisTypes.STRING] = None
   artists: Optional[MprisTypes.STRING_ARRAY] = None
   comments: Optional[MprisTypes.STRING_ARRAY] = None
-  disc_no: Optional[MprisTypes.INT32] = None
+  disc_number: Optional[MprisTypes.INT32] = None
   length: Optional[MprisTypes.LENGTH] = None
   title: Optional[MprisTypes.STRING] = None
   track_id: MprisTypes.OBJ = DEFAULT_TRACK_ID
-  track_no: Optional[MprisTypes.INT32] = None
+  track_number: Optional[MprisTypes.INT32] = None
   url: Optional[MprisTypes.STRING] = None
 
+  def sorted(self) -> SortedMetadata:
+    items: Iterable[NameMetadata] = self._asdict().items()
+    items = sorted(items, key=lambda m: m[0].casefold())
+
+    return dict(items)
+
   def to_dict(self) -> Metadata:
+    entries = MetadataEntries.sorted()
+    vals = self.sorted().values()
+    pairs = zip(entries, vals)
+    # return dict(filter(None, pairs))
+
     return {
-      key: val
-      for key, val in zip(MetadataEntries, self)
-      if val is not None
+      entry: metadata
+      for entry, metadata in pairs
+      if metadata is not None
     }
 
 
