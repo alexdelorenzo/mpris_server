@@ -26,6 +26,7 @@ class MetadataEntries(StrEnum):
   ART_URL: MetadataEntry = "mpris:artUrl"
   ARTISTS: MetadataEntry = "xesam:artist"
   AS_TEXT: MetadataEntry = 'xesam:asText'
+  AUDIO_BPM: MetadataEntry = 'xesam:audioBPM'
   COMMENT: MetadataEntry = "xesam:comment"
   DISC_NUMBER: MetadataEntry = "xesam:discNumber"
   LENGTH: MetadataEntry = "mpris:length"
@@ -53,6 +54,7 @@ METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.ART_URL: DbusTypes.STRING,
   MetadataEntries.ARTISTS: DbusTypes.STRING_ARRAY,
   MetadataEntries.AS_TEXT: DbusTypes.STRING_ARRAY,
+  MetadataEntries.AUDIO_BPM: DbusTypes.INT32,
   MetadataEntries.COMMENT: DbusTypes.STRING_ARRAY,
   MetadataEntries.DISC_NUMBER: DbusTypes.INT32,
   MetadataEntries.LENGTH: DbusTypes.INT64,
@@ -80,7 +82,8 @@ METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
   MetadataEntries.ALBUM_ARTISTS: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.ART_URL: DBUS_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.ARTISTS: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MetadataEntries.AS_TEXT: DbusTypes.STRING_ARRAY,
+  MetadataEntries.AS_TEXT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
+  MetadataEntries.AUDIO_BPM: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.COMMENT: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.DISC_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
@@ -97,6 +100,7 @@ class _MetadataTypes(NamedTuple):
   ART_URL: PyType = METADATA_PY_TYPES[MetadataEntries.ART_URL]
   ARTISTS: PyType = METADATA_PY_TYPES[MetadataEntries.ARTISTS]
   AS_TEXT: PyType = METADATA_PY_TYPES[MetadataEntries.AS_TEXT]
+  AUDIO_BPM: PyType = METADATA_PY_TYPES[MetadataEntries.AUDIO_BPM]
   COMMENT: PyType = METADATA_PY_TYPES[MetadataEntries.COMMENT]
   DISC_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.DISC_NUMBER]
   LENGTH: PyType = METADATA_PY_TYPES[MetadataEntries.LENGTH]
@@ -115,6 +119,7 @@ class MetadataObj(NamedTuple):
   art_url: Optional[MprisTypes.STRING] = None
   artists: Optional[MprisTypes.STRING_ARRAY] = None
   as_text: Optional[MprisTypes.STRING_ARRAY] = None
+  audio_bpm: Optional[MprisTypes.INT32] = None
   comments: Optional[MprisTypes.STRING_ARRAY] = None
   disc_number: Optional[MprisTypes.INT32] = None
   length: Optional[MprisTypes.LENGTH] = None
