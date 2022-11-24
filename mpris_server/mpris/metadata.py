@@ -36,6 +36,7 @@ class MetadataEntries(StrEnum):
   GENRE: MetadataEntry = "xesam:genre"
   LAST_USED: MetadataEntry = "xesam:lastUsed"
   LENGTH: MetadataEntry = "mpris:length"
+  LYRICIST: MetadataEntry = "xesam:lyricist"
   TITLE: MetadataEntry = "xesam:title"
   TRACK_ID: MetadataEntry = "mpris:trackid"
   TRACK_NUMBER: MetadataEntry = "xesam:trackNumber"
@@ -70,6 +71,7 @@ METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.GENRE: DbusTypes.STRING_ARRAY,
   MetadataEntries.LAST_USED: DbusTypes.STRING_ARRAY,
   MetadataEntries.LENGTH: DbusTypes.INT64,
+  MetadataEntries.LYRICIST: DbusTypes.STRING_ARRAY,
   MetadataEntries.TITLE: DbusTypes.STRING,
   MetadataEntries.TRACK_ID: DbusTypes.STRING,
   MetadataEntries.TRACK_NUMBER: DbusTypes.INT32,
@@ -105,6 +107,7 @@ METADATA_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
   MetadataEntries.GENRE: DBUS_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.LAST_USED: DBUS_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.LENGTH: DBUS_PY_TYPES[DbusTypes.INT64],
+  MetadataEntries.LYRICIST: DBUS_PY_TYPES[DbusTypes.DbusTypes.STRING_ARRAY],
   MetadataEntries.TITLE: DBUS_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.TRACK_ID: DBUS_PY_TYPES[DbusTypes.OBJ],
   MetadataEntries.TRACK_NUMBER: DBUS_PY_TYPES[DbusTypes.INT32],
@@ -128,6 +131,7 @@ class _MetadataTypes(NamedTuple):
   LAST_USED: PyType = METADATA_PY_TYPES[MetadataEntries.FIRST_USED]
   GENRE: PyType = METADATA_PY_TYPES[MetadataEntries.GENRE]
   LENGTH: PyType = METADATA_PY_TYPES[MetadataEntries.LENGTH]
+  LYRICIST: PyType = METADATA_PY_TYPES[MetadataEntries.LYRICIST]
   TITLE: PyType = METADATA_PY_TYPES[MetadataEntries.TITLE]
   TRACK_ID: PyType = METADATA_PY_TYPES[MetadataEntries.TRACK_ID]
   TRACK_NUMBER: PyType = METADATA_PY_TYPES[MetadataEntries.TRACK_NUMBER]
@@ -153,6 +157,7 @@ class MetadataObj(NamedTuple):
   genre: Optional[MprisTypes.STRING_ARRAY] = None
   last_used: MetadataTypes.LAST_USED | None = None
   length: Optional[MprisTypes.LENGTH] = None
+  lyricist: Optional[MprisTypes.STRING_ARRAY] = None
   title: Optional[MprisTypes.STRING] = None
   track_id: MetadataTypes.TRACK_ID = DEFAULT_TRACK_ID
   track_number: Optional[MprisTypes.INT32] = None
