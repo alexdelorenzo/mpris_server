@@ -14,7 +14,7 @@ Implements the following from the [MPRIS specification](https://specifications.f
   * [x] MediaPlayer2.Playlist
   * [x] MediaPlayer2.TrackList
   
-The library also provides an event handler that emits `org.freedesktop.DBus.Properties.PropertiesChanged` in response to changes in your media player. This allows for real-time updates from your media player to DBus.
+The library also provides an event handler that emits `org.freedesktop.DBus.Properties.PropertiesChanged` in response to changes in your media player. This allows for real-time updates from your media player to D-Bus.
 
 ## Installation
 ### Requirements
