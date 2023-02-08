@@ -208,17 +208,19 @@ class DbusTypes(StrEnum):
   DOUBLE: DbusType = 'd'
   INT32: DbusType = 'i'
   INT64: DbusType = 'x'
-  MAP: DbusType = f'{ARRAY}{{}}'
-  VARIANT: DbusType = 'v'
-  METADATA: DbusType = f'{ARRAY}{{{STRING}{VARIANT}}}'
-  METADATA_ARRAY: DbusType = 'aa{sv}'
   OBJ: DbusType = 'o'
   OBJ_ARRAY: DbusType = f'{ARRAY}{OBJ}'
+  UINT32: DbusType = 'u'
+  UINT64: DbusType = 't'
+
+  VARIANT: DbusType = 'v'
+  MAP: DbusType = f'{ARRAY}{{}}'
+
   PLAYLIST: DbusType = f'({OBJ}{STRING}{STRING})'
   PLAYLISTS: DbusType = f'{ARRAY}{PLAYLIST}'
   MAYBE_PLAYLIST: DbusType = f'({BOOLEAN}{PLAYLIST})'
-  UINT32: DbusType = 'u'
-  UINT64: DbusType = 't'
+  METADATA: DbusType = f'{ARRAY}{{{STRING}{VARIANT}}}'
+  METADATA_ARRAY: DbusType = 'aa{sv}'
 
 
 class _MprisTypes(NamedTuple):
@@ -233,6 +235,16 @@ class _MprisTypes(NamedTuple):
   STRING_ARRAY: PyType = list[str]
   UINT32: PyType = int
   UINT64: PyType = int
+
+  ARRAY: PyType = list
+  VARIANT: PyType = object
+  MAP: PyType = dict
+
+  PLAYLIST: PyType = PlaylistEntry
+  PLAYLISTS: PyType = list[PlaylistEntry]
+  MAYBE_PLAYLIST: PyType = PlaylistEntry | None
+  METADATA: PyType = DbusMetadata
+  METADATA_ARRAY: PyType = list[DbusMetadata]
 
 
 MprisTypes: Final = _MprisTypes()
