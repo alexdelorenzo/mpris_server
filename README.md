@@ -14,7 +14,7 @@ Implements the following from the [MPRIS specification](https://specifications.f
   * [x] MediaPlayer2.Playlist
   * [x] MediaPlayer2.TrackList
   
-The library also provides an event handler that emits `org.freedesktop.DBus.Properties.PropertiesChanged` in response to changes in your media player. This allows for real-time updates from your media player to DBus.
+The library also provides an event handler that emits `org.freedesktop.DBus.Properties.PropertiesChanged` in response to changes in your media player. This allows for real-time updates from your media player to D-Bus.
 
 ## Installation
 ### Requirements
@@ -25,7 +25,9 @@ The library also provides an event handler that emits `org.freedesktop.DBus.Prop
  - `requirements.txt`
  
 #### Installing PyGObject
-On Debian-derived distributions like Ubuntu, install `python3-gi` with `apt`. On Arch, you'll want to install `python-gobject`. On macOS, install [`pygobject3`](https://formulae.brew.sh/formula/pygobject3) via `brew`.
+On Debian-derived distributions like Ubuntu, install `python3-gi` with `apt`. On Arch, you'll want to install `python-gobject`. 
+
+On macOS, install [`pygobject3`](https://formulae.brew.sh/formula/pygobject3) via `brew`. Note that `mpris_server` on macOS hasn't been tested, but is theoretically possible to use.
 
 Use `pip` to install `PyGObject>=3.34.0` if there are no installation candidates available in your vendor's package repositories.
 
