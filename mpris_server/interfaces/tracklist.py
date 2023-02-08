@@ -4,48 +4,48 @@ from typing import ClassVar
 
 from pydbus.generic import signal
 
-from ..base import DbusObj, ROOT_INTERFACE, NoTrack
+from ..base import DbusObj, DbusTypes, ROOT_INTERFACE, NoTrack
 from ..mpris.metadata import Metadata
 from ..types import Final
 from .interface import MprisInterface
 
 
 class TrackList(MprisInterface):
-  """
+  f"""
   <node>
     <interface name="org.mpris.MediaPlayer2.TrackList">
       <method name="GetTracksMetadata">
-        <arg name="TrackIds" type="ao" direction="in"/>
-        <arg name="Metadata" type="aa{sv}" direction="out"/>
+        <arg name="TrackIds" type="{DbusTypes.OBJ_ARRAY}" direction="in"/>
+        <arg name="Metadata" type="{DbusTypes.METADATA_ARRAY}" direction="out"/>
       </method>
       <method name="AddTrack">
-        <arg name="Uri" type="s" direction="in"/>
-        <arg name="AfterTrack" type="o" direction="in"/>
-        <arg name="SetAsCurrent" type="b" direction="in"/>
+        <arg name="Uri" type="{DbusTypes.STRING}" direction="in"/>
+        <arg name="AfterTrack" type="{DbusTypes.OBJ}" direction="in"/>
+        <arg name="SetAsCurrent" type="{DbusTypes.BOOLEAN}" direction="in"/>
       </method>
       <method name="RemoveTrack">
-        <arg name="TrackId" type="o" direction="in"/>
+        <arg name="TrackId" type="{DbusTypes.OBJ}" direction="in"/>
       </method>
       <method name="GoTo">
-        <arg name="TrackId" type="o" direction="in"/>
+        <arg name="TrackId" type="{DbusTypes.OBJ}" direction="in"/>
       </method>
       <signal name="TrackListReplaced">
-        <arg name="Tracks" type="ao"/>
-        <arg name="CurrentTrack" type="o"/>
+        <arg name="Tracks" type="{DbusTypes.OBJ_ARRAY}"/>
+        <arg name="CurrentTrack" type="{DbusTypes.OBJ}"/>
       </signal>
       <signal name="TrackAdded">
-        <arg name="Metadata" type="a{sv}"/>
-        <arg name="AfterTrack" type="o"/>
+        <arg name="Metadata" type="{DbusTypes.METADATA}"/>
+        <arg name="AfterTrack" type="{DbusTypes.OBJ}"/>
       </signal>
       <signal name="TrackRemoved">
-        <arg name="TrackId" type="o"/>
+        <arg name="TrackId" type="{DbusTypes.OBJ}"/>
       </signal>
       <signal name="TrackMetadataChanged">
-        <arg name="TrackId" type="o"/>
-        <arg name="Metadata" type="a{sv}"/>
+        <arg name="TrackId" type="{DbusTypes.OBJ}"/>
+        <arg name="Metadata" type="{DbusTypes.METADATA}"/>
       </signal>
-      <property name="Tracks" type="ao" access="read"/>
-      <property name="CanEditTracks" type="b" access="read"/>
+      <property name="Tracks" type="{DbusTypes.OBJ_ARRAY}" access="read"/>
+      <property name="CanEditTracks" type="{DbusTypes.BOOLEAN}" access="read"/>
     </interface>
   </node>
   """

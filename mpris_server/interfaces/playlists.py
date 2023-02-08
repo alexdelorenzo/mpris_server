@@ -4,31 +4,31 @@ from typing import ClassVar
 
 from pydbus.generic import signal
 
-from ..base import ActivePlaylist, PlaylistEntry, ROOT_INTERFACE
+from ..base import ActivePlaylist, DbusTypes, PlaylistEntry, ROOT_INTERFACE
 from ..types import Final
 from .interface import MprisInterface, log_trace
 
 
 class Playlists(MprisInterface):
-  """
+  f"""
   <node>
     <interface name="org.mpris.MediaPlayer2.Playlists">
       <method name="ActivatePlaylist">
-        <arg name="PlaylistId" type="o" direction="in"/>
+        <arg name="PlaylistId" type="{DbusTypes.OBJ}" direction="in"/>
       </method>
       <method name="GetPlaylists">
-        <arg name="Index" type="u" direction="in"/>
-        <arg name="MaxCount" type="u" direction="in"/>
-        <arg name="Order" type="s" direction="in"/>
-        <arg name="ReverseOrder" type="b" direction="in"/>
-        <arg name="Playlists" type="a(oss)" direction="out"/>
+        <arg name="Index" type="{DbusTypes.UINT32}" direction="in"/>
+        <arg name="MaxCount" type="{DbusTypes.UINT32}" direction="in"/>
+        <arg name="Order" type="{DbusTypes.STRING}" direction="in"/>
+        <arg name="ReverseOrder" type="{DbusTypes.BOOLEAN}" direction="in"/>
+        <arg name="Playlists" type="{DbusTypes.PLAYLISTS}" direction="out"/>
       </method>
       <signal name="PlaylistChanged">
-        <arg name="Playlist" type="oss"/>
+        <arg name="Playlist" type="{DbusTypes.PLAYLIST}"/>
       </signal>
-      <property name="PlaylistCount" type="u" access="read"/>
-      <property name="Orderings" type="as" access="read"/>
-      <property name="ActivePlaylist" type="(b(oss))" access="read"/>
+      <property name="PlaylistCount" type="{DbusTypes.UINT32}" access="read"/>
+      <property name="Orderings" type="{DbusTypes.STRING_ARRAY}" access="read"/>
+      <property name="ActivePlaylist" type="{DbusTypes.MAYBE_PLAYLIST}" access="read"/>
     </interface>
   </node>
   """

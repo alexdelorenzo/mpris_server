@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Optional
+from typing import ClassVar, Optional
 import logging
 
 from gi.repository.GLib import Variant
@@ -24,7 +24,7 @@ class LoopStatus(StrEnum):
 
 
 class Player(MprisInterface):
-  """
+  f"""
   <node>
     <interface name="org.mpris.MediaPlayer2.Player">
       <method name="Next"/>
@@ -34,33 +34,33 @@ class Player(MprisInterface):
       <method name="Stop"/>
       <method name="Play"/>
       <method name="Seek">
-        <arg name="Offset" type="x" direction="in"/>
+        <arg name="Offset" type="{DbusTypes.INT64}" direction="in"/>
       </method>
       <method name="SetPosition">
-        <arg name="TrackId" type="o" direction="in"/>
-        <arg name="Position" type="x" direction="in"/>
+        <arg name="TrackId" type="{DbusTypes.OBJ}" direction="in"/>
+        <arg name="Position" type="{DbusTypes.INT64}" direction="in"/>
       </method>
       <method name="OpenUri">
-        <arg name="Uri" type="s" direction="in"/>
+        <arg name="Uri" type="{DbusTypes.STRING}" direction="in"/>
       </method>
       <signal name="Seeked">
-        <arg name="Position" type="x"/>
+        <arg name="Position" type="{DbusTypes.INT64}"/>
       </signal>
-      <property name="PlaybackStatus" type="s" access="read"/>
-      <property name="LoopStatus" type="s" access="readwrite"/>
-      <property name="Rate" type="d" access="readwrite"/>
-      <property name="Shuffle" type="b" access="readwrite"/>
-      <property name="Metadata" type="a{sv}" access="read"/>
-      <property name="Volume" type="d" access="readwrite"/>
-      <property name="Position" type="x" access="read"/>
-      <property name="MinimumRate" type="d" access="read"/>
-      <property name="MaximumRate" type="d" access="read"/>
-      <property name="CanGoNext" type="b" access="read"/>
-      <property name="CanGoPrevious" type="b" access="read"/>
-      <property name="CanPlay" type="b" access="read"/>
-      <property name="CanPause" type="b" access="read"/>
-      <property name="CanSeek" type="b" access="read"/>
-      <property name="CanControl" type="b" access="read"/>
+      <property name="PlaybackStatus" type="{DbusTypes.STRING}" access="read"/>
+      <property name="LoopStatus" type="{DbusTypes.STRING}" access="readwrite"/>
+      <property name="Rate" type="{DbusTypes.DOUBLE}" access="readwrite"/>
+      <property name="Shuffle" type="{DbusTypes.BOOLEAN}" access="readwrite"/>
+      <property name="Metadata" type="{DbusTypes.METADATA}" access="read"/>
+      <property name="Volume" type="{DbusTypes.DOUBLE}" access="readwrite"/>
+      <property name="Position" type="{DbusTypes.INT64}" access="read"/>
+      <property name="MinimumRate" type="{DbusTypes.DOUBLE}" access="read"/>
+      <property name="MaximumRate" type="{DbusTypes.DOUBLE}" access="read"/>
+      <property name="CanGoNext" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="CanGoPrevious" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="CanPlay" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="CanPause" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="CanSeek" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="CanControl" type="{DbusTypes.BOOLEAN}" access="read"/>
     </interface>
   </node>
   """

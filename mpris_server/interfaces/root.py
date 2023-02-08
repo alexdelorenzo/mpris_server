@@ -1,11 +1,11 @@
 from __future__ import annotations
+
 from pathlib import PurePath
-import logging
 from typing import ClassVar
 
-from ..base import ROOT_INTERFACE, NAME, Paths
-from ..types import Final
 from .interface import MprisInterface, log_trace
+from ..base import DbusTypes, Paths, ROOT_INTERFACE
+from ..types import Final
 
 
 NO_SUFFIX: Final[str] = ''
@@ -13,20 +13,20 @@ DESKTOP_EXT: Final[str] = '.desktop'
 
 
 class Root(MprisInterface):
-  """
+  f"""
   <node>
     <interface name="org.mpris.MediaPlayer2">
       <method name="Raise"/>
       <method name="Quit"/>
-      <property name="CanQuit" type="b" access="read"/>
-      <property name="CanRaise" type="b" access="read"/>
-      <property name="Fullscreen" type="b" access="readwrite"/>
-      <property name="CanSetFullscreen" type="b" access="read"/>
-      <property name="HasTrackList" type="b" access="read"/>
-      <property name="Identity" type="s" access="read"/>
-      <property name="DesktopEntry" type="s" access="read"/>
-      <property name="SupportedUriSchemes" type="as" access="read"/>
-      <property name="SupportedMimeTypes" type="as" access="read"/>
+      <property name="CanQuit" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="CanRaise" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="Fullscreen" type="{DbusTypes.BOOLEAN}" access="readwrite"/>
+      <property name="CanSetFullscreen" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="HasTrackList" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="Identity" type="{DbusTypes.STRING}" access="read"/>
+      <property name="DesktopEntry" type="{DbusTypes.STRING}" access="read"/>
+      <property name="SupportedUriSchemes" type="{DbusTypes.STRING_ARRAY}" access="read"/>
+      <property name="SupportedMimeTypes" type="{DbusTypes.STRING_ARRAY}" access="read"/>
     </interface>
   </node>
   """
