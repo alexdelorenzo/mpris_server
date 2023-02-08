@@ -67,9 +67,9 @@ class Server:
     self._publication_token = bus.publish(
       f'{ROOT_INTERFACE}.{self.dbus_name}',
       (DBUS_PATH, self.root),
-      # (DBUS_PATH, self.player),
-      # (DBUS_PATH, self.playlists),
-      # (DBUS_PATH, self.tracklist),
+      (DBUS_PATH, self.player),
+      (DBUS_PATH, self.playlists),
+      (DBUS_PATH, self.tracklist),
     )
 
   def unpublish(self):
