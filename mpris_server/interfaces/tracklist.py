@@ -11,9 +11,11 @@ from .interface import MprisInterface
 
 
 class TrackList(MprisInterface):
-  f"""
+  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.TrackList"
+
+  __doc__: Final[str] = f"""
   <node>
-    <interface name="org.mpris.MediaPlayer2.TrackList">
+    <interface name="{INTERFACE}">
       <method name="GetTracksMetadata">
         <arg name="TrackIds" type="{DbusTypes.OBJ_ARRAY}" direction="in"/>
         <arg name="Metadata" type="{DbusTypes.METADATA_ARRAY}" direction="out"/>
@@ -49,8 +51,6 @@ class TrackList(MprisInterface):
     </interface>
   </node>
   """
-
-  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.TrackList"
 
   TrackListReplaced = signal()
   TrackAdded = signal()

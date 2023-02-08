@@ -10,9 +10,11 @@ from .interface import MprisInterface, log_trace
 
 
 class Playlists(MprisInterface):
-  f"""
+  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.Playlists"
+
+  __doc__: Final[str] = f"""
   <node>
-    <interface name="org.mpris.MediaPlayer2.Playlists">
+    <interface name="{INTERFACE}">
       <method name="ActivatePlaylist">
         <arg name="PlaylistId" type="{DbusTypes.OBJ}" direction="in"/>
       </method>
@@ -32,8 +34,6 @@ class Playlists(MprisInterface):
     </interface>
   </node>
   """
-
-  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.Playlists"
 
   PlaylistChanged = signal()
 

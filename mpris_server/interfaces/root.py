@@ -13,9 +13,11 @@ DESKTOP_EXT: Final[str] = '.desktop'
 
 
 class Root(MprisInterface):
-  f"""
+  INTERFACE: ClassVar[str] = ROOT_INTERFACE
+
+  __doc__: Final[str] = f"""
   <node>
-    <interface name="org.mpris.MediaPlayer2">
+    <interface name="{INTERFACE}">
       <method name="Raise"/>
       <method name="Quit"/>
       <property name="CanQuit" type="{DbusTypes.BOOLEAN}" access="read"/>
@@ -30,8 +32,6 @@ class Root(MprisInterface):
     </interface>
   </node>
   """
-
-  INTERFACE: ClassVar[str] = ROOT_INTERFACE
 
   @log_trace
   def Raise(self):

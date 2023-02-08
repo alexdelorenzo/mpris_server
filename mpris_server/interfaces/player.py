@@ -24,9 +24,11 @@ class LoopStatus(StrEnum):
 
 
 class Player(MprisInterface):
-  f"""
+  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.Player"
+
+  __doc__: Final[str] = f"""
   <node>
-    <interface name="org.mpris.MediaPlayer2.Player">
+    <interface name="{INTERFACE}">
       <method name="Next"/>
       <method name="Previous"/>
       <method name="Pause"/>
@@ -64,8 +66,6 @@ class Player(MprisInterface):
     </interface>
   </node>
   """
-
-  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.Player"
 
   Seeked: Final[signal] = signal()
 
