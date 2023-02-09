@@ -4,8 +4,8 @@ from decimal import Decimal
 from enum import Enum, auto
 from os import PathLike
 from string import ascii_letters, digits
-from typing import Callable, Concatenate, Final, Iterable, NamedTuple, Optional, ParamSpec, Self, TYPE_CHECKING, \
-  TypeVar, Union
+from typing import Callable, Concatenate, Iterable, NamedTuple, Optional, \
+  ParamSpec, Self, TYPE_CHECKING, TypeVar, Union
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
@@ -200,27 +200,28 @@ class PlayState(StrEnum):
 
 
 class DbusTypes(StrEnum):
-  ARRAY: DbusType = 'a'
   BOOLEAN: DbusType = 'b'
   STRING: DbusType = 's'
   DATETIME: DbusType = STRING
-  STRING_ARRAY: DbusType = f'{ARRAY}{STRING}'
   DOUBLE: DbusType = 'd'
   INT32: DbusType = 'i'
   INT64: DbusType = 'x'
   OBJ: DbusType = 'o'
-  OBJ_ARRAY: DbusType = f'{ARRAY}{OBJ}'
   UINT32: DbusType = 'u'
   UINT64: DbusType = 't'
-
   VARIANT: DbusType = 'v'
+
+  ARRAY: DbusType = 'a'
   MAP: DbusType = f'{ARRAY}{{}}'
+  STRING_ARRAY: DbusType = f'{ARRAY}{STRING}'
+  OBJ_ARRAY: DbusType = f'{ARRAY}{OBJ}'
 
   PLAYLIST: DbusType = f'({OBJ}{STRING}{STRING})'
   PLAYLISTS: DbusType = f'{ARRAY}{PLAYLIST}'
   MAYBE_PLAYLIST: DbusType = f'({BOOLEAN}{PLAYLIST})'
-  METADATA: DbusType = f'{ARRAY}{{{STRING}{VARIANT}}}'
-  METADATA_ARRAY: DbusType = 'aa{sv}'
+  METADATA_ENTRY: DbusType = f'{{{STRING}{VARIANT}}}'
+  METADATA: DbusType = f'{ARRAY}{METADATA_ENTRY}'
+  METADATA_ARRAY: DbusType = f'{ARRAY}{METADATA}'
 
 
 class _MprisTypes(NamedTuple):
