@@ -4,7 +4,7 @@ from typing import ClassVar
 
 from pydbus.generic import signal
 
-from ..base import DbusObj, DbusTypes, ROOT_INTERFACE, NoTrack
+from ..base import DbusObj, DbusTypes, Property, ROOT_INTERFACE, NoTrack
 from ..mpris.metadata import Metadata
 from ..types import Final
 from .interface import MprisInterface
@@ -46,8 +46,8 @@ class TrackList(MprisInterface):
         <arg name="TrackId" type="{DbusTypes.OBJ}"/>
         <arg name="Metadata" type="{DbusTypes.METADATA}"/>
       </signal>
-      <property name="Tracks" type="{DbusTypes.OBJ_ARRAY}" access="read"/>
-      <property name="CanEditTracks" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.Tracks}" type="{DbusTypes.OBJ_ARRAY}" access="read"/>
+      <property name="{Property.CanEditTracks}" type="{DbusTypes.BOOLEAN}" access="read"/>
     </interface>
   </node>
   """

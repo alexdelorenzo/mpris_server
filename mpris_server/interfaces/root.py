@@ -4,7 +4,7 @@ from pathlib import PurePath
 from typing import ClassVar
 
 from .interface import MprisInterface, log_trace
-from ..base import DbusTypes, Paths, ROOT_INTERFACE
+from ..base import DbusTypes, Paths, Property, ROOT_INTERFACE
 from ..types import Final
 
 
@@ -20,15 +20,15 @@ class Root(MprisInterface):
     <interface name="{INTERFACE}">
       <method name="Raise"/>
       <method name="Quit"/>
-      <property name="CanQuit" type="{DbusTypes.BOOLEAN}" access="read"/>
-      <property name="CanRaise" type="{DbusTypes.BOOLEAN}" access="read"/>
-      <property name="Fullscreen" type="{DbusTypes.BOOLEAN}" access="readwrite"/>
-      <property name="CanSetFullscreen" type="{DbusTypes.BOOLEAN}" access="read"/>
-      <property name="HasTrackList" type="{DbusTypes.BOOLEAN}" access="read"/>
-      <property name="Identity" type="{DbusTypes.STRING}" access="read"/>
-      <property name="DesktopEntry" type="{DbusTypes.STRING}" access="read"/>
-      <property name="SupportedUriSchemes" type="{DbusTypes.STRING_ARRAY}" access="read"/>
-      <property name="SupportedMimeTypes" type="{DbusTypes.STRING_ARRAY}" access="read"/>
+      <property name="{Property.CanQuit}" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.CanRaise}" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.Fullscreen}" type="{DbusTypes.BOOLEAN}" access="readwrite"/>
+      <property name="{Property.CanSetFullscreen}" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.HasTrackList}" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.Identity}" type="{DbusTypes.STRING}" access="read"/>
+      <property name="{Property.DesktopEntry}" type="{DbusTypes.STRING}" access="read"/>
+      <property name="{Property.SupportedUriSchemes}" type="{DbusTypes.STRING_ARRAY}" access="read"/>
+      <property name="{Property.SupportedMimeTypes}" type="{DbusTypes.STRING_ARRAY}" access="read"/>
     </interface>
   </node>
   """

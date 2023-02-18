@@ -4,7 +4,7 @@ from typing import ClassVar
 
 from pydbus.generic import signal
 
-from ..base import ActivePlaylist, DbusTypes, PlaylistEntry, ROOT_INTERFACE
+from ..base import ActivePlaylist, DbusTypes, PlaylistEntry, Property, ROOT_INTERFACE
 from ..types import Final
 from .interface import MprisInterface, log_trace
 
@@ -28,9 +28,9 @@ class Playlists(MprisInterface):
       <signal name="PlaylistChanged">
         <arg name="Playlist" type="{DbusTypes.PLAYLIST}"/>
       </signal>
-      <property name="PlaylistCount" type="{DbusTypes.UINT32}" access="read"/>
-      <property name="Orderings" type="{DbusTypes.STRING_ARRAY}" access="read"/>
-      <property name="ActivePlaylist" type="{DbusTypes.MAYBE_PLAYLIST}" access="read"/>
+      <property name="{Property.PlaylistCount}" type="{DbusTypes.UINT32}" access="read"/>
+      <property name="{Property.Orderings}" type="{DbusTypes.STRING_ARRAY}" access="read"/>
+      <property name="{Property.ActivePlaylist}" type="{DbusTypes.MAYBE_PLAYLIST}" access="read"/>
     </interface>
   </node>
   """
