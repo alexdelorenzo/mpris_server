@@ -1,5 +1,4 @@
 from __future__ import annotations
-import logging
 from typing import ClassVar
 
 from pydbus.generic import signal
