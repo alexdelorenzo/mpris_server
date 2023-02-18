@@ -4,7 +4,7 @@ from abc import ABC
 from typing import Optional
 
 from .base import ActivePlaylist, DEFAULT_DESKTOP, DEFAULT_ORDERINGS, DEFAULT_PLAYLIST_COUNT, \
-  DEFAULT_RATE, DbusObj, MIME_TYPES, Paths, PlayState, PlaylistEntry, Position, Rate, Track, URI, \
+  DEFAULT_RATE, DbusObj, MIME_TYPES, Ordering, Paths, PlayState, PlaylistEntry, Position, Rate, Track, URI, \
   Volume, NoTrack
 from .mpris.metadata import Metadata, ValidMetadata
 
@@ -190,7 +190,7 @@ class PlaylistAdapter(ABC):
   def get_playlist_count(self) -> int:
     return DEFAULT_PLAYLIST_COUNT
 
-  def get_orderings(self) -> list[str]:
+  def get_orderings(self) -> list[Ordering]:
     return DEFAULT_ORDERINGS
 
   def get_active_playlist(self) -> ActivePlaylist:
