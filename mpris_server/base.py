@@ -23,6 +23,7 @@ NoTrack: Final[str] = '/org/mpris/MediaPlayer2/TrackList/NoTrack'
 class Property(StrEnum):
   ActivePlaylist: Self = auto()
   CanControl: Self = auto()
+  CanEditTracks: Self = auto()
   CanGoNext: Self = auto()
   CanGoPrevious: Self = auto()
   CanPause: Self = auto()
@@ -52,6 +53,11 @@ class Property(StrEnum):
 
 
 Properties = list[Property]
+
+
+class Ordering(StrEnum):
+  Alphabetical: Self = auto()
+  User: Self = auto()
 
 
 INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
@@ -117,10 +123,12 @@ ON_PLAYER_PROPS: Final[Properties] = list({
   *ON_VOLUME_PROPS,
 })
 ON_TRACKS_PROPS: Final[Properties] = [
-  Property.Tracks
+  Property.CanEditTracks,
+  Property.Tracks,
 ]
 ON_PLAYLIST_PROPS: Final[Properties] = [
   Property.ActivePlaylist,
+  Property.CanEditTracks,
   Property.Orderings,
   Property.PlaylistCount,
 ]
@@ -136,13 +144,11 @@ ON_ROOT_PROPS: Final[Properties] = [
   Property.SupportedUriSchemes,
 ]
 
-BEGINNING: Final[int] = 0
-
 DEFAULT_TRACK_ID: Final[str] = '/default/1'
 DEFAULT_PLAYLIST_COUNT: Final[int] = 1
-DEFAULT_ORDERINGS: Final[list[str]] = [
-  "Alphabetical",
-  "User",
+DEFAULT_ORDERINGS: Final[list[Ordering]] = [
+  Ordering.Alphabetical,
+  Ordering.User,
 ]
 
 # valid characters for a DBus name
@@ -183,6 +189,8 @@ P = ParamSpec('P')
 
 Method = Callable[Concatenate[Self, P], T]
 
+
+BEGINNING: Final[Position] = Position(0)
 
 DEFAULT_RATE: Final[Rate] = Rate(1.0)
 PAUSE_RATE: Final[Rate] = Rate(0.0)
@@ -236,9 +244,9 @@ class _MprisTypes(NamedTuple):
   STRING_ARRAY: PyType = list[str]
   UINT32: PyType = int
   UINT64: PyType = int
+  VARIANT: PyType = object
 
   ARRAY: PyType = list
-  VARIANT: PyType = object
   MAP: PyType = dict
 
   PLAYLIST: PyType = PlaylistEntry
