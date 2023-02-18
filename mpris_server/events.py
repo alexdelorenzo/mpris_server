@@ -2,7 +2,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from .base import Position, dbus_emit_changes, Microseconds, DbusObj, \
+from .base import Position, Property, dbus_emit_changes, Microseconds, DbusObj, \
   ON_VOLUME_PROPS, ON_PLAYBACK_PROPS, ON_PLAYPAUSE_PROPS, \
   ON_TITLE_PROPS, ON_SEEK_PROPS, ON_OPTION_PROPS, ON_ENDED_PROPS, \
   ON_PLAYLIST_PROPS, ON_TRACKS_PROPS, ON_PLAYER_PROPS, \
@@ -28,11 +28,13 @@ class BaseEventAdapter(ABC):
     self.playlist = playlist
     self.tracklist = tracklist
 
-  def emit_changes(self, interface: MprisInterface, changes: list[str]):
+  @staticmethod
+  def emit_changes(interface: MprisInterface, changes: list[Property]):
     dbus_emit_changes(interface, changes)
 
   @abstractmethod
   def emit_all(self):
+    """Emit all changes for all adapters in hierarchy"""
     pass
 
 
@@ -83,16 +85,27 @@ class PlayerEventAdapter(BaseEventAdapter, ABC):
 
 
 class PlaylistsEventAdapter(BaseEventAdapter, ABC):
-  def emit_playlist_changes(self, changes: list[str]):
+  def emit_all(self):
+    self.on_playerlists_all()
+    super().emit_all()
+
+  def emit_playlist_changes(self, changes: list[Property]):
     self.emit_changes(self.playlist, changes)
 
   def on_playlist_change(self, playlist_id: DbusObj):
     self.playlist.PlaylistChanged(playlist_id)
     self.emit_playlist_changes(ON_PLAYLIST_PROPS)
 
+  def on_playerlists_all(self):
+    self.emit_playlist_changes(ON_PLAYLIST_PROPS)
+
 
 class TracklistEventAdapter(BaseEventAdapter, ABC):
-  def emit_tracklist_changes(self, changes: list[str]):
+  def emit_all(self):
+    self.on_tracklist_all()
+    super().emit_all()
+
+  def emit_tracklist_changes(self, changes: list[Property]):
     self.emit_changes(self.tracklist, changes)
 
   def on_list_replaced(self, tracks: list[DbusObj], current_track: DbusObj):
@@ -109,6 +122,9 @@ class TracklistEventAdapter(BaseEventAdapter, ABC):
 
   def on_track_metadata_change(self, track_id: DbusObj, metadata: Metadata):
     self.tracklist.TrackMetadataChanged(track_id, metadata)
+    self.emit_tracklist_changes(ON_TRACKS_PROPS)
+
+  def on_tracklist_all(self):
     self.emit_tracklist_changes(ON_TRACKS_PROPS)
 
 
