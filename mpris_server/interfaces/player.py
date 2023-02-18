@@ -8,11 +8,14 @@ from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import BEGINNING, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
-  PAUSE_RATE, PlayState, Position, ROOT_INTERFACE, Rate, Track, Volume
+from ..base import Artist, BEGINNING, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
+  PAUSE_RATE, PlayState, Position, Property, ROOT_INTERFACE, Rate, Track, Volume
 from ..mpris.metadata import DEFAULT_METADATA, DbusTypes, Metadata, \
   MetadataEntries, get_dbus_metadata
 from ..types import Final
+
+
+NO_NAME: Final[str] = ""
 
 
 class LoopStatus(StrEnum):
@@ -46,21 +49,21 @@ class Player(MprisInterface):
       <signal name="Seeked">
         <arg name="Position" type="{DbusTypes.INT64}"/>
       </signal>
-      <property name="PlaybackStatus" type="{DbusTypes.STRING}" access="read"/>
-      <property name="LoopStatus" type="{DbusTypes.STRING}" access="readwrite"/>
-      <property name="Rate" type="{DbusTypes.DOUBLE}" access="readwrite"/>
-      <property name="Shuffle" type="{DbusTypes.BOOLEAN}" access="readwrite"/>
-      <property name="Metadata" type="{DbusTypes.METADATA}" access="read"/>
-      <property name="Volume" type="{DbusTypes.DOUBLE}" access="readwrite"/>
-      <property name="Position" type="{DbusTypes.INT64}" access="read"/>
-      <property name="MinimumRate" type="{DbusTypes.DOUBLE}" access="read"/>
-      <property name="MaximumRate" type="{DbusTypes.DOUBLE}" access="read"/>
-      <property name="CanGoNext" type="{DbusTypes.BOOLEAN}" access="read"/>
-      <property name="CanGoPrevious" type="{DbusTypes.BOOLEAN}" access="read"/>
-      <property name="CanPlay" type="{DbusTypes.BOOLEAN}" access="read"/>
-      <property name="CanPause" type="{DbusTypes.BOOLEAN}" access="read"/>
-      <property name="CanSeek" type="{DbusTypes.BOOLEAN}" access="read"/>
-      <property name="CanControl" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.PlaybackStatus}" type="{DbusTypes.STRING}" access="read"/>
+      <property name="{Property.LoopStatus}" type="{DbusTypes.STRING}" access="readwrite"/>
+      <property name="{Property.Rate}" type="{DbusTypes.DOUBLE}" access="readwrite"/>
+      <property name="{Property.Shuffle}" type="{DbusTypes.BOOLEAN}" access="readwrite"/>
+      <property name="{Property.Metadata}" type="{DbusTypes.METADATA}" access="read"/>
+      <property name="{Property.Volume}" type="{DbusTypes.DOUBLE}" access="readwrite"/>
+      <property name="{Property.Position}" type="{DbusTypes.INT64}" access="read"/>
+      <property name="{Property.MinimumRate}" type="{DbusTypes.DOUBLE}" access="read"/>
+      <property name="{Property.MaximumRate}" type="{DbusTypes.DOUBLE}" access="read"/>
+      <property name="{Property.CanGoNext}" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.CanGoPrevious}" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.CanPlay}" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.CanPause}" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.CanSeek}" type="{DbusTypes.BOOLEAN}" access="read"/>
+      <property name="{Property.CanControl}" type="{DbusTypes.BOOLEAN}" access="read"/>
     </interface>
   </node>
   """
@@ -161,33 +164,33 @@ class Player(MprisInterface):
 
     self.adapter.seek(position, track_id=track_id)
 
-    #metadata = self.adapter.metadata()
-    #current_track: Optional[Track] = None
+    # metadata = self.adapter.metadata()
+    # current_track: Optional[Track] = None
 
     ##use metadata from adapter if available
-    #if metadata \
-      #and 'mpris:trackid' in metadata \
-      #and 'mpris:length' in metadata:
-        #current_track = Track(
-            #track_id=metadata['mpris:trackid'],
-            #length=metadata['mpris:length']
-        #)
+    # if metadata \
+    # and 'mpris:trackid' in metadata \
+    # and 'mpris:length' in metadata:
+    # current_track = Track(
+    # track_id=metadata['mpris:trackid'],
+    # length=metadata['mpris:length']
+    # )
 
     ##if no metadata, build metadata from Track interface
-    #else:
-        #current_track = self.adapter.get_current_track()
+    # else:
+    # current_track = self.adapter.get_current_track()
 
-    #if current_track is None:
-        #return
+    # if current_track is None:
+    # return
 
-    #if track_id != current_track.track_id:
-        #return
+    # if track_id != current_track.track_id:
+    # return
 
-    #if position < BEGINNING:
-        #return
+    # if position < BEGINNING:
+    # return
 
-    #if current_track.length < position:
-        #return
+    # if current_track.length < position:
+    # return
 
     # self.adapter.seek(position, track_id=track_id)
 
@@ -242,7 +245,7 @@ class Player(MprisInterface):
   @property
   @log_trace
   def Rate(self) -> Rate:
-      return self.adapter.get_rate()
+    return self.adapter.get_rate()
 
   @Rate.setter
   @log_trace
@@ -290,50 +293,50 @@ class Player(MprisInterface):
     metadata: dict[MetadataEntries, Variant] = {
       MetadataEntries.TRACK_ID: Variant(
         DbusTypes.OBJ,
-        track.track_id
+        track.track_id,
       )
     }
 
     if track.length:
       metadata[MetadataEntries.LENGTH] = Variant(
         DbusTypes.INT64,
-        track.length
+        track.length,
       )
 
     if track.uri:
       metadata[MetadataEntries.URL] = Variant(
         DbusTypes.STRING,
-        track.uri
+        track.uri,
       )
 
     if stream_title or track.name:
       metadata[MetadataEntries.TITLE] = Variant(
         DbusTypes.STRING,
-        stream_title or track.name
+        stream_title or track.name,
       )
 
     if track.artists:
       artists = list(track.artists)
-      artists.sort(key=lambda a: a.name or "")
+      artists.sort(key=sort_names)
 
       metadata[MetadataEntries.ARTISTS] = Variant(
         DbusTypes.STRING_ARRAY,
-        [a.name for a in artists if a.name]
+        [a.name for a in artists if a.name],
       )
 
     if track.album and track.album.name:
       metadata[MetadataEntries.ALBUM] = Variant(
         DbusTypes.STRING,
-        track.album.name
+        track.album.name,
       )
 
     if track.album and track.album.artists:
       artists = list(track.album.artists)
-      artists.sort(key=lambda a: a.name or "")
+      artists.sort(key=sort_names)
 
       metadata[MetadataEntries.ALBUM_ARTISTS] = Variant(
         DbusTypes.STRING_ARRAY,
-        [a.name for a in artists if a.name]
+        [a.name for a in artists if a.name],
       )
 
     art_url = self._get_art_url(track)
@@ -341,19 +344,19 @@ class Player(MprisInterface):
     if art_url:
       metadata[MetadataEntries.ART_URL] = Variant(
         DbusTypes.STRING,
-        art_url
+        art_url,
       )
 
     if track.disc_no:
       metadata[MetadataEntries.DISC_NUMBER] = Variant(
         DbusTypes.INT32,
-        track.disc_no
+        track.disc_no,
       )
 
     if track.track_no:
       metadata[MetadataEntries.TRACK_NUMBER] = Variant(
         DbusTypes.INT32,
-        track.track_no
+        track.track_no,
       )
 
     return metadata
@@ -361,10 +364,10 @@ class Player(MprisInterface):
   @property
   @log_trace
   def Volume(self) -> Volume:
-    mute = self.adapter.is_mute()
-    volume = self.adapter.get_volume()
+    if self.adapter.is_mute():
+      return MUTE_VOL
 
-    if volume is None or mute is True:
+    if not (volume := self.adapter.get_volume()):
       return MUTE_VOL
 
     return volume
@@ -401,9 +404,7 @@ class Player(MprisInterface):
   @property
   @log_trace
   def MinimumRate(self) -> Rate:
-    rate = self.adapter.get_minimum_rate()
-
-    if rate is None:
+    if (rate := self.adapter.get_minimum_rate()) is None:
       return MIN_RATE
 
     return rate
@@ -411,9 +412,7 @@ class Player(MprisInterface):
   @property
   @log_trace
   def MaximumRate(self) -> Rate:
-    rate = self.adapter.get_minimum_rate()
-
-    if rate is None:
+    if (rate := self.adapter.get_maximum_rate()) is None:
       return MAX_RATE
 
     return rate
@@ -421,24 +420,24 @@ class Player(MprisInterface):
   @property
   @log_trace
   def CanGoNext(self) -> bool:
-    #if not self.CanControl:
-      #return False
+    # if not self.CanControl:
+    # return False
 
     return self.adapter.can_go_next()
 
   @property
   @log_trace
   def CanGoPrevious(self) -> bool:
-    #if not self.CanControl:
-      #return False
+    # if not self.CanControl:
+    # return False
 
     return self.adapter.can_go_previous()
 
   @property
   @log_trace
   def CanPlay(self) -> bool:
-    #if not self.CanControl:
-      #return False
+    # if not self.CanControl:
+    # return False
 
     return self.adapter.can_play()
 
@@ -446,21 +445,25 @@ class Player(MprisInterface):
   @log_trace
   def CanPause(self) -> bool:
     return self.adapter.can_pause()
-    #if not self.CanControl:
-        #return False
+    # if not self.CanControl:
+    # return False
 
-    #return True
+    # return True
 
   @property
   @log_trace
   def CanSeek(self) -> bool:
     return self.adapter.can_seek()
-    #if not self.CanControl:
-        #return False
+    # if not self.CanControl:
+    # return False
 
-    #return True
+    # return True
 
   @property
   @log_trace
   def CanControl(self) -> bool:
     return self.adapter.can_control()
+
+
+def sort_names(artist: Artist) -> str:
+  return artist.name or NO_NAME
