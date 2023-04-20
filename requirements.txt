@@ -4,4 +4,4 @@ unidecode>=1.2.0, <2.0.0
 emoji>=2.2.0, <3.0.0
 StrEnum>=0.4.6
 
-typing-extensions>=3.10.0.0; python_version < '3.10'
+typing-extensions>=3.10.0.0, <4.0.0.0; python_version < '3.10'
