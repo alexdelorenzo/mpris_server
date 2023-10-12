@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Optional
+from typing import ClassVar, Optional
 import logging
 
 from gi.repository.GLib import Variant
