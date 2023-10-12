@@ -200,15 +200,23 @@ class PlayState(StrEnum):
 
 
 class DbusTypes(StrEnum):
+  ARRAY: DbusType = 'a'
   BOOLEAN: DbusType = 'b'
+  STRING: DbusType = 's'
+  DATETIME: DbusType = STRING
+  STRING_ARRAY: DbusType = f'{ARRAY}{STRING}'
   DOUBLE: DbusType = 'd'
   INT32: DbusType = 'i'
   INT64: DbusType = 'x'
+  MAP: DbusType = f'{ARRAY}{{}}'
+  VARIANT: DbusType = 'v'
+  METADATA: DbusType = f'{ARRAY}{{{STRING}{VARIANT}}}'
+  METADATA_ARRAY: DbusType = 'aa{sv}'
   OBJ: DbusType = 'o'
-  OBJ_ARRAY: DbusType = 'ao'
-  STRING: DbusType = 's'
-  DATETIME: DbusType = STRING
-  STRING_ARRAY: DbusType = 'as'
+  OBJ_ARRAY: DbusType = f'{ARRAY}{OBJ}'
+  PLAYLIST: DbusType = f'({OBJ}{STRING}{STRING})'
+  PLAYLISTS: DbusType = f'{ARRAY}{PLAYLIST}'
+  MAYBE_PLAYLIST: DbusType = f'({BOOLEAN}{PLAYLIST})'
   UINT32: DbusType = 'u'
   UINT64: DbusType = 't'
 
