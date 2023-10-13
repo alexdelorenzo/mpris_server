@@ -312,10 +312,10 @@ class Player(MprisInterface):
   @property
   @log_trace
   def Volume(self) -> Volume:
-    mute = self.adapter.is_mute()
-    volume = self.adapter.get_volume()
+    if self.adapter.is_mute():
+      return MUTE_VOL
 
-    if volume is None or mute is True:
+    if not (volume := self.adapter.get_volume()):
       return MUTE_VOL
 
     return volume
