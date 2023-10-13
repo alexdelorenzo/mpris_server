@@ -75,7 +75,7 @@ ON_SEEK_PROPS: Final[Properties] = [
 ]
 
 # all props for each interface
-ON_PLAYER_PROPS: Final[Properties] = list({
+ON_PLAYER_PROPS: Final[Properties] = sorted({
   *ON_ENDED_PROPS,
   *ON_OPTION_PROPS,
   *ON_PLAYBACK_PROPS,
