@@ -1,10 +1,11 @@
-from typing import List
-from setuptools import setup, find_packages
 from pathlib import Path
-from mpris_server import __version__
+from typing import Final
+
+from setuptools import find_packages, setup
 
 
 __author__ = "Alex DeLorenzo <alex@alexdelorenzo.dev>"
+__version__: Final[str] = '0.8.0'
 
 NAME = "mpris_server"
 DESCRIPTION = "⏯️ Publish a MediaPlayer2 MPRIS device to D-Bus."
