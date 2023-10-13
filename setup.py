@@ -32,7 +32,7 @@ setup(
   long_description=README,
   long_description_content_type="text/markdown",
   url="https://alexdelorenzo.dev",
-  author="Alex DeLorenzo",
+  author="Alex DeLorenzo <alex@alexdelorenzo.dev>",
   license="AGPL-3.0",
   packages=PKGS,
   zip_safe=True,

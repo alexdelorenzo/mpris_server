@@ -5,7 +5,7 @@ version = "0.8.0"
 description = "Publish a MediaPlayer2 MPRIS device to D-Bus."
 license = "AGPL-3.0"
 homepage = "https://alexdelorenzo.dev"
-authors = ["Alex DeLorenzo"]
+authors = ["Alex DeLorenzo <alex@alexdelorenzo.dev>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
