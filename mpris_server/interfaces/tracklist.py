@@ -11,9 +11,11 @@ from ..mpris.metadata import Metadata
 
 
 class TrackList(MprisInterface):
+  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.TrackList"
+
   __doc__ = f"""
   <node>
-    <interface name="{ROOT_INTERFACE}.TrackList">
+    <interface name="{INTERFACE}">
       <method name="{Method.GetTracksMetadata}">
         <arg name="{Arg.TrackIds}" type="{DbusTypes.OBJ_ARRAY}" direction="{Direction.In}"/>
         <arg name="{Arg.Metadata}" type="{DbusTypes.METADATA_ARRAY}" direction="{Direction.out}"/>
@@ -49,8 +51,6 @@ class TrackList(MprisInterface):
     </interface>
   </node>
   """
-
-  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.TrackList"
 
   TrackListReplaced = signal()
   TrackAdded = signal()

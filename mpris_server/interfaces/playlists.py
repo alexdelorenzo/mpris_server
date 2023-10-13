@@ -10,9 +10,11 @@ from ..enums import Access, Arg, Direction, Method, Property, Signal
 
 
 class Playlists(MprisInterface):
+  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.Playlists"
+
   __doc__ = f"""
   <node>
-    <interface name="{ROOT_INTERFACE}.Playlists">
+    <interface name="{INTERFACE}">
       <method name="{Method.ActivatePlaylist}">
         <arg name="{Arg.PlaylistId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
       </method>
@@ -32,8 +34,6 @@ class Playlists(MprisInterface):
     </interface>
   </node>
   """
-
-  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.Playlists"
 
   PlaylistChanged = signal()
 
