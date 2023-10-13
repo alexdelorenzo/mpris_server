@@ -19,17 +19,17 @@ class Root(MprisInterface):
   __doc__ = f"""
   <node>
     <interface name="{INTERFACE}">
-      <method name="{Method.Raise}"/>
       <method name="{Method.Quit}"/>
+      <method name="{Method.Raise}"/>
       <property name="{Property.CanQuit}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
       <property name="{Property.CanRaise}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.Fullscreen}" type="{DbusTypes.BOOLEAN}" access="{Access.readwrite}"/>
       <property name="{Property.CanSetFullscreen}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.DesktopEntry}" type="{DbusTypes.STRING}" access="{Access.read}"/>
+      <property name="{Property.Fullscreen}" type="{DbusTypes.BOOLEAN}" access="{Access.readwrite}"/>
       <property name="{Property.HasTrackList}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
       <property name="{Property.Identity}" type="{DbusTypes.STRING}" access="{Access.read}"/>
-      <property name="{Property.DesktopEntry}" type="{DbusTypes.STRING}" access="{Access.read}"/>
-      <property name="{Property.SupportedUriSchemes}" type="{DbusTypes.STRING_ARRAY}" access="{Access.read}"/>
       <property name="{Property.SupportedMimeTypes}" type="{DbusTypes.STRING_ARRAY}" access="{Access.read}"/>
+      <property name="{Property.SupportedUriSchemes}" type="{DbusTypes.STRING_ARRAY}" access="{Access.read}"/>
     </interface>
   </node>
   """

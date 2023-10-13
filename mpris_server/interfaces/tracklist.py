@@ -16,19 +16,19 @@ class TrackList(MprisInterface):
   __doc__ = f"""
   <node>
     <interface name="{INTERFACE}">
-      <method name="{Method.GetTracksMetadata}">
-        <arg name="{Arg.TrackIds}" type="{DbusTypes.OBJ_ARRAY}" direction="{Direction.In}"/>
-        <arg name="{Arg.Metadata}" type="{DbusTypes.METADATA_ARRAY}" direction="{Direction.out}"/>
-      </method>
       <method name="{Method.AddTrack}">
         <arg name="{Arg.Uri}" type="{DbusTypes.STRING}" direction="{Direction.In}"/>
         <arg name="{Arg.AfterTrack}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
         <arg name="{Arg.SetAsCurrent}" type="{DbusTypes.BOOLEAN}" direction="{Direction.In}"/>
       </method>
-      <method name="{Method.RemoveTrack}">
-        <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
+      <method name="{Method.GetTracksMetadata}">
+        <arg name="{Arg.TrackIds}" type="{DbusTypes.OBJ_ARRAY}" direction="{Direction.In}"/>
+        <arg name="{Arg.Metadata}" type="{DbusTypes.METADATA_ARRAY}" direction="{Direction.out}"/>
       </method>
       <method name="{Method.GoTo}">
+        <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
+      </method>
+      <method name="{Method.RemoveTrack}">
         <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
       </method>
       <signal name="{Signal.TrackListReplaced}">
@@ -46,8 +46,8 @@ class TrackList(MprisInterface):
         <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}"/>
         <arg name="{Arg.Metadata}" type="{DbusTypes.METADATA}"/>
       </signal>
-      <property name="{Property.Tracks}" type="{DbusTypes.OBJ_ARRAY}" access="{Access.read}"/>
       <property name="{Property.CanEditTracks}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.Tracks}" type="{DbusTypes.OBJ_ARRAY}" access="{Access.read}"/>
     </interface>
   </node>
   """

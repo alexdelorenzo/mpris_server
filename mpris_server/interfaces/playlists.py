@@ -28,9 +28,9 @@ class Playlists(MprisInterface):
       <signal name="{Signal.PlaylistChanged}">
         <arg name="{Arg.Playlist}" type="{DbusTypes.PLAYLIST}"/>
       </signal>
-      <property name="{Property.PlaylistCount}" type="{DbusTypes.UINT32}" access="{Access.read}"/>
-      <property name="{Property.Orderings}" type="{DbusTypes.STRING_ARRAY}" access="{Access.read}"/>
       <property name="{Property.ActivePlaylist}" type="{DbusTypes.MAYBE_PLAYLIST}" access="{Access.read}"/>
+      <property name="{Property.Orderings}" type="{DbusTypes.STRING_ARRAY}" access="{Access.read}"/>
+      <property name="{Property.PlaylistCount}" type="{DbusTypes.UINT32}" access="{Access.read}"/>
     </interface>
   </node>
   """
