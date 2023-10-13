@@ -4,55 +4,22 @@ from decimal import Decimal
 from enum import Enum, auto
 from os import PathLike
 from string import ascii_letters, digits
-from typing import Callable, Concatenate, Final, Iterable, NamedTuple, Optional, ParamSpec, Self, TYPE_CHECKING, \
+from typing import Callable, Concatenate, Iterable, NamedTuple, Optional, ParamSpec, Self, TYPE_CHECKING, \
   TypeVar, Union
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
 
+from .enums import Property
 from .types import Final, GenericAlias, _GenericAlias
 
 
 if TYPE_CHECKING:
   from .interfaces.interface import MprisInterface
 
-
 NoTrack: Final[str] = '/org/mpris/MediaPlayer2/TrackList/NoTrack'
 
-
-class Property(StrEnum):
-  ActivePlaylist: Self = auto()
-  CanControl: Self = auto()
-  CanGoNext: Self = auto()
-  CanGoPrevious: Self = auto()
-  CanPause: Self = auto()
-  CanPlay: Self = auto()
-  CanQuit: Self = auto()
-  CanRaise: Self = auto()
-  CanSeek: Self = auto()
-  CanSetFullscreen: Self = auto()
-  DesktopEntry: Self = auto()
-  Fullscreen: Self = auto()
-  HasTrackList: Self = auto()
-  Identity: Self = auto()
-  LoopStatus: Self = auto()
-  MaximumRate: Self = auto()
-  Metadata: Self = auto()
-  MinimumRate: Self = auto()
-  Orderings: Self = auto()
-  PlaybackStatus: Self = auto()
-  PlaylistCount: Self = auto()
-  Position: Self = auto()
-  Rate: Self = auto()
-  Shuffle: Self = auto()
-  SupportedMimeTypes: Self = auto()
-  SupportedUriSchemes: Self = auto()
-  Tracks: Self = auto()
-  Volume: Self = auto()
-
-
 Properties = list[Property]
-
 
 INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
 ROOT_INTERFACE: Final[str] = INTERFACE
@@ -182,7 +149,6 @@ T = TypeVar('T')
 P = ParamSpec('P')
 
 Method = Callable[Concatenate[Self, P], T]
-
 
 DEFAULT_RATE: Final[Rate] = Rate(1.0)
 PAUSE_RATE: Final[Rate] = Rate(0.0)
