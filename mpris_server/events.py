@@ -15,6 +15,16 @@ from .interfaces.root import Root
 from .mpris.metadata import Metadata
 
 
+__all__ = [
+  'BaseEventAdapter',
+  'RootEventAdapter',
+  'PlayerEventAdapter',
+  'PlaylistsEventAdapter',
+  'TracklistEventAdapter',
+  'EventAdapter',
+]
+
+
 class BaseEventAdapter(ABC):
   def __init__(
     self,

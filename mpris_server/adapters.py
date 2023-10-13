@@ -9,6 +9,15 @@ from .base import ActivePlaylist, DEFAULT_DESKTOP, DEFAULT_ORDERINGS, DEFAULT_PL
 from .mpris.metadata import Metadata, ValidMetadata
 
 
+__all__ = [
+  'RootAdapter',
+  'PlayerAdapter',
+  'PlaylistAdapter',
+  'TrackListAdapter',
+  'MprisAdapter',
+]
+
+
 class RootAdapter(ABC):
   def can_quit(self) -> bool:
     pass

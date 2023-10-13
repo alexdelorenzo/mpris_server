@@ -4,6 +4,8 @@ from .playlists import Playlists
 from .root import Root
 from .tracklist import TrackList
 
+from . import interface, player, root, playlists, tracklist
+
 
 __all__ = [
   'MprisInterface',
@@ -11,4 +13,9 @@ __all__ = [
   'Playlists',
   'Root',
   'TrackList',
+  'interface',
+  'player',
+  'root',
+  'playlists',
+  'tracklist',
 ]
