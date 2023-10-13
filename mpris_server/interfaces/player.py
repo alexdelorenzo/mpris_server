@@ -1,20 +1,18 @@
 from __future__ import annotations
 
+import logging
 from enum import StrEnum
 from typing import ClassVar, Optional
-import logging
 
 from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
-from ..types import Final
-from ..base import PlayState, MUTE_VOL, MAX_VOL, PAUSE_RATE, BEGINNING, \
-  Microseconds, Rate, Volume, MAX_RATE, MIN_RATE, \
-  Track, ROOT_INTERFACE, Position
-from ..mpris.metadata import Metadata, DbusMetadata, DbusTypes, \
-  get_dbus_metadata, METADATA_TYPES, DEFAULT_METADATA, \
-  ValidMetadata, MetadataObj
 from .interface import MprisInterface, log_trace
+from ..base import BEGINNING, DbusTypes, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, PAUSE_RATE, \
+  PlayState, Position, ROOT_INTERFACE, Rate, Track, Volume
+from ..enums import Access, Arg, Direction, Method, Property, Signal
+from ..mpris.metadata import DEFAULT_METADATA, DbusMetadata, Metadata, get_dbus_metadata
+from ..types import Final
 
 
 class LoopStatus(StrEnum):
@@ -24,47 +22,46 @@ class LoopStatus(StrEnum):
 
 
 class Player(MprisInterface):
-  """
+  __doc__ = f"""
   <node>
-    <interface name="org.mpris.MediaPlayer2.Player">
-      <method name="Next"/>
-      <method name="Previous"/>
-      <method name="Pause"/>
-      <method name="PlayPause"/>
-      <method name="Stop"/>
-      <method name="Play"/>
-      <method name="Seek">
-        <arg name="Offset" type="x" direction="in"/>
+    <interface name="{ROOT_INTERFACE}.Player">
+      <method name="{Method.Next}"/>
+      <method name="{Method.Previous}"/>
+      <method name="{Method.Pause}"/>
+      <method name="{Method.PlayPause}"/>
+      <method name="{Method.Stop}"/>
+      <method name="{Method.Play}"/>
+      <method name="{Method.Seek}">
+        <arg name="{Arg.Offset}" type="{DbusTypes.INT64}" direction="{Direction.In}"/>
       </method>
-      <method name="SetPosition">
-        <arg name="TrackId" type="o" direction="in"/>
-        <arg name="Position" type="x" direction="in"/>
+      <method name="{Method.SetPosition}">
+        <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
+        <arg name="{Arg.Position}" type="{DbusTypes.INT64}" direction="{Direction.In}"/>
       </method>
-      <method name="OpenUri">
-        <arg name="Uri" type="s" direction="in"/>
+      <method name="{Method.OpenUri}">
+        <arg name="{Arg.Uri}" type="{DbusTypes.STRING}" direction="{Direction.In}"/>
       </method>
-      <signal name="Seeked">
-        <arg name="Position" type="x"/>
+      <signal name="{Signal.Seeked}">
+        <arg name="{Arg.Position}" type="{DbusTypes.INT64}"/>
       </signal>
-      <property name="PlaybackStatus" type="s" access="read"/>
-      <property name="LoopStatus" type="s" access="readwrite"/>
-      <property name="Rate" type="d" access="readwrite"/>
-      <property name="Shuffle" type="b" access="readwrite"/>
-      <property name="Metadata" type="a{sv}" access="read"/>
-      <property name="Volume" type="d" access="readwrite"/>
-      <property name="Position" type="x" access="read"/>
-      <property name="MinimumRate" type="d" access="read"/>
-      <property name="MaximumRate" type="d" access="read"/>
-      <property name="CanGoNext" type="b" access="read"/>
-      <property name="CanGoPrevious" type="b" access="read"/>
-      <property name="CanPlay" type="b" access="read"/>
-      <property name="CanPause" type="b" access="read"/>
-      <property name="CanSeek" type="b" access="read"/>
-      <property name="CanControl" type="b" access="read"/>
+      <property name="{Property.PlaybackStatus}" type="{DbusTypes.STRING}" access="{Access.read}"/>
+      <property name="{Property.LoopStatus}" type="{DbusTypes.STRING}" access="{Access.readwrite}"/>
+      <property name="{Property.Rate}" type="{DbusTypes.DOUBLE}" access="{Access.readwrite}"/>
+      <property name="{Property.Shuffle}" type="{DbusTypes.BOOLEAN}" access="{Access.readwrite}"/>
+      <property name="{Property.Metadata}" type="{DbusTypes.METADATA}" access="{Access.read}"/>
+      <property name="{Property.Volume}" type="{DbusTypes.DOUBLE}" access="{Access.readwrite}"/>
+      <property name="{Property.Position}" type="{DbusTypes.INT64}" access="{Access.read}"/>
+      <property name="{Property.MinimumRate}" type="{DbusTypes.DOUBLE}" access="{Access.read}"/>
+      <property name="{Property.MaximumRate}" type="{DbusTypes.DOUBLE}" access="{Access.read}"/>
+      <property name="{Property.CanGoNext}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanGoPrevious}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanPlay}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanPause}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanSeek}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanControl}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
     </interface>
   </node>
   """
-
   INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.Player"
 
   Seeked: Final[signal] = signal()
@@ -163,33 +160,33 @@ class Player(MprisInterface):
 
     self.adapter.seek(position, track_id=track_id)
 
-    #metadata = self.adapter.metadata()
-    #current_track: Optional[Track] = None
+    # metadata = self.adapter.metadata()
+    # current_track: Optional[Track] = None
 
     ##use metadata from adapter if available
-    #if metadata \
-      #and 'mpris:trackid' in metadata \
-      #and 'mpris:length' in metadata:
-        #current_track = Track(
-            #track_id=metadata['mpris:trackid'],
-            #length=metadata['mpris:length']
-        #)
+    # if metadata \
+    # and 'mpris:trackid' in metadata \
+    # and 'mpris:length' in metadata:
+    # current_track = Track(
+    # track_id=metadata['mpris:trackid'],
+    # length=metadata['mpris:length']
+    # )
 
     ##if no metadata, build metadata from Track interface
-    #else:
-        #current_track = self.adapter.get_current_track()
+    # else:
+    # current_track = self.adapter.get_current_track()
 
-    #if current_track is None:
-        #return
+    # if current_track is None:
+    # return
 
-    #if track_id != current_track.track_id:
-        #return
+    # if track_id != current_track.track_id:
+    # return
 
-    #if position < BEGINNING:
-        #return
+    # if position < BEGINNING:
+    # return
 
-    #if current_track.length < position:
-        #return
+    # if current_track.length < position:
+    # return
 
     # self.adapter.seek(position, track_id=track_id)
 
@@ -244,7 +241,7 @@ class Player(MprisInterface):
   @property
   @log_trace
   def Rate(self) -> Rate:
-      return self.adapter.get_rate()
+    return self.adapter.get_rate()
 
   @Rate.setter
   @log_trace
@@ -394,24 +391,24 @@ class Player(MprisInterface):
   @property
   @log_trace
   def CanGoNext(self) -> bool:
-    #if not self.CanControl:
-      #return False
+    # if not self.CanControl:
+    # return False
 
     return self.adapter.can_go_next()
 
   @property
   @log_trace
   def CanGoPrevious(self) -> bool:
-    #if not self.CanControl:
-      #return False
+    # if not self.CanControl:
+    # return False
 
     return self.adapter.can_go_previous()
 
   @property
   @log_trace
   def CanPlay(self) -> bool:
-    #if not self.CanControl:
-      #return False
+    # if not self.CanControl:
+    # return False
 
     return self.adapter.can_play()
 
@@ -419,19 +416,19 @@ class Player(MprisInterface):
   @log_trace
   def CanPause(self) -> bool:
     return self.adapter.can_pause()
-    #if not self.CanControl:
-        #return False
+    # if not self.CanControl:
+    # return False
 
-    #return True
+    # return True
 
   @property
   @log_trace
   def CanSeek(self) -> bool:
     return self.adapter.can_seek()
-    #if not self.CanControl:
-        #return False
+    # if not self.CanControl:
+    # return False
 
-    #return True
+    # return True
 
   @property
   @log_trace

@@ -1,11 +1,12 @@
 from __future__ import annotations
+
 from pathlib import PurePath
-import logging
 from typing import ClassVar
 
-from ..base import ROOT_INTERFACE, NAME, Paths
-from ..types import Final
 from .interface import MprisInterface, log_trace
+from ..base import DbusTypes, Paths, ROOT_INTERFACE
+from ..enums import Access, Method, Property
+from ..types import Final
 
 
 NO_SUFFIX: Final[str] = ''
@@ -13,20 +14,20 @@ DESKTOP_EXT: Final[str] = '.desktop'
 
 
 class Root(MprisInterface):
-  """
+  __doc__ = f"""
   <node>
-    <interface name="org.mpris.MediaPlayer2">
-      <method name="Raise"/>
-      <method name="Quit"/>
-      <property name="CanQuit" type="b" access="read"/>
-      <property name="CanRaise" type="b" access="read"/>
-      <property name="Fullscreen" type="b" access="readwrite"/>
-      <property name="CanSetFullscreen" type="b" access="read"/>
-      <property name="HasTrackList" type="b" access="read"/>
-      <property name="Identity" type="s" access="read"/>
-      <property name="DesktopEntry" type="s" access="read"/>
-      <property name="SupportedUriSchemes" type="as" access="read"/>
-      <property name="SupportedMimeTypes" type="as" access="read"/>
+    <interface name="{ROOT_INTERFACE}">
+      <method name="{Method.Raise}"/>
+      <method name="{Method.Quit}"/>
+      <property name="{Property.CanQuit}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanRaise}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.Fullscreen}" type="{DbusTypes.BOOLEAN}" access="{Access.readwrite}"/>
+      <property name="{Property.CanSetFullscreen}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.HasTrackList}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.Identity}" type="{DbusTypes.STRING}" access="{Access.read}"/>
+      <property name="{Property.DesktopEntry}" type="{DbusTypes.STRING}" access="{Access.read}"/>
+      <property name="{Property.SupportedUriSchemes}" type="{DbusTypes.STRING_ARRAY}" access="{Access.read}"/>
+      <property name="{Property.SupportedMimeTypes}" type="{DbusTypes.STRING_ARRAY}" access="{Access.read}"/>
     </interface>
   </node>
   """

@@ -4,31 +4,31 @@ from typing import ClassVar
 
 from pydbus.generic import signal
 
-from ..base import ActivePlaylist, PlaylistEntry, ROOT_INTERFACE
-from ..types import Final
 from .interface import MprisInterface, log_trace
+from ..base import ActivePlaylist, DbusTypes, PlaylistEntry, ROOT_INTERFACE
+from ..enums import Access, Arg, Direction, Method, Property, Signal
 
 
 class Playlists(MprisInterface):
-  """
+  __doc__ = f"""
   <node>
-    <interface name="org.mpris.MediaPlayer2.Playlists">
-      <method name="ActivatePlaylist">
-        <arg name="PlaylistId" type="o" direction="in"/>
+    <interface name="{ROOT_INTERFACE}.Playlists">
+      <method name="{Method.ActivatePlaylist}">
+        <arg name="{Arg.PlaylistId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
       </method>
-      <method name="GetPlaylists">
-        <arg name="Index" type="u" direction="in"/>
-        <arg name="MaxCount" type="u" direction="in"/>
-        <arg name="Order" type="s" direction="in"/>
-        <arg name="ReverseOrder" type="b" direction="in"/>
-        <arg name="Playlists" type="a(oss)" direction="out"/>
+      <method name="{Method.GetPlaylists}">
+        <arg name="{Arg.Index}" type="{DbusTypes.UINT32}" direction="{Direction.In}"/>
+        <arg name="{Arg.MaxCount}" type="{DbusTypes.UINT32}" direction="{Direction.In}"/>
+        <arg name="{Arg.Order}" type="{DbusTypes.STRING}" direction="{Direction.In}"/>
+        <arg name="{Arg.ReverseOrder}" type="{DbusTypes.BOOLEAN}" direction="{Direction.In}"/>
+        <arg name="{Arg.Playlists}" type="{DbusTypes.PLAYLISTS}" direction="{Direction.out}"/>
       </method>
-      <signal name="PlaylistChanged">
-        <arg name="Playlist" type="oss"/>
+      <signal name="{Signal.PlaylistChanged}">
+        <arg name="{Arg.Playlist}" type="{DbusTypes.PLAYLIST}"/>
       </signal>
-      <property name="PlaylistCount" type="u" access="read"/>
-      <property name="Orderings" type="as" access="read"/>
-      <property name="ActivePlaylist" type="(b(oss))" access="read"/>
+      <property name="{Property.PlaylistCount}" type="{DbusTypes.UINT32}" access="{Access.read}"/>
+      <property name="{Property.Orderings}" type="{DbusTypes.STRING_ARRAY}" access="{Access.read}"/>
+      <property name="{Property.ActivePlaylist}" type="{DbusTypes.MAYBE_PLAYLIST}" access="{Access.read}"/>
     </interface>
   </node>
   """
