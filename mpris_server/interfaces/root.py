@@ -35,45 +35,6 @@ class Root(MprisInterface):
   </node>
   """
 
-  @log_trace
-  def Raise(self):
-    self.adapter.set_raise(True)
-
-  @log_trace
-  def Quit(self):
-    self.adapter.quit()
-
-  @property
-  @log_trace
-  def Fullscreen(self) -> bool:
-    return self.adapter.get_fullscreen()
-
-  @Fullscreen.setter
-  @log_trace
-  def Fullscreen(self, value):
-    self.adapter.set_fullscreen(value)
-
-  @property
-  @log_trace
-  def DesktopEntry(self) -> str:
-    path: Paths = self.adapter.get_desktop_entry()
-    return get_desktop_entry(path)
-
-  @property
-  @log_trace
-  def SupportedUriSchemes(self) -> list[str]:
-    return self.adapter.get_uri_schemes()
-
-  @property
-  @log_trace
-  def SupportedMimeTypes(self) -> list[str]:
-    return self.adapter.get_mime_types()
-
-  @property
-  @log_trace
-  def Identity(self) -> str:
-    return self.name
-
   @property
   @log_trace
   def CanQuit(self) -> bool:
@@ -91,8 +52,47 @@ class Root(MprisInterface):
 
   @property
   @log_trace
+  def DesktopEntry(self) -> str:
+    path: Paths = self.adapter.get_desktop_entry()
+    return get_desktop_entry(path)
+
+  @property
+  @log_trace
+  def Fullscreen(self) -> bool:
+    return self.adapter.get_fullscreen()
+
+  @Fullscreen.setter
+  @log_trace
+  def Fullscreen(self, value):
+    self.adapter.set_fullscreen(value)
+
+  @property
+  @log_trace
   def HasTrackList(self) -> bool:
     return self.adapter.has_tracklist()
+
+  @property
+  @log_trace
+  def Identity(self) -> str:
+    return self.name
+
+  @property
+  @log_trace
+  def SupportedMimeTypes(self) -> list[str]:
+    return self.adapter.get_mime_types()
+
+  @property
+  @log_trace
+  def SupportedUriSchemes(self) -> list[str]:
+    return self.adapter.get_uri_schemes()
+
+  @log_trace
+  def Quit(self):
+    self.adapter.quit()
+
+  @log_trace
+  def Raise(self):
+    self.adapter.set_raise(True)
 
 
 def get_desktop_entry(path: Paths) -> str:

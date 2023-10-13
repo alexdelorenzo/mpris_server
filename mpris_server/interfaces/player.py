@@ -78,136 +78,52 @@ class Player(MprisInterface):
   def _get_art_url(self, track: 'Track') -> str:
     return self.adapter.get_art_url(track)
 
+  @property
   @log_trace
-  def Next(self):
-    if not self.CanGoNext:
-      logging.debug(f"{self.INTERFACE}.Next not allowed")
-      return
-
-    self.adapter.next()
-
-  @log_trace
-  def Previous(self):
-    if not self.CanGoPrevious:
-      logging.debug(f"{self.INTERFACE}.Previous not allowed")
-      return
-
-    self.adapter.previous()
-
-  @log_trace
-  def Pause(self):
-    if not self.CanPause:
-      logging.debug(f"{self.INTERFACE}.Pause not allowed")
-      return
-
-    self.adapter.pause()
-
-  @log_trace
-  def PlayPause(self):
-    if not self.CanPause:
-      logging.debug(f"{self.INTERFACE}.PlayPause not allowed")
-      return
-
-    state = self.adapter.get_playstate()
-
-    if state is PlayState.PLAYING:
-      self.adapter.pause()
-
-    elif state is PlayState.PAUSED:
-      self.adapter.resume()
-
-    elif state is PlayState.STOPPED:
-      self.adapter.play()
-
-  @log_trace
-  def Stop(self):
-    if not self.CanControl:
-      logging.debug(f"{self.INTERFACE}.Stop not allowed")
-      return
-
-    self.adapter.stop()
-
-  @log_trace
-  def Play(self):
-    if not self.CanPlay:
-      logging.debug(f"{self.INTERFACE}.Play not allowed")
-      return
-
-    state = self.adapter.get_playstate()
-
-    if state is PlayState.PAUSED:
-      self.adapter.resume()
-
-    else:
-      self.adapter.play()
-
-  @log_trace
-  def Seek(self, offset: Position):
-    if not self.CanSeek:
-      logging.debug(f"{self.INTERFACE}.Seek not allowed")
-      return
-
-    current_position = self.adapter.get_current_position()
-    new_position = current_position + offset
-
-    if new_position < BEGINNING:
-      new_position = BEGINNING
-
-    self.adapter.seek(new_position)
-
-  @log_trace
-  def SetPosition(self, track_id: str, position: Position):
-    if not self.CanSeek:
-      logging.debug(f"{self.INTERFACE}.SetPosition not allowed")
-      return
-
-    self.adapter.seek(position, track_id=track_id)
-
-    # metadata = self.adapter.metadata()
-    # current_track: Optional[Track] = None
-
-    ##use metadata from adapter if available
-    # if metadata \
-    # and 'mpris:trackid' in metadata \
-    # and 'mpris:length' in metadata:
-    # current_track = Track(
-    # track_id=metadata['mpris:trackid'],
-    # length=metadata['mpris:length']
-    # )
-
-    ##if no metadata, build metadata from Track interface
-    # else:
-    # current_track = self.adapter.get_current_track()
-
-    # if current_track is None:
-    # return
-
-    # if track_id != current_track.track_id:
-    # return
-
-    # if position < BEGINNING:
-    # return
-
-    # if current_track.length < position:
-    # return
-
-    # self.adapter.seek(position, track_id=track_id)
-
-  @log_trace
-  def OpenUri(self, uri: str):
-    if not self.CanControl:
-      logging.debug(f"{self.INTERFACE}.OpenUri not allowed")
-      return
-
-    # NOTE Check if URI has MIME type known to the backend, if MIME support
-    # is added to the backend.
-    self.adapter.open_uri(uri)
+  def CanControl(self) -> bool:
+    return self.adapter.can_control()
 
   @property
   @log_trace
-  def PlaybackStatus(self) -> str:
-    state = self.adapter.get_playstate()
-    return state.value.title()
+  def CanGoNext(self) -> bool:
+    # if not self.CanControl:
+    # return False
+
+    return self.adapter.can_go_next()
+
+  @property
+  @log_trace
+  def CanGoPrevious(self) -> bool:
+    # if not self.CanControl:
+    # return False
+
+    return self.adapter.can_go_previous()
+
+  @property
+  @log_trace
+  def CanPause(self) -> bool:
+    return self.adapter.can_pause()
+    # if not self.CanControl:
+    # return False
+
+    # return True
+
+  @property
+  @log_trace
+  def CanPlay(self) -> bool:
+    # if not self.CanControl:
+    # return False
+
+    return self.adapter.can_play()
+
+  @property
+  @log_trace
+  def CanSeek(self) -> bool:
+    return self.adapter.can_seek()
+    # if not self.CanControl:
+    # return False
+
+    # return True
 
   @property
   @log_trace
@@ -243,35 +159,23 @@ class Player(MprisInterface):
 
   @property
   @log_trace
-  def Rate(self) -> Rate:
-    return self.adapter.get_rate()
+  def MaximumRate(self) -> Rate:
+    rate = self.adapter.get_minimum_rate()
 
-  @Rate.setter
-  @log_trace
-  def Rate(self, value: Rate):
-    if not self.CanControl:
-      logging.debug(f"Setting {self.INTERFACE}.Rate not allowed")
-      return
+    if rate is None:
+      return MAX_RATE
 
-    self.adapter.set_rate(value)
-
-    if value == PAUSE_RATE:
-      self.Pause()
+    return rate
 
   @property
   @log_trace
-  def Shuffle(self) -> bool:
-    return self.adapter.get_shuffle()
+  def MinimumRate(self) -> Rate:
+    rate = self.adapter.get_minimum_rate()
 
-  @Shuffle.setter
-  @log_trace
-  def Shuffle(self, value: bool):
-    if not self.CanControl:
-      logging.debug(f"Setting {self.INTERFACE}.Shuffle not allowed")
-      return
+    if rate is None:
+      return MIN_RATE
 
-    logging.debug(f"Setting {self.INTERFACE}.Shuffle to {value}")
-    self.adapter.set_shuffle(value)
+    return rate
 
   @property
   @log_trace
@@ -333,6 +237,49 @@ class Player(MprisInterface):
 
   @property
   @log_trace
+  def PlaybackStatus(self) -> str:
+    state = self.adapter.get_playstate()
+    return state.value.title()
+
+  @property
+  @log_trace
+  def Position(self) -> Position:
+    return self.adapter.get_current_position()
+
+  @property
+  @log_trace
+  def Rate(self) -> Rate:
+    return self.adapter.get_rate()
+
+  @Rate.setter
+  @log_trace
+  def Rate(self, value: Rate):
+    if not self.CanControl:
+      logging.debug(f"Setting {self.INTERFACE}.Rate not allowed")
+      return
+
+    self.adapter.set_rate(value)
+
+    if value == PAUSE_RATE:
+      self.Pause()
+
+  @property
+  @log_trace
+  def Shuffle(self) -> bool:
+    return self.adapter.get_shuffle()
+
+  @Shuffle.setter
+  @log_trace
+  def Shuffle(self, value: bool):
+    if not self.CanControl:
+      logging.debug(f"Setting {self.INTERFACE}.Shuffle not allowed")
+      return
+
+    logging.debug(f"Setting {self.INTERFACE}.Shuffle to {value}")
+    self.adapter.set_shuffle(value)
+
+  @property
+  @log_trace
   def Volume(self) -> Volume:
     mute = self.adapter.is_mute()
     volume = self.adapter.get_volume()
@@ -366,74 +313,127 @@ class Player(MprisInterface):
     elif value == MUTE_VOL:
       self.adapter.set_mute(True)
 
-  @property
   @log_trace
-  def Position(self) -> Position:
-    return self.adapter.get_current_position()
+  def Next(self):
+    if not self.CanGoNext:
+      logging.debug(f"{self.INTERFACE}.Next not allowed")
+      return
 
-  @property
+    self.adapter.next()
+
   @log_trace
-  def MinimumRate(self) -> Rate:
-    rate = self.adapter.get_minimum_rate()
+  def OpenUri(self, uri: str):
+    if not self.CanControl:
+      logging.debug(f"{self.INTERFACE}.OpenUri not allowed")
+      return
 
-    if rate is None:
-      return MIN_RATE
+    # NOTE Check if URI has MIME type known to the backend, if MIME support
+    # is added to the backend.
+    self.adapter.open_uri(uri)
 
-    return rate
-
-  @property
   @log_trace
-  def MaximumRate(self) -> Rate:
-    rate = self.adapter.get_minimum_rate()
+  def Previous(self):
+    if not self.CanGoPrevious:
+      logging.debug(f"{self.INTERFACE}.Previous not allowed")
+      return
 
-    if rate is None:
-      return MAX_RATE
+    self.adapter.previous()
 
-    return rate
-
-  @property
   @log_trace
-  def CanGoNext(self) -> bool:
-    # if not self.CanControl:
-    # return False
+  def Pause(self):
+    if not self.CanPause:
+      logging.debug(f"{self.INTERFACE}.Pause not allowed")
+      return
 
-    return self.adapter.can_go_next()
+    self.adapter.pause()
 
-  @property
   @log_trace
-  def CanGoPrevious(self) -> bool:
-    # if not self.CanControl:
-    # return False
+  def Play(self):
+    if not self.CanPlay:
+      logging.debug(f"{self.INTERFACE}.Play not allowed")
+      return
 
-    return self.adapter.can_go_previous()
+    state = self.adapter.get_playstate()
 
-  @property
+    if state is PlayState.PAUSED:
+      self.adapter.resume()
+
+    else:
+      self.adapter.play()
+
   @log_trace
-  def CanPlay(self) -> bool:
-    # if not self.CanControl:
-    # return False
+  def PlayPause(self):
+    if not self.CanPause:
+      logging.debug(f"{self.INTERFACE}.PlayPause not allowed")
+      return
 
-    return self.adapter.can_play()
+    state = self.adapter.get_playstate()
 
-  @property
+    if state is PlayState.PLAYING:
+      self.adapter.pause()
+
+    elif state is PlayState.PAUSED:
+      self.adapter.resume()
+
+    elif state is PlayState.STOPPED:
+      self.adapter.play()
+
   @log_trace
-  def CanPause(self) -> bool:
-    return self.adapter.can_pause()
-    # if not self.CanControl:
-    # return False
+  def Seek(self, offset: Position):
+    if not self.CanSeek:
+      logging.debug(f"{self.INTERFACE}.Seek not allowed")
+      return
 
-    # return True
+    current_position = self.adapter.get_current_position()
+    new_position = current_position + offset
 
-  @property
+    if new_position < BEGINNING:
+      new_position = BEGINNING
+
+    self.adapter.seek(new_position)
+
   @log_trace
-  def CanSeek(self) -> bool:
-    return self.adapter.can_seek()
-    # if not self.CanControl:
-    # return False
+  def SetPosition(self, track_id: str, position: Position):
+    if not self.CanSeek:
+      logging.debug(f"{self.INTERFACE}.SetPosition not allowed")
+      return
 
-    # return True
+    self.adapter.seek(position, track_id=track_id)
 
-  @property
+    # metadata = self.adapter.metadata()
+    # current_track: Optional[Track] = None
+
+    ##use metadata from adapter if available
+    # if metadata \
+    # and 'mpris:trackid' in metadata \
+    # and 'mpris:length' in metadata:
+    # current_track = Track(
+    # track_id=metadata['mpris:trackid'],
+    # length=metadata['mpris:length']
+    # )
+
+    ##if no metadata, build metadata from Track interface
+    # else:
+    # current_track = self.adapter.get_current_track()
+
+    # if current_track is None:
+    # return
+
+    # if track_id != current_track.track_id:
+    # return
+
+    # if position < BEGINNING:
+    # return
+
+    # if current_track.length < position:
+    # return
+
+    # self.adapter.seek(position, track_id=track_id)
+
   @log_trace
-  def CanControl(self) -> bool:
-    return self.adapter.can_control()
+  def Stop(self):
+    if not self.CanControl:
+      logging.debug(f"{self.INTERFACE}.Stop not allowed")
+      return
+
+    self.adapter.stop()

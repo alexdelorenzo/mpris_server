@@ -39,6 +39,25 @@ class Playlists(MprisInterface):
 
   PlaylistChanged = signal()
 
+  @property
+  @log_trace
+  def ActivePlaylist(self) -> ActivePlaylist:
+    return self.adapter.get_active_playlist()
+    # self.log_trace("Getting %s.ActivePlaylist", self.INTERFACE)
+    # playlist_is_valid = False
+    # playlist = ("/", "None", "")
+    # return (playlist_is_valid, playlist)
+
+  @property
+  @log_trace
+  def Orderings(self) -> list[str]:
+    return self.adapter.get_orderings()
+
+  @property
+  @log_trace
+  def PlaylistCount(self) -> int:
+    return self.adapter.get_playlist_count()
+
   @log_trace
   def ActivatePlaylist(self, playlist_id: str):
     self.adapter.activate_playlist(playlist_id)
@@ -72,24 +91,6 @@ class Playlists(MprisInterface):
     # results = [(get_playlist_id(p.uri), p.name, "") for p in playlists]
     # return results
 
-  @property
-  @log_trace
-  def PlaylistCount(self) -> int:
-    return self.adapter.get_playlist_count()
-
-  @property
-  @log_trace
-  def Orderings(self) -> list[str]:
-    return self.adapter.get_orderings()
-
-  @property
-  @log_trace
-  def ActivePlaylist(self) -> ActivePlaylist:
-    return self.adapter.get_active_playlist()
-    # self.log_trace("Getting %s.ActivePlaylist", self.INTERFACE)
-    # playlist_is_valid = False
-    # playlist = ("/", "None", "")
-    # return (playlist_is_valid, playlist)
 
 #
 # def get_playlist_id(playlist_uri: Union[str, bytes]) -> str:

@@ -54,27 +54,14 @@ class TrackList(MprisInterface):
   </node>
   """
 
-  TrackListReplaced = signal()
   TrackAdded = signal()
-  TrackRemoved = signal()
+  TrackListReplaced = signal()
   TrackMetadataChanged = signal()
+  TrackRemoved = signal()
 
-  def GetTracksMetadata(self, track_ids: list[DbusObj]) -> list[Metadata]:
-    return self.adapter.get_tracks_metadata(track_ids)
-
-  def AddTrack(
-    self,
-    uri: str,
-    after_track: DbusObj,
-    set_as_current: bool
-  ):
-    self.adapter.add_track(uri, after_track, set_as_current)
-
-  def RemoveTrack(self, track_id: DbusObj):
-    self.adapter.remove_track(track_id)
-
-  def GoTo(self, track_id: DbusObj):
-    self.adapter.go_to(track_id)
+  @property
+  def CanEditTracks(self) -> bool:
+    return self.adapter.can_edit_tracks()
 
   @property
   def Tracks(self) -> list[DbusObj]:
@@ -85,6 +72,22 @@ class TrackList(MprisInterface):
 
     return items
 
-  @property
-  def CanEditTracks(self) -> bool:
-    return self.adapter.can_edit_tracks()
+  def AddTrack(
+    self,
+    uri: str,
+    after_track: DbusObj,
+    set_as_current: bool
+  ):
+    self.adapter.add_track(uri, after_track, set_as_current)
+
+  def GetTracksMetadata(self, track_ids: list[DbusObj]) -> list[Metadata]:
+    return self.adapter.get_tracks_metadata(track_ids)
+
+  def GoTo(self, track_id: DbusObj):
+    self.adapter.go_to(track_id)
+
+  def RemoveTrack(self, track_id: DbusObj):
+    self.adapter.remove_track(track_id)
+
+
+
