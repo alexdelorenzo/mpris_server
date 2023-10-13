@@ -154,26 +154,26 @@ assert len(MetadataEntries) == len(METADATA_TYPES) == len(METADATA_TO_PY_TYPES) 
 
 
 class MetadataObj(NamedTuple):
-  album: Optional[MprisTypes.STRING] = None
-  album_artists: Optional[MprisTypes.STRING_ARRAY] = None
-  art_url: Optional[MprisTypes.STRING] = None
-  artists: Optional[MprisTypes.STRING_ARRAY] = None
-  as_text: Optional[MprisTypes.STRING_ARRAY] = None
-  audio_bpm: Optional[MprisTypes.INT32] = None
-  auto_rating: Optional[MprisTypes.DOUBLE] = None
-  comments: Optional[MprisTypes.STRING_ARRAY] = None
-  composer: Optional[MprisTypes.STRING_ARRAY] = None
-  content_created: Optional[MprisTypes.STRING] = None
-  disc_number: Optional[MprisTypes.INT32] = None
+  album: MprisTypes.STRING | None = None
+  album_artists: MprisTypes.STRING_ARRAY | None = None
+  art_url: MprisTypes.STRING | None = None
+  artists: MprisTypes.STRING_ARRAY | None = None
+  as_text: MprisTypes.STRING_ARRAY | None = None
+  audio_bpm: MprisTypes.INT32 | None = None
+  auto_rating: MprisTypes.DOUBLE | None = None
+  comments: MprisTypes.STRING_ARRAY | None = None
+  composer: MprisTypes.STRING_ARRAY | None = None
+  content_created: MprisTypes.STRING | None = None
+  disc_number: MprisTypes.INT32 | None = None
   first_used: MetadataTypes.FIRST_USED = None
-  genre: Optional[MprisTypes.STRING_ARRAY] = None
+  genre: MprisTypes.STRING_ARRAY | None = None
   last_used: MetadataTypes.LAST_USED | None = None
-  length: Optional[MprisTypes.LENGTH] = None
-  lyricist: Optional[MprisTypes.STRING_ARRAY] = None
-  title: Optional[MprisTypes.STRING] = None
+  length: MprisTypes.LENGTH | None = None
+  lyricist: MprisTypes.STRING_ARRAY | None = None
+  title: MprisTypes.STRING | None = None
   track_id: MetadataTypes.TRACK_ID = DEFAULT_TRACK_ID
-  track_number: Optional[MprisTypes.INT32] = None
-  url: Optional[MprisTypes.STRING] = None
+  track_number: MprisTypes.INT32 | None = None
+  url: MprisTypes.STRING | None = None
   use_count: MetadataTypes.USE_COUNT | None = None
   user_rating: MetadataTypes.USER_RATING | None = None
 
