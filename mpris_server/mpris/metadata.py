@@ -148,7 +148,7 @@ class _MetadataTypes(NamedTuple):
   USER_RATING: PyType = METADATA_TO_PY_TYPES[MetadataEntries.USER_RATING]
 
 
-MetadataTypes: Final = _MetadataTypes()
+MetadataTypes: Final[_MetadataTypes] = _MetadataTypes()
 
 
 assert len(MetadataEntries) == len(METADATA_TYPES) == len(METADATA_TO_PY_TYPES) == len(MetadataTypes)
