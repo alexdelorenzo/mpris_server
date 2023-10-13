@@ -15,12 +15,9 @@ from .enums import Property
 if TYPE_CHECKING:
   from .interfaces.interface import MprisInterface
 
-
 NoTrack: Final[str] = '/org/mpris/MediaPlayer2/TrackList/NoTrack'
 
-
 Properties = list[Property]
-
 
 INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
 ROOT_INTERFACE: Final[str] = INTERFACE
@@ -85,10 +82,12 @@ ON_PLAYER_PROPS: Final[Properties] = sorted({
   *ON_VOLUME_PROPS,
 })
 ON_TRACKS_PROPS: Final[Properties] = [
-  Property.Tracks
+  Property.CanEditTracks,
+  Property.Tracks,
 ]
 ON_PLAYLIST_PROPS: Final[Properties] = [
   Property.ActivePlaylist,
+  Property.CanEditTracks,
   Property.Orderings,
   Property.PlaylistCount,
 ]
@@ -104,14 +103,20 @@ ON_ROOT_PROPS: Final[Properties] = [
   Property.SupportedUriSchemes,
 ]
 
-BEGINNING: Final[int] = 0
+
+class Ordering(StrEnum):
+  Alphabetical: Self = auto()
+  User: Self = auto()
+
 
 DEFAULT_TRACK_ID: Final[str] = '/default/1'
 DEFAULT_PLAYLIST_COUNT: Final[int] = 1
-DEFAULT_ORDERINGS: Final[list[str]] = [
-  "Alphabetical",
-  "User",
+DEFAULT_ORDERINGS: Final[list[Ordering]] = [
+  Ordering.Alphabetical,
+  Ordering.User,
 ]
+
+BEGINNING: Final[int] = 0
 
 # valid characters for a DBus name
 VALID_PUNC: Final[str] = '_'
@@ -167,39 +172,51 @@ class PlayState(StrEnum):
 
 
 class DbusTypes(StrEnum):
-  ARRAY: DbusType = 'a'
   BOOLEAN: DbusType = 'b'
   STRING: DbusType = 's'
   DATETIME: DbusType = STRING
-  STRING_ARRAY: DbusType = f'{ARRAY}{STRING}'
   DOUBLE: DbusType = 'd'
   INT32: DbusType = 'i'
   INT64: DbusType = 'x'
-  MAP: DbusType = f'{ARRAY}{{}}'
-  VARIANT: DbusType = 'v'
-  METADATA: DbusType = f'{ARRAY}{{{STRING}{VARIANT}}}'
-  METADATA_ARRAY: DbusType = 'aa{sv}'
   OBJ: DbusType = 'o'
-  OBJ_ARRAY: DbusType = f'{ARRAY}{OBJ}'
-  PLAYLIST: DbusType = f'({OBJ}{STRING}{STRING})'
-  PLAYLISTS: DbusType = f'{ARRAY}{PLAYLIST}'
-  MAYBE_PLAYLIST: DbusType = f'({BOOLEAN}{PLAYLIST})'
   UINT32: DbusType = 'u'
   UINT64: DbusType = 't'
+  VARIANT: DbusType = 'v'
+
+  ARRAY: DbusType = 'a'
+  MAP: DbusType = f'{ARRAY}{{}}'
+  OBJ_ARRAY: DbusType = f'{ARRAY}{OBJ}'
+  STRING_ARRAY: DbusType = f'{ARRAY}{STRING}'
+
+  METADATA_ENTRY: DbusType = f'{{{STRING}{VARIANT}}}'
+  METADATA: DbusType = f'{ARRAY}{METADATA_ENTRY}'
+  METADATA_ARRAY: DbusType = f'{ARRAY}{METADATA}'
+  PLAYLIST: DbusType = f'({OBJ}{STRING}{STRING})'
+  MAYBE_PLAYLIST: DbusType = f'({BOOLEAN}{PLAYLIST})'
+  PLAYLISTS: DbusType = f'{ARRAY}{PLAYLIST}'
 
 
 class _MprisTypes(NamedTuple):
+  ARRAY: PyType = list
   BOOLEAN: PyType = bool
   DATETIME: PyType = str
   DOUBLE: PyType = float
   INT32: PyType = int
   INT64: PyType = int
+  MAP: PyType = dict
   OBJ: PyType = str
   OBJ_ARRAY: PyType = list[str]
   STRING: PyType = str
   STRING_ARRAY: PyType = list[str]
   UINT32: PyType = int
   UINT64: PyType = int
+  VARIANT: PyType = object
+
+  MAYBE_PLAYLIST: PyType = PlaylistEntry | None
+  METADATA: PyType = DbusMetadata
+  METADATA_ARRAY: PyType = list[DbusMetadata]
+  PLAYLIST: PyType = PlaylistEntry
+  PLAYLISTS: PyType = list[PlaylistEntry]
 
 
 MprisTypes: Final = _MprisTypes()
