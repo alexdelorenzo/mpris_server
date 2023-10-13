@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from enum import Enum, auto
+from enum import Enum, auto, StrEnum
 from os import PathLike
 from string import ascii_letters, digits
 from typing import Callable, Concatenate, Final, Iterable, NamedTuple, Optional, \
   ParamSpec, Self, TYPE_CHECKING, TypeVar, Union, GenericAlias, _GenericAlias
 
 from gi.repository.GLib import Variant
-from strenum import StrEnum
 
 from .enums import Property
 

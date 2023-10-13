@@ -3,9 +3,9 @@ from __future__ import annotations
 import logging
 from typing import Any, Final, Iterable, NamedTuple, Optional, Self, Union, cast, \
   TypedDict
+from enum import StrEnum
 
 from gi.repository.GLib import Variant
-from strenum import StrEnum
 
 from ..base import DEFAULT_TRACK_ID, DbusMetadata, DbusObj, DbusPyTypes, \
   DbusType, DbusTypes, MprisTypes, PyType

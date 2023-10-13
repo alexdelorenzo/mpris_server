@@ -1,10 +1,9 @@
 from __future__ import annotations
 from typing import Final, Optional
 from weakref import finalize
-from enum import auto
+from enum import auto, StrEnum
 import logging
 
-from strenum import StrEnum
 from gi.repository import GLib
 import pydbus
 

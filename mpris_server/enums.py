@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-from enum import auto
+from enum import auto, StrEnum
 from typing import Self
-
-from strenum import StrEnum
 
 
 class Direction(StrEnum):
