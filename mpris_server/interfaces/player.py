@@ -11,7 +11,7 @@ from .interface import MprisInterface, log_trace
 from ..base import BEGINNING, DbusTypes, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, PAUSE_RATE, \
   PlayState, Position, ROOT_INTERFACE, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, Method, Property, Signal
-from ..mpris.metadata import DEFAULT_METADATA, DbusMetadata, Metadata, get_dbus_metadata
+from ..mpris.metadata import DEFAULT_METADATA, DbusMetadata, Metadata, MetadataEntries, get_dbus_metadata
 
 
 class LoopStatus(StrEnum):
@@ -180,9 +180,7 @@ class Player(MprisInterface):
   @log_trace
   def Metadata(self) -> Metadata:
     # prefer adapter's metadata to building our own
-    metadata: DbusMetadata = self._dbus_metadata()
-
-    if metadata:
+    if metadata := self._dbus_metadata():
       return metadata
 
     # build metadata if no metadata supplied by adapter
@@ -194,43 +192,74 @@ class Player(MprisInterface):
     if track is None:
       return DEFAULT_METADATA
 
-    track_id = track.track_id
-    metadata = {"mpris:trackid": Variant("o", track_id)}
+    metadata: dict[MetadataEntries, Variant] = {
+      MetadataEntries.TRACK_ID: Variant(
+        DbusTypes.OBJ,
+        track.track_id,
+      )
+    }
 
     if track.length:
-      metadata["mpris:length"] = Variant("x", track.length)
+      metadata[MetadataEntries.LENGTH] = Variant(
+        DbusTypes.INT64,
+        track.length,
+      )
 
     if track.uri:
-      metadata["xesam:url"] = Variant("s", track.uri)
+      metadata[MetadataEntries.URL] = Variant(
+        DbusTypes.STRING,
+        track.uri,
+      )
 
     if stream_title or track.name:
-      metadata["xesam:title"] = Variant("s", stream_title or track.name)
+      metadata[MetadataEntries.TITLE] = Variant(
+        DbusTypes.STRING,
+        stream_title or track.name,
+      )
 
     if track.artists:
       artists = list(track.artists)
-      artists.sort(key=lambda a: a.name or "")
-      metadata["xesam:artist"] = Variant("as", [a.name for a in artists if a.name])
+      artists.sort(key=sort_names)
+
+      metadata[MetadataEntries.ARTISTS] = Variant(
+        DbusTypes.STRING_ARRAY,
+        [a.name for a in artists if a.name],
+      )
 
     if track.album and track.album.name:
-      metadata["xesam:album"] = Variant("s", track.album.name)
+      metadata[MetadataEntries.ALBUM] = Variant(
+        DbusTypes.STRING,
+        track.album.name,
+      )
 
     if track.album and track.album.artists:
       artists = list(track.album.artists)
-      artists.sort(key=lambda a: a.name or "")
-      metadata["xesam:albumArtist"] = Variant(
-        "as", [a.name for a in artists if a.name]
+      artists.sort(key=sort_names)
+
+      metadata[MetadataEntries.ALBUM_ARTISTS] = Variant(
+        DbusTypes.STRING_ARRAY,
+        [a.name for a in artists if a.name],
       )
 
     art_url = self._get_art_url(track)
 
     if art_url:
-      metadata["mpris:artUrl"] = Variant("s", art_url)
+      metadata[MetadataEntries.ART_URL] = Variant(
+        DbusTypes.STRING,
+        art_url,
+      )
 
     if track.disc_no:
-      metadata["xesam:discNumber"] = Variant("i", track.disc_no)
+      metadata[MetadataEntries.DISC_NUMBER] = Variant(
+        DbusTypes.INT32,
+        track.disc_no,
+      )
 
     if track.track_no:
-      metadata["xesam:trackNumber"] = Variant("i", track.track_no)
+      metadata[MetadataEntries.TRACK_NUMBER] = Variant(
+        DbusTypes.INT32,
+        track.track_no,
+      )
 
     return metadata
 
