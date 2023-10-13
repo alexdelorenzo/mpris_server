@@ -16,7 +16,7 @@ authors = ["Alex DeLorenzo"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.7"
+python = ">=3.11"
 emoji = ">=1.2.0, <2.0.0"
 pydbus = ">=0.6.0, <0.7.0"
 pygobject = ">=3.34.0"
