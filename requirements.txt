@@ -1,5 +1,5 @@
 emoji>=2.8.0, <3.0.0
 pydbus>=0.6.0, <0.7.0
 PyGObject>=3.34.0
-StrEnum>=0.4.15
+StrEnum>=0.4.15  # StrEnum preserves strings' case unlike enum.StrEnum
 unidecode>=1.3.7, <2.0.0
