@@ -1,18 +1,6 @@
 from __future__ import annotations
 
-# Python 3.10+
-try:
-  from typing import \
-    Protocol, runtime_checkable, Final, TypedDict, TypeAlias, \
-    get_origin, GenericAlias, _GenericAlias
-
-# Python 3.7 - 3.9
-except ImportError:
-  from typing_extensions import \
-    Protocol, runtime_checkable, Final, TypedDict, TypeAlias, \
-    get_origin, GenericAlias, _GenericAlias
-
-from typing import Union, Optional
+from typing import Final, GenericAlias, Union, _GenericAlias, get_origin
 
 
 ORIGIN: Final[str] = '__origin__'
@@ -29,7 +17,7 @@ def is_generic(obj: type) -> bool:
   return hasattr(obj, ORIGIN) or get_origin(obj)
 
 
-def get_type(obj: type) -> Optional[type]:
+def get_type(obj: type) -> type | None:
   if hasattr(obj, ORIGIN):
     return getattr(obj, ORIGIN)
 

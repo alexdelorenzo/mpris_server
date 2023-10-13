@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from pathlib import PurePath
-from typing import ClassVar
+from typing import ClassVar, Final
 
 from .interface import MprisInterface, log_trace
 from ..base import DbusTypes, Paths, ROOT_INTERFACE
 from ..enums import Access, Method, Property
-from ..types import Final
 
 
 NO_SUFFIX: Final[str] = ''

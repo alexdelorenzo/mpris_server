@@ -4,13 +4,12 @@ from __future__ import annotations
 
 from functools import wraps
 from random import choices
-from typing import Callable, Optional
+from typing import Callable, Final, Optional
 
 from emoji import demojize, emoji_count
 from unidecode import unidecode
 
 from ..base import DbusObj, NAME_PREFIX, P, RAND_CHARS, VALID_CHARS
-from ..types import Final
 
 
 DBUS_NAME_MAX: Final[int] = 255

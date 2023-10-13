@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Iterable, NamedTuple, Optional, Self, Union, cast
+from typing import Any, Final, Iterable, NamedTuple, Optional, Self, Union, cast, \
+  TypedDict
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
 
 from ..base import DEFAULT_TRACK_ID, DbusMetadata, DbusObj, DbusPyTypes, \
   DbusType, DbusTypes, MprisTypes, PyType
-from ..types import Final, TypedDict, get_type, is_type
+from ..types import get_type, is_type
 
 
 DEFAULT_METADATA: Final[Metadata] = {}

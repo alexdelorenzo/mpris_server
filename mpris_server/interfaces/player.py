@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from enum import StrEnum
-from typing import ClassVar, Optional
+from typing import ClassVar, Final, Optional
 
 from gi.repository.GLib import Variant
 from pydbus.generic import signal
@@ -12,7 +12,6 @@ from ..base import BEGINNING, DbusTypes, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, 
   PlayState, Position, ROOT_INTERFACE, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, Method, Property, Signal
 from ..mpris.metadata import DEFAULT_METADATA, DbusMetadata, Metadata, get_dbus_metadata
-from ..types import Final
 
 
 class LoopStatus(StrEnum):

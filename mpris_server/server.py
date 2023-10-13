@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Final, Optional
 from weakref import finalize
 from enum import auto
 import logging
@@ -8,7 +8,6 @@ from strenum import StrEnum
 from gi.repository import GLib
 import pydbus
 
-from .types import Final
 from .adapters import MprisAdapter
 from .base import NAME, BUS_TYPE, DBUS_PATH, \
   ROOT_INTERFACE

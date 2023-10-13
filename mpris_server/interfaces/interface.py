@@ -2,14 +2,13 @@ from __future__ import annotations
 
 from abc import ABC
 from functools import wraps
-from typing import ClassVar, Optional, Self, TYPE_CHECKING
+from typing import ClassVar, Final, Optional, Self, TYPE_CHECKING
 import logging
 
 from pydbus.generic import signal
 
 from ..base import NAME, P, ROOT_INTERFACE
 from ..enums import Method
-from ..types import Final
 
 if TYPE_CHECKING:
   from ..adapters import MprisAdapter
