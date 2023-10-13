@@ -28,39 +28,41 @@ class Player(MprisInterface):
   <node>
     <interface name="{INTERFACE}">
       <method name="{Method.Next}"/>
-      <method name="{Method.Previous}"/>
       <method name="{Method.Pause}"/>
       <method name="{Method.PlayPause}"/>
-      <method name="{Method.Stop}"/>
       <method name="{Method.Play}"/>
-      <method name="{Method.Seek}">
+      <method name="{Method.Previous}"/>
+      <method name="{Method.Stop}"/>
+      <method name="{Method.OpenUri}">
+        <arg name="{Arg.Uri}" type="{DbusTypes.STRING}" direction="{Direction.In}"/>
+      </method>
+        <method name="{Method.Seek}">
         <arg name="{Arg.Offset}" type="{DbusTypes.INT64}" direction="{Direction.In}"/>
       </method>
       <method name="{Method.SetPosition}">
         <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
         <arg name="{Arg.Position}" type="{DbusTypes.INT64}" direction="{Direction.In}"/>
       </method>
-      <method name="{Method.OpenUri}">
-        <arg name="{Arg.Uri}" type="{DbusTypes.STRING}" direction="{Direction.In}"/>
-      </method>
+
+      <property name="{Property.CanControl}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanGoNext}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanGoPrevious}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanPause}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanPlay}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.CanSeek}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.LoopStatus}" type="{DbusTypes.STRING}" access="{Access.readwrite}"/>
+      <property name="{Property.MaximumRate}" type="{DbusTypes.DOUBLE}" access="{Access.read}"/>
+      <property name="{Property.Metadata}" type="{DbusTypes.METADATA}" access="{Access.read}"/>
+      <property name="{Property.MinimumRate}" type="{DbusTypes.DOUBLE}" access="{Access.read}"/>
+      <property name="{Property.PlaybackStatus}" type="{DbusTypes.STRING}" access="{Access.read}"/>
+      <property name="{Property.Position}" type="{DbusTypes.INT64}" access="{Access.read}"/>
+      <property name="{Property.Rate}" type="{DbusTypes.DOUBLE}" access="{Access.readwrite}"/>
+      <property name="{Property.Shuffle}" type="{DbusTypes.BOOLEAN}" access="{Access.readwrite}"/>
+      <property name="{Property.Volume}" type="{DbusTypes.DOUBLE}" access="{Access.readwrite}"/>
+
       <signal name="{Signal.Seeked}">
         <arg name="{Arg.Position}" type="{DbusTypes.INT64}"/>
       </signal>
-      <property name="{Property.PlaybackStatus}" type="{DbusTypes.STRING}" access="{Access.read}"/>
-      <property name="{Property.LoopStatus}" type="{DbusTypes.STRING}" access="{Access.readwrite}"/>
-      <property name="{Property.Rate}" type="{DbusTypes.DOUBLE}" access="{Access.readwrite}"/>
-      <property name="{Property.Shuffle}" type="{DbusTypes.BOOLEAN}" access="{Access.readwrite}"/>
-      <property name="{Property.Metadata}" type="{DbusTypes.METADATA}" access="{Access.read}"/>
-      <property name="{Property.Volume}" type="{DbusTypes.DOUBLE}" access="{Access.readwrite}"/>
-      <property name="{Property.Position}" type="{DbusTypes.INT64}" access="{Access.read}"/>
-      <property name="{Property.MinimumRate}" type="{DbusTypes.DOUBLE}" access="{Access.read}"/>
-      <property name="{Property.MaximumRate}" type="{DbusTypes.DOUBLE}" access="{Access.read}"/>
-      <property name="{Property.CanGoNext}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.CanGoPrevious}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.CanPlay}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.CanPause}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.CanSeek}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.CanControl}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
     </interface>
   </node>
   """
