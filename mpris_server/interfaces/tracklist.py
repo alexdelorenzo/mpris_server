@@ -31,6 +31,10 @@ class TrackList(MprisInterface):
       <method name="{Method.RemoveTrack}">
         <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
       </method>
+
+      <property name="{Property.CanEditTracks}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
+      <property name="{Property.Tracks}" type="{DbusTypes.OBJ_ARRAY}" access="{Access.read}"/>
+
       <signal name="{Signal.TrackListReplaced}">
         <arg name="{Arg.Tracks}" type="{DbusTypes.OBJ_ARRAY}"/>
         <arg name="{Arg.CurrentTrack}" type="{DbusTypes.OBJ}"/>
@@ -46,8 +50,6 @@ class TrackList(MprisInterface):
         <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}"/>
         <arg name="{Arg.Metadata}" type="{DbusTypes.METADATA}"/>
       </signal>
-      <property name="{Property.CanEditTracks}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.Tracks}" type="{DbusTypes.OBJ_ARRAY}" access="{Access.read}"/>
     </interface>
   </node>
   """

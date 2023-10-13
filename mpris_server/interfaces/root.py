@@ -21,6 +21,7 @@ class Root(MprisInterface):
     <interface name="{INTERFACE}">
       <method name="{Method.Quit}"/>
       <method name="{Method.Raise}"/>
+
       <property name="{Property.CanQuit}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
       <property name="{Property.CanRaise}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
       <property name="{Property.CanSetFullscreen}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>

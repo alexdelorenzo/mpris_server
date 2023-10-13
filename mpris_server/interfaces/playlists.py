@@ -25,12 +25,14 @@ class Playlists(MprisInterface):
         <arg name="{Arg.ReverseOrder}" type="{DbusTypes.BOOLEAN}" direction="{Direction.In}"/>
         <arg name="{Arg.Playlists}" type="{DbusTypes.PLAYLISTS}" direction="{Direction.out}"/>
       </method>
-      <signal name="{Signal.PlaylistChanged}">
-        <arg name="{Arg.Playlist}" type="{DbusTypes.PLAYLIST}"/>
-      </signal>
+
       <property name="{Property.ActivePlaylist}" type="{DbusTypes.MAYBE_PLAYLIST}" access="{Access.read}"/>
       <property name="{Property.Orderings}" type="{DbusTypes.STRING_ARRAY}" access="{Access.read}"/>
       <property name="{Property.PlaylistCount}" type="{DbusTypes.UINT32}" access="{Access.read}"/>
+
+      <signal name="{Signal.PlaylistChanged}">
+        <arg name="{Arg.Playlist}" type="{DbusTypes.PLAYLIST}"/>
+      </signal>
     </interface>
   </node>
   """
