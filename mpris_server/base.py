@@ -13,13 +13,14 @@ from strenum import StrEnum
 from .enums import Property
 from .types import Final, GenericAlias, _GenericAlias
 
-
 if TYPE_CHECKING:
   from .interfaces.interface import MprisInterface
+
 
 NoTrack: Final[str] = '/org/mpris/MediaPlayer2/TrackList/NoTrack'
 
 Properties = list[Property]
+
 
 INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
 ROOT_INTERFACE: Final[str] = INTERFACE
