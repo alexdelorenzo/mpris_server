@@ -1,14 +1,20 @@
 from typing import List
 from setuptools import setup, find_packages
 from pathlib import Path
+from mpris_server import __version__
 
-# from mpris_server import __version__
 
+__author__ = "Alex DeLorenzo <alex@alexdelorenzo.dev>"
+
+NAME = "mpris_server"
+DESCRIPTION = "⏯️ Publish a MediaPlayer2 MPRIS device to D-Bus."
+LICENSE = "AGPL-3.0"
+URL = "https://github.com/alexdelorenzo/mpris_server"
 
 PKGS: list[str] = list({
-  'mpris_server',
-  'mpris_server.mpris',
-  'mpris_server.interfaces',
+  f'{NAME}',
+  f'{NAME}.mpris',
+  f'{NAME}.interfaces',
   *find_packages(),
 })
 
@@ -24,18 +30,19 @@ REQS: list[str] = [
 
 README: str = Path('README.md').read_text()
 
+PYTHON_VERSION = '>=3.11'
 
 setup(
-  name="mpris_server",
-  version='0.8.0',
-  description="⏯️ Publish a MediaPlayer2 MPRIS device to D-Bus.",
+  name=NAME,
+  version=__version__,
+  description=DESCRIPTION,
   long_description=README,
   long_description_content_type="text/markdown",
-  url="https://alexdelorenzo.dev",
-  author="Alex DeLorenzo <alex@alexdelorenzo.dev>",
-  license="AGPL-3.0",
+  url=URL,
+  author=__author__,
+  license=LICENSE,
   packages=PKGS,
   zip_safe=True,
   install_requires=REQS,
-  python_requires='>=3.11',
+  python_requires=PYTHON_VERSION,
 )
