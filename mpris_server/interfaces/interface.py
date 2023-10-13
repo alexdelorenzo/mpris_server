@@ -7,7 +7,8 @@ import logging
 
 from pydbus.generic import signal
 
-from ..base import Method, NAME, P, ROOT_INTERFACE
+from ..base import NAME, P, ROOT_INTERFACE
+from ..enums import Method
 from ..types import Final
 
 if TYPE_CHECKING:
