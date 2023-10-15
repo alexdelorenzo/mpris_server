@@ -31,12 +31,17 @@ type Changes = list[Property | str]
 
 
 class BaseEventAdapter(ABC):
+  root: Root
+  player: Player
+  playlist: Playlists | None
+  tracklist: TrackList | None
+
   def __init__(
     self,
     player: Player,
     root: Root,
-    playlist: Optional[Playlists] = None,
-    tracklist: Optional[TrackList] = None,
+    playlist: Playlists | None = None,
+    tracklist: TrackList | None = None,
   ):
     self.root = root
     self.player = player

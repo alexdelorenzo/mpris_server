@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from typing import Final, GenericAlias, Union, _GenericAlias, get_origin
+from typing import Final, GenericAlias, _GenericAlias, get_origin
 
 
 ORIGIN: Final[str] = '__origin__'
 
 
-GenericAliases = Union[GenericAlias, _GenericAlias]
+type GenericAliases = GenericAlias | _GenericAlias
 
 
 def is_type(obj: type) -> bool:
