@@ -11,11 +11,12 @@ from .mpris.metadata import Metadata, ValidMetadata
 
 
 __all__ = [
-  'RootAdapter',
+  'MprisAdapter',
+  'NoTrack',
   'PlayerAdapter',
   'PlaylistAdapter',
+  'RootAdapter',
   'TrackListAdapter',
-  'MprisAdapter',
 ]
 
 
