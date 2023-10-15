@@ -26,6 +26,9 @@ __all__ = [
 ]
 
 
+type Properties = list[Property | str]
+
+
 class BaseEventAdapter(ABC):
   def __init__(
     self,
@@ -40,7 +43,7 @@ class BaseEventAdapter(ABC):
     self.tracklist = tracklist
 
   @staticmethod
-  def emit_changes(interface: MprisInterface, changes: list[Property | str]):
+  def emit_changes(interface: MprisInterface, changes: Properties):
     dbus_emit_changes(interface, changes)
 
   @abstractmethod
@@ -54,7 +57,7 @@ class RootEventAdapter(BaseEventAdapter, ABC):
     self.on_root_all()
     super().emit_all()
 
-  def emit_root_changes(self, changes: list[str]):
+  def emit_root_changes(self, changes: Properties):
     self.emit_changes(self.root, changes)
 
   def on_root_all(self):
@@ -66,7 +69,7 @@ class PlayerEventAdapter(BaseEventAdapter, ABC):
     self.on_player_all()
     super().emit_all()
 
-  def emit_player_changes(self, changes: list[str]):
+  def emit_player_changes(self, changes: Properties):
     self.emit_changes(self.player, changes)
 
   def on_ended(self):
@@ -100,7 +103,7 @@ class PlaylistsEventAdapter(BaseEventAdapter, ABC):
     self.on_playerlists_all()
     super().emit_all()
 
-  def emit_playlist_changes(self, changes: list[Property]):
+  def emit_playlist_changes(self, changes: Properties):
     self.emit_changes(self.playlist, changes)
 
   def on_playlist_change(self, playlist_id: DbusObj):
@@ -116,7 +119,7 @@ class TracklistEventAdapter(BaseEventAdapter, ABC):
     self.on_tracklist_all()
     super().emit_all()
 
-  def emit_tracklist_changes(self, changes: list[Property]):
+  def emit_tracklist_changes(self, changes: Properties):
     self.emit_changes(self.tracklist, changes)
 
   def on_list_replaced(self, tracks: list[DbusObj], current_track: DbusObj):
