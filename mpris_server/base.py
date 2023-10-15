@@ -163,8 +163,8 @@ PAUSE_RATE: Final[Rate] = Rate(0.0)
 MIN_RATE: Final[Rate] = Rate(1.0)
 MAX_RATE: Final[Rate] = Rate(1.0)
 
-MUTE_VOL: Final[Rate] = Rate(0.0)
-MAX_VOL: Final[Rate] = Rate(1.0)
+MUTE_VOL: Final[Volume] = Volume(0.0)
+MAX_VOL: Final[Volume] = Volume(1.0)
 
 
 class Interfaces(StrEnum):
