@@ -3,10 +3,9 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import override
 
-from . import Property
 from .base import DbusObj, ON_ENDED_PROPS, ON_OPTION_PROPS, ON_PLAYBACK_PROPS, ON_PLAYER_PROPS, ON_PLAYLIST_PROPS, \
   ON_PLAYPAUSE_PROPS, ON_ROOT_PROPS, ON_SEEK_PROPS, ON_TITLE_PROPS, ON_TRACKS_PROPS, ON_VOLUME_PROPS, Position, \
-  dbus_emit_changes
+  dbus_emit_changes, Changes
 from .interfaces.interface import MprisInterface
 from .interfaces.player import Player
 from .interfaces.playlists import Playlists
@@ -24,9 +23,6 @@ __all__ = [
   'RootEventAdapter',
   'TracklistEventAdapter',
 ]
-
-
-type Changes = list[Property | str]
 
 
 class BaseEventAdapter(ABC):
@@ -48,7 +44,7 @@ class BaseEventAdapter(ABC):
     self.tracklist = tracklist
 
   @staticmethod
-  def emit_changes(interface: MprisInterface, changes: Changes):
+  def emit_changes[T: MprisInterface](interface: T, changes: Changes):
     dbus_emit_changes(interface, changes)
 
   @abstractmethod
@@ -76,6 +72,9 @@ class PlayerEventAdapter(BaseEventAdapter, ABC):
     self.on_player_all()
     super().emit_all()
 
+  def on_player_all(self):
+    self.emit_player_changes(ON_PLAYER_PROPS)
+
   def emit_player_changes(self, changes: Changes):
     self.emit_changes(self.player, changes)
 
@@ -101,9 +100,6 @@ class PlayerEventAdapter(BaseEventAdapter, ABC):
   def on_options(self):
     self.emit_player_changes(ON_OPTION_PROPS)
 
-  def on_player_all(self):
-    self.emit_player_changes(ON_PLAYER_PROPS)
-
 
 class PlaylistsEventAdapter(BaseEventAdapter, ABC):
   @override
@@ -114,11 +110,11 @@ class PlaylistsEventAdapter(BaseEventAdapter, ABC):
   def emit_playlist_changes(self, changes: Changes):
     self.emit_changes(self.playlist, changes)
 
-  def on_playlist_change(self, playlist_id: DbusObj):
-    self.playlist.PlaylistChanged(playlist_id)
+  def on_playerlists_all(self):
     self.emit_playlist_changes(ON_PLAYLIST_PROPS)
 
-  def on_playerlists_all(self):
+  def on_playlist_change(self, playlist_id: DbusObj):
+    self.playlist.PlaylistChanged(playlist_id)
     self.emit_playlist_changes(ON_PLAYLIST_PROPS)
 
 
@@ -130,6 +126,9 @@ class TracklistEventAdapter(BaseEventAdapter, ABC):
 
   def emit_tracklist_changes(self, changes: Changes):
     self.emit_changes(self.tracklist, changes)
+
+  def on_tracklist_all(self):
+    self.emit_tracklist_changes(ON_TRACKS_PROPS)
 
   def on_list_replaced(self, tracks: list[DbusObj], current_track: DbusObj):
     self.tracklist.TrackListReplaced(tracks, current_track)
@@ -145,9 +144,6 @@ class TracklistEventAdapter(BaseEventAdapter, ABC):
 
   def on_track_metadata_change(self, track_id: DbusObj, metadata: Metadata):
     self.tracklist.TrackMetadataChanged(track_id, metadata)
-    self.emit_tracklist_changes(ON_TRACKS_PROPS)
-
-  def on_tracklist_all(self):
     self.emit_tracklist_changes(ON_TRACKS_PROPS)
 
 

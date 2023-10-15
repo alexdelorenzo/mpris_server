@@ -112,11 +112,17 @@ class Ordering(StrEnum):
 
 
 DEFAULT_TRACK_ID: Final[str] = '/default/1'
+DEFAULT_TRACK_NAME: Final[str] = "Default Track"
+DEFAULT_TRACK_LENGTH: Final[int] = 0
 DEFAULT_PLAYLIST_COUNT: Final[int] = 1
 DEFAULT_ORDERINGS: Final[list[Ordering]] = [
   Ordering.Alphabetical,
   Ordering.User,
 ]
+NO_ARTISTS: Final[tuple[Artist]] = tuple()
+DEFAULT_ALBUM_NAME: Final[str] = "Default Album"
+DEFAULT_ARTIST_NAME: Final[str] = "Default Artist"
+
 
 BEGINNING: Final[int] = 0
 
@@ -129,6 +135,7 @@ RAND_CHARS: Final[int] = 5
 
 # type aliases
 type Paths = PathLike | str
+type Changes = Iterable[Property | str]
 
 # units and convenience aliases
 Microseconds = int
@@ -230,31 +237,31 @@ MprisTypes: Final = _MprisTypes()
 
 
 class Artist(NamedTuple):
-  name: str = "Default Artist"
+  name: str = DEFAULT_ARTIST_NAME
 
 
 class Album(NamedTuple):
   art_url: str | None = None
-  artists: tuple[Artist] = tuple()
-  name: str = "Default Album"
+  artists: tuple[Artist] = NO_ARTISTS
+  name: str = DEFAULT_ALBUM_NAME
 
 
 class Track(NamedTuple):
   album: Album | None = None
   art_url: str | None = None
-  artists: tuple[Artist] = tuple()
+  artists: tuple[Artist] = NO_ARTISTS
   disc_no: int | None = None
-  length: Duration = 0
-  name: str = "Default Track"
+  length: Duration = DEFAULT_TRACK_LENGTH
+  name: str = DEFAULT_TRACK_NAME
   track_id: DbusObj = DEFAULT_TRACK_ID
   track_no: int | None = None
   type: Enum | None = None
   uri: str | None = None
 
 
-def dbus_emit_changes(
-  interface: MprisInterface,
-  changes: Iterable[Property]
+def dbus_emit_changes[T: MprisInterface](
+  interface: T,
+  changes: Changes,
 ):
   prop_vals: PropVals = {
     prop: getattr(interface, prop)
