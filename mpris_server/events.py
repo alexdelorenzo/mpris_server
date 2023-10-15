@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from typing import override
 
 from . import Property
 from .base import DbusObj, ON_ENDED_PROPS, ON_OPTION_PROPS, ON_PLAYBACK_PROPS, ON_PLAYER_PROPS, ON_PLAYLIST_PROPS, \
@@ -57,6 +58,7 @@ class BaseEventAdapter(ABC):
 
 
 class RootEventAdapter(BaseEventAdapter, ABC):
+  @override
   def emit_all(self):
     self.on_root_all()
     super().emit_all()
@@ -69,6 +71,7 @@ class RootEventAdapter(BaseEventAdapter, ABC):
 
 
 class PlayerEventAdapter(BaseEventAdapter, ABC):
+  @override
   def emit_all(self):
     self.on_player_all()
     super().emit_all()
@@ -103,6 +106,7 @@ class PlayerEventAdapter(BaseEventAdapter, ABC):
 
 
 class PlaylistsEventAdapter(BaseEventAdapter, ABC):
+  @override
   def emit_all(self):
     self.on_playerlists_all()
     super().emit_all()
@@ -119,6 +123,7 @@ class PlaylistsEventAdapter(BaseEventAdapter, ABC):
 
 
 class TracklistEventAdapter(BaseEventAdapter, ABC):
+  @override
   def emit_all(self):
     self.on_tracklist_all()
     super().emit_all()
