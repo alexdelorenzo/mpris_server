@@ -169,19 +169,25 @@ class Player(MprisInterface):
     # build metadata if no metadata supplied by adapter
     logging.debug(f"Building {self.INTERFACE}.{Property.Metadata}")
 
+    metadata: DbusMetadata = {}
+
     track = self.adapter.get_current_track()
     stream_title = self.adapter.get_stream_title()
 
+    if stream_title or track and track.name:
+      metadata[MetadataEntries.TITLE] = Variant(
+        DbusTypes.STRING,
+        stream_title or track.name,
+      )
+
     if track is None:
       logging.warning("Couldn't find track, please implement `metadata()` or `get_current_track()` methods.")
-      return DEFAULT_METADATA
+      return metadata
 
-    metadata: dict[MetadataEntries, Variant] = {
-      MetadataEntries.TRACK_ID: Variant(
-        DbusTypes.OBJ,
-        track.track_id,
-      )
-    }
+    metadata[MetadataEntries.TRACK_ID] = Variant(
+      DbusTypes.OBJ,
+      track.track_id,
+    )
 
     if track.length:
       metadata[MetadataEntries.LENGTH] = Variant(
@@ -193,12 +199,6 @@ class Player(MprisInterface):
       metadata[MetadataEntries.URL] = Variant(
         DbusTypes.STRING,
         track.uri,
-      )
-
-    if stream_title or track.name:
-      metadata[MetadataEntries.TITLE] = Variant(
-        DbusTypes.STRING,
-        stream_title or track.name,
       )
 
     if track.artists:
