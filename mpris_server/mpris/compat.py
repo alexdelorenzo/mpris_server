@@ -9,7 +9,7 @@ from typing import Callable, Final
 from emoji import demojize, emoji_count
 from unidecode import unidecode
 
-from ..base import DbusObj, NAME_PREFIX, P, RAND_CHARS, VALID_CHARS
+from ..base import DbusObj, NAME_PREFIX, RAND_CHARS, VALID_CHARS
 
 
 DBUS_NAME_MAX: Final[int] = 255
@@ -38,7 +38,7 @@ def random_name() -> str:
   return NAME_PREFIX + rand
 
 
-def enforce_dbus_length(func: ReturnsStr) -> ReturnsStr:
+def enforce_dbus_length[**P](func: ReturnsStr) -> ReturnsStr:
   @wraps(func)
   def new_func(*args: P.args, **kwargs: P.kwargs) -> str:
     val: str = func(*args, **kwargs)
