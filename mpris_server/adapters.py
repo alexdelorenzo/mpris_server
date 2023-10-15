@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC
+from typing import Final
 
 from .base import ActivePlaylist, DEFAULT_DESKTOP, DEFAULT_ORDERINGS, DEFAULT_PLAYLIST_COUNT, DEFAULT_RATE, DbusObj, \
   MIME_TYPES, NoTrack, Ordering, Paths, PlayState, PlaylistEntry, Position, Rate, Track, URI, Volume
@@ -16,6 +17,8 @@ __all__ = [
   'RootAdapter',
   'TrackListAdapter',
 ]
+
+DEFAULT_ADAPTER_NAME: Final[str] = 'MprisAdapter'
 
 
 class RootAdapter(ABC):
@@ -241,5 +244,7 @@ class MprisAdapter(
   returned from this adapter.
   """
 
-  def __init__(self, name: str = 'MprisAdapter'):
+  name: str
+
+  def __init__(self, name: str = DEFAULT_ADAPTER_NAME):
     self.name = name
