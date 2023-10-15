@@ -13,7 +13,7 @@ from ..mpris.metadata import Metadata
 class TrackList(MprisInterface):
   INTERFACE: ClassVar[Interfaces] = Interfaces.TrackList
 
-  __doc__ = f"""
+  __doc__: Final[str] = f"""
   <node>
     <interface name="{INTERFACE}">
       <method name="{Method.AddTrack}">

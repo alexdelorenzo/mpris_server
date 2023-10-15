@@ -16,7 +16,7 @@ NO_DESKTOP_ENTRY: Final[str] = ''
 class Root(MprisInterface):
   INTERFACE: ClassVar[Interfaces] = Interfaces.Root
 
-  __doc__ = f"""
+  __doc__: Final[str] = f"""
   <node>
     <interface name="{INTERFACE}">
       <method name="{Method.Quit}"/>
@@ -63,7 +63,7 @@ class Root(MprisInterface):
 
   @Fullscreen.setter
   @log_trace
-  def Fullscreen(self, value):
+  def Fullscreen(self, value: bool):
     self.adapter.set_fullscreen(value)
 
   @property

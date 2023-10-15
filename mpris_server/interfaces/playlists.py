@@ -5,14 +5,14 @@ from typing import ClassVar, Final
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import ActivePlaylist, DbusTypes, Interfaces, PlaylistEntry, ROOT_INTERFACE
+from ..base import ActivePlaylist, DbusTypes, Interfaces, Ordering, PlaylistEntry, PlaylistId, ROOT_INTERFACE
 from ..enums import Access, Arg, Direction, Method, Property, Signal
 
 
 class Playlists(MprisInterface):
   INTERFACE: ClassVar[Interfaces] = Interfaces.Playlists
 
-  __doc__ = f"""
+  __doc__: Final[str] = f"""
   <node>
     <interface name="{INTERFACE}">
       <method name="{Method.ActivatePlaylist}">
@@ -50,7 +50,7 @@ class Playlists(MprisInterface):
 
   @property
   @log_trace
-  def Orderings(self) -> list[str]:
+  def Orderings(self) -> list[Ordering]:
     return self.adapter.get_orderings()
 
   @property
@@ -59,7 +59,7 @@ class Playlists(MprisInterface):
     return self.adapter.get_playlist_count()
 
   @log_trace
-  def ActivatePlaylist(self, playlist_id: str):
+  def ActivatePlaylist(self, playlist_id: PlaylistId):
     self.adapter.activate_playlist(playlist_id)
     # logging.debug(
     #     "%s.ActivatePlaylist(%r) called", self.INTERFACE, playlist_id
