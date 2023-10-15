@@ -132,12 +132,12 @@ RAND_CHARS: Final[int] = 5
 type Paths = PathLike | str
 
 # units and convenience aliases
-type Microseconds = int
-type Position = Microseconds
-type Duration = Microseconds
-type UnitInterval = Decimal
-type Volume = UnitInterval
-type Rate = UnitInterval
+Microseconds = int
+Position = Microseconds
+Duration = Microseconds
+UnitInterval = Decimal
+Volume = UnitInterval
+Rate = UnitInterval
 
 type PlaylistId = str
 type PlaylistName = str
