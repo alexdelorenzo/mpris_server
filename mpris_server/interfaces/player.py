@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import logging
-from enum import StrEnum
 from typing import ClassVar, Final, Optional
 
 from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
+from .. import LoopStatus
 from ..base import Artist, BEGINNING, DbusTypes, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, PAUSE_RATE, \
   PlayState, Position, ROOT_INTERFACE, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, Method, Property, Signal
@@ -15,12 +15,6 @@ from ..mpris.metadata import DEFAULT_METADATA, DbusMetadata, Metadata, MetadataE
 
 
 NO_NAME: Final[str] = ''
-
-
-class LoopStatus(StrEnum):
-  NONE: str = 'None'
-  TRACK: str = 'Track'
-  PLAYLIST: str = 'Playlist'
 
 
 class Player(MprisInterface):
