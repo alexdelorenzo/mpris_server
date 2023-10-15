@@ -173,6 +173,7 @@ class Player(MprisInterface):
     stream_title = self.adapter.get_stream_title()
 
     if track is None:
+      logging.warning("Couldn't find track, please implement `metadata()` or `get_current_track()` methods.")
       return DEFAULT_METADATA
 
     metadata: dict[MetadataEntries, Variant] = {
@@ -321,7 +322,7 @@ class Player(MprisInterface):
     if value > MUTE_VOL:
       self.adapter.set_mute(False)
 
-    elif value == MUTE_VOL:
+    elif value <= MUTE_VOL:
       self.adapter.set_mute(True)
 
   @log_trace
