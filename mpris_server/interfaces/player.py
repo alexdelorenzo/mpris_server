@@ -161,23 +161,19 @@ class Player(MprisInterface):
 
   @property
   @log_trace
-  def MaximumRate(self) -> Rate:
-    rate = self.adapter.get_minimum_rate()
+  def MinimumRate(self) -> Rate:
+    if rate := self.adapter.get_minimum_rate():
+      return rate
 
-    if rate is None:
-      return MAX_RATE
-
-    return rate
+    return MIN_RATE
 
   @property
   @log_trace
-  def MinimumRate(self) -> Rate:
-    rate = self.adapter.get_minimum_rate()
+  def MaximumRate(self) -> Rate:
+    if rate := self.adapter.get_maximum_rate():
+      return rate
 
-    if rate is None:
-      return MIN_RATE
-
-    return rate
+    return MAX_RATE
 
   @property
   @log_trace
