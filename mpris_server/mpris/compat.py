@@ -21,7 +21,7 @@ VALID_CHARS_SUB: Final[tuple[str, ...]] = tuple(VALID_CHARS)
 INTERFACE_CHARS: Final[set[str]] = {*VALID_CHARS, '-'}
 
 
-ReturnsStr = Callable[P, str]
+type ReturnsStr[**P] = Callable[P, str]
 
 
 def to_ascii(text: str) -> str:
