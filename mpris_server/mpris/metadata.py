@@ -242,7 +242,7 @@ def get_dbus_var(entry: MetadataEntry, obj: DbusObj) -> Variant:
   return Variant(metadata_type, obj)
 
 
-def get_dbus_metadata(metadata: ValidMetadata) -> DbusMetadata:
+def get_dbus_metadata(metadata: ValidMetadata) -> Metadata:
   if isinstance(metadata, MetadataObj):
     metadata: Metadata = metadata.to_dict()
 
