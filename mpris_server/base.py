@@ -5,7 +5,7 @@ from enum import Enum, auto
 from os import PathLike
 from string import ascii_letters, digits
 from typing import Callable, Concatenate, Final, Iterable, \
-  NamedTuple, Optional, Self, TYPE_CHECKING
+  NamedTuple, Self, TYPE_CHECKING
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
@@ -32,7 +32,6 @@ MIME_TYPES: Final[list[str]] = [
   "application/ogg",
   "video/mpeg",
 ]
-BUS_TYPE: Final[str] = "session"
 URI: Final[list[str]] = [
   "file",
 ]
@@ -153,7 +152,6 @@ type PropVals = dict[Property, DbusPyTypes]
 type DbusMetadata = dict[Property, Variant]
 type DbusType = str
 type DbusObj = str
-
 
 type Method[S, **P, T] = Callable[Concatenate[S, P], T]
 
