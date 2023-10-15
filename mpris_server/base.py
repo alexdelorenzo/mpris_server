@@ -15,14 +15,15 @@ from .enums import Property
 if TYPE_CHECKING:
   from .interfaces.interface import MprisInterface
 
-NoTrack: Final[str] = '/org/mpris/MediaPlayer2/TrackList/NoTrack'
-
-Properties = list[Property]
 
 INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
 ROOT_INTERFACE: Final[str] = INTERFACE
 DBUS_PATH: Final[str] = '/org/mpris/MediaPlayer2'
 NAME: Final[str] = "mprisServer"
+
+NoTrack: Final[str] = f'{DBUS_PATH}/TrackList/NoTrack'
+Properties = list[Property]
+
 
 MIME_TYPES: Final[list[str]] = [
   "audio/mpeg",
