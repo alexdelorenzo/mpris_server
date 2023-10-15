@@ -10,6 +10,7 @@ from ..enums import Access, Method, Property
 
 NO_SUFFIX: Final[str] = ''
 DESKTOP_EXT: Final[str] = '.desktop'
+NO_DESKTOP_ENTRY: Final[str] = ''
 
 
 class Root(MprisInterface):
@@ -94,7 +95,10 @@ class Root(MprisInterface):
     self.adapter.set_raise(True)
 
 
-def get_desktop_entry(path: Paths) -> str:
+def get_desktop_entry(path: Paths | None) -> str:
+  if not path:
+    return NO_DESKTOP_ENTRY
+
   # mpris requires stripped suffix
   if isinstance(path, PurePath):
     path = path.with_suffix(NO_SUFFIX)
