@@ -25,7 +25,10 @@ def log_trace[S, **P, T](method: Method) -> Method:
   return new_method
 
 
-class MprisInterface(ABC):
+class MprisInterface[T: MprisAdapter](ABC):
+  name: str
+  adapter: T | None
+
   INTERFACE: ClassVar[Interfaces] = Interfaces.Root
 
   PropertiesChanged: Final[signal] = signal()
@@ -33,7 +36,7 @@ class MprisInterface(ABC):
   def __init__(
     self,
     name: str = NAME,
-    adapter: MprisAdapter | None = None
+    adapter: T | None = None
   ):
     self.name = name
     self.adapter = adapter
