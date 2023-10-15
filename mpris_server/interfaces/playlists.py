@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import ClassVar, Final
 
 from pydbus.generic import signal
 
@@ -37,7 +37,7 @@ class Playlists(MprisInterface):
   </node>
   """
 
-  PlaylistChanged = signal()
+  PlaylistChanged: Final[signal] = signal()
 
   @property
   @log_trace

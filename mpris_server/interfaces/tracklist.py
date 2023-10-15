@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import ClassVar, Final
 
 from pydbus.generic import signal
 
@@ -54,10 +54,10 @@ class TrackList(MprisInterface):
   </node>
   """
 
-  TrackAdded = signal()
-  TrackListReplaced = signal()
-  TrackMetadataChanged = signal()
-  TrackRemoved = signal()
+  TrackAdded: Final[signal] = signal()
+  TrackListReplaced: Final[signal] = signal()
+  TrackMetadataChanged: Final[signal] = signal()
+  TrackRemoved: Final[signal] = signal()
 
   @property
   def CanEditTracks(self) -> bool:
