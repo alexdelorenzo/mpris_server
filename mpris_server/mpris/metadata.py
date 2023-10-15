@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Final, Iterable, NamedTuple, Self, TypedDict, cast
+from typing import Any, Final, Iterable, NamedTuple, Required, Self, TypedDict, cast
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
@@ -14,10 +14,10 @@ from ..types import get_type, is_type
 DEFAULT_METADATA: Final[Metadata] = {}
 
 
-Name = str
-MetadataEntry = str
-NameMetadata = tuple[Name, DbusPyTypes]
-SortedMetadata = dict[Name, DbusPyTypes]
+type Name = str
+type MetadataEntry = str
+type NameMetadata = tuple[Name, DbusPyTypes]
+type SortedMetadata = dict[Name, DbusPyTypes]
 
 
 class MetadataEntries(StrEnum):
@@ -113,7 +113,7 @@ METADATA_TO_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
   MetadataEntries.LAST_USED: DBUS_TYPES_TO_PY_TYPES[DbusTypes.DATETIME],
   MetadataEntries.LENGTH: DBUS_TYPES_TO_PY_TYPES[DbusTypes.INT64],
   MetadataEntries.LYRICIST: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING_ARRAY],
-  MetadataEntries.TITLE: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING],
+  MetadataEntries.TITLE: Required[DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING]],
   MetadataEntries.TRACK_ID: DBUS_TYPES_TO_PY_TYPES[DbusTypes.OBJ],
   MetadataEntries.TRACK_NUMBER: DBUS_TYPES_TO_PY_TYPES[DbusTypes.INT32],
   MetadataEntries.URL: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING],
