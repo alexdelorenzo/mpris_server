@@ -31,6 +31,12 @@ class Arg(StrEnum):
   Uri: Self = auto()
 
 
+class BusType(StrEnum):
+  session: Self = auto()
+  system: Self = auto()
+  default: Self = session
+
+
 class Direction(StrEnum):
   In: Self = 'in'
   out: Self = auto()
@@ -101,5 +107,3 @@ class Signal(StrEnum):
   TrackListReplaced: Self = auto()
   TrackMetadataChanged: Self = auto()
   TrackRemoved: Self = auto()
-
-
