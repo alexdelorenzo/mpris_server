@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 from abc import ABC
-from typing import Optional
 
-from .base import ActivePlaylist, DEFAULT_DESKTOP, DEFAULT_ORDERINGS, DEFAULT_PLAYLIST_COUNT, \
-  DEFAULT_RATE, DbusObj, MIME_TYPES, Paths, PlayState, PlaylistEntry, Position, Rate, Track, URI, \
-  Volume, NoTrack, Ordering
+from .base import ActivePlaylist, DEFAULT_DESKTOP, DEFAULT_ORDERINGS, DEFAULT_PLAYLIST_COUNT, DEFAULT_RATE, DbusObj, \
+  MIME_TYPES, NoTrack, Ordering, Paths, PlayState, PlaylistEntry, Position, Rate, Track, URI, Volume
 from .enums import LoopStatus
 from .mpris.metadata import Metadata, ValidMetadata
 

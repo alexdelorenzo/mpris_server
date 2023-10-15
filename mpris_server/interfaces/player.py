@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 import logging
-from typing import ClassVar, Final, Optional
+from typing import ClassVar, Final
 
 from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import Artist, BEGINNING, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, PAUSE_RATE, \
-  PlayState, Position, ROOT_INTERFACE, Rate, Track, Volume
-from ..enums import Access, Arg, Direction, Method, Property, Signal, LoopStatus
-from ..mpris.metadata import DEFAULT_METADATA, DbusMetadata, Metadata, MetadataEntries, get_dbus_metadata
+from ..base import Artist, BEGINNING, DbusMetadata, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
+  PAUSE_RATE, \
+  PlayState, Position, Rate, Track, Volume
+from ..enums import Access, Arg, Direction, LoopStatus, Method, Property, Signal
+from ..mpris.metadata import DEFAULT_METADATA, Metadata, MetadataEntries, get_dbus_metadata
 
 
 NO_NAME: Final[str] = ''
@@ -64,7 +65,7 @@ class Player(MprisInterface):
 
   Seeked: Final[signal] = signal()
 
-  def _dbus_metadata(self) -> Optional[DbusMetadata]:
+  def _dbus_metadata(self) -> DbusMetadata | None:
     if metadata := self.adapter.metadata():
       return get_dbus_metadata(metadata)
 

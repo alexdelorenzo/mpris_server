@@ -1,7 +1,8 @@
 from __future__ import annotations
-from typing import Final, Optional
-from weakref import finalize
+
 import logging
+from typing import Final
+from weakref import finalize
 
 from gi.repository import GLib
 from pydbus import SessionBus, SystemBus
@@ -9,7 +10,7 @@ from pydbus.bus import Bus
 from pydbus.publication import Publication
 
 from .adapters import MprisAdapter
-from .base import Interfaces, NAME, DBUS_PATH
+from .base import DBUS_PATH, Interfaces, NAME
 from .enums import BusType
 from .interfaces.player import Player
 from .interfaces.playlists import Playlists

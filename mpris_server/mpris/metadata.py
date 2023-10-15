@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Final, Iterable, NamedTuple, Optional, Self, Union, cast, \
-  TypedDict
+from typing import Any, Final, Iterable, NamedTuple, Self, TypedDict, cast
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
 
-from ..base import DEFAULT_TRACK_ID, DbusMetadata, DbusObj, DbusPyTypes, \
+from ..base import DEFAULT_TRACK_ID, DbusObj, DbusPyTypes, \
   DbusType, DbusTypes, MprisTypes, PyType
 from ..types import get_type, is_type
 
@@ -200,7 +199,8 @@ class MetadataObj(NamedTuple):
 Metadata = \
   TypedDict('Metadata', METADATA_TO_PY_TYPES, total=False)
 
-ValidMetadata = Union[Metadata, MetadataObj]
+
+type ValidMetadata = Metadata | MetadataObj
 
 
 def get_runtime_types() -> tuple[type, ...]:

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from functools import wraps
 from random import choices
-from typing import Callable, Final, Optional
+from typing import Callable, Final
 
 from emoji import demojize, emoji_count
 from unidecode import unidecode
@@ -49,8 +49,8 @@ def enforce_dbus_length(func: ReturnsStr) -> ReturnsStr:
 
 @enforce_dbus_length
 def get_dbus_name(
-  name: Optional[str] = None,
-  is_interface: bool = False
+  name: str | None = None,
+  is_interface: bool = False,
 ) -> str:
   if not name:
     return get_dbus_name(random_name())

@@ -1,14 +1,15 @@
 from __future__ import annotations
 
+import logging
 from abc import ABC
 from functools import wraps
-from typing import ClassVar, Final, Optional, Self, TYPE_CHECKING
-import logging
+from typing import ClassVar, Final, Self, TYPE_CHECKING
 
 from pydbus.generic import signal
 
-from ..base import Interfaces, NAME, P, ROOT_INTERFACE
+from ..base import Interfaces, NAME, P
 from ..enums import Method
+
 
 if TYPE_CHECKING:
   from ..adapters import MprisAdapter
@@ -33,7 +34,7 @@ class MprisInterface(ABC):
   def __init__(
     self,
     name: str = NAME,
-    adapter: Optional[MprisAdapter] = None
+    adapter: MprisAdapter | None = None
   ):
     self.name = name
     self.adapter = adapter

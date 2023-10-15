@@ -4,13 +4,15 @@ from decimal import Decimal
 from enum import Enum, auto
 from os import PathLike
 from string import ascii_letters, digits
-from typing import Callable, Concatenate, Final, Iterable, NamedTuple, Optional, \
-  ParamSpec, Self, TYPE_CHECKING, TypeVar, Union, GenericAlias, _GenericAlias
+from typing import Callable, Concatenate, Final, Iterable, \
+  NamedTuple, Optional, Self, TYPE_CHECKING
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
 
 from .enums import Property
+from .types import GenericAliases
+
 
 if TYPE_CHECKING:
   from .interfaces.interface import MprisInterface
@@ -127,35 +129,34 @@ NAME_PREFIX: Final[str] = "Mpris_Server_"
 RAND_CHARS: Final[int] = 5
 
 # type aliases
-Paths = Union[PathLike, str]
+type Paths = PathLike | str
 
 # units and convenience aliases
-Microseconds = int
-Position = Microseconds
-Duration = Microseconds
-UnitInterval = Decimal
-Volume = UnitInterval
-Rate = UnitInterval
+type Microseconds = int
+type Position = Microseconds
+type Duration = Microseconds
+type UnitInterval = Decimal
+type Volume = UnitInterval
+type Rate = UnitInterval
 
-PlaylistId = str
-PlaylistName = str
-PlaylistIcon = str
-PlaylistEntry = tuple[PlaylistId, PlaylistName, PlaylistIcon]
-PlaylistValidity = bool
-ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
+type PlaylistId = str
+type PlaylistName = str
+type PlaylistIcon = str
+type PlaylistEntry = tuple[PlaylistId, PlaylistName, PlaylistIcon]
+type PlaylistValidity = bool
+type ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
 
 # python, d-bus and mpris types
-PyType = Union[type, GenericAlias, _GenericAlias]
-DbusPyTypes = Union[str, float, int, bool, list, Decimal]
-PropVals = dict[Property, DbusPyTypes]
-DbusMetadata = dict[Property, Variant]
-DbusType = str
-DbusObj = str
+type PyType = type | GenericAliases
+type DbusPyTypes = str | float | int | bool | list | Decimal
+type PropVals = dict[Property, DbusPyTypes]
+type DbusMetadata = dict[Property, Variant]
+type DbusType = str
+type DbusObj = str
 
-T = TypeVar('T')
-P = ParamSpec('P')
 
-Method = Callable[Concatenate[Self, P], T]
+type Method[S, **P, T] = Callable[Concatenate[S, P], T]
+
 
 DEFAULT_RATE: Final[Rate] = Rate(1.0)
 PAUSE_RATE: Final[Rate] = Rate(0.0)
@@ -235,22 +236,22 @@ class Artist(NamedTuple):
 
 
 class Album(NamedTuple):
-  art_url: Optional[str] = None
+  art_url: str | None = None
   artists: tuple[Artist] = tuple()
   name: str = "Default Album"
 
 
 class Track(NamedTuple):
-  album: Optional[Album] = None
-  art_url: Optional[str] = None
+  album: Album | None = None
+  art_url: str | None = None
   artists: tuple[Artist] = tuple()
-  disc_no: Optional[int] = None
+  disc_no: int | None = None
   length: Duration = 0
   name: str = "Default Track"
   track_id: DbusObj = DEFAULT_TRACK_ID
-  track_no: Optional[int] = None
-  type: Optional[Enum] = None
-  uri: Optional[str] = None
+  track_no: int | None = None
+  type: Enum | None = None
+  uri: str | None = None
 
 
 def dbus_emit_changes(
