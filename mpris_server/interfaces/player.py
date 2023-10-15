@@ -181,7 +181,9 @@ class Player(MprisInterface):
       )
 
     if track is None:
-      logging.warning("Couldn't find track, please implement `metadata()` or `get_current_track()` methods.")
+      logging.warning(
+        "Couldn't find metadata, please implement metadata() or get_stream_title() and get_current_track() methods."
+      )
       return metadata
 
     metadata[MetadataEntries.TRACK_ID] = Variant(
