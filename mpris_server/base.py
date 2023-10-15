@@ -165,6 +165,13 @@ MUTE_VOL: Final[Rate] = Rate(0.0)
 MAX_VOL: Final[Rate] = Rate(1.0)
 
 
+class Interfaces(StrEnum):
+  Root: Self = INTERFACE
+  Player: Self = f'{INTERFACE}.Player'
+  TrackList: Self = f'{INTERFACE}.TrackList'
+  Playlists: Self = f'{INTERFACE}.Playlists'
+
+
 class PlayState(StrEnum):
   PAUSED = auto()
   PLAYING = auto()

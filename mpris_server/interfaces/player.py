@@ -7,7 +7,7 @@ from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import Artist, BEGINNING, DbusTypes, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, PAUSE_RATE, \
+from ..base import Artist, BEGINNING, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, PAUSE_RATE, \
   PlayState, Position, ROOT_INTERFACE, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, Method, Property, Signal, LoopStatus
 from ..mpris.metadata import DEFAULT_METADATA, DbusMetadata, Metadata, MetadataEntries, get_dbus_metadata
@@ -17,7 +17,7 @@ NO_NAME: Final[str] = ''
 
 
 class Player(MprisInterface):
-  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.Player"
+  INTERFACE: ClassVar[Interfaces] = Interfaces.Player
 
   __doc__ = f"""
   <node>
@@ -136,10 +136,10 @@ class Player(MprisInterface):
   @log_trace
   def LoopStatus(self, value: LoopStatus):
     if not self.CanControl:
-      logging.debug(f"Setting {self.INTERFACE}.LoopStatus not allowed")
+      logging.debug(f"Setting {self.INTERFACE}.{Property.LoopStatus} not allowed")
       return
 
-    logging.debug(f"Setting {self.INTERFACE}.LoopStatus to {value}")
+    logging.debug(f"Setting {self.INTERFACE}.{Property.LoopStatus} to {value}")
 
     self.adapter.set_loop_status(value)
 
@@ -167,7 +167,7 @@ class Player(MprisInterface):
       return metadata
 
     # build metadata if no metadata supplied by adapter
-    logging.debug(f"Building {self.INTERFACE}.Metadata")
+    logging.debug(f"Building {self.INTERFACE}.{Property.Metadata}")
 
     track = self.adapter.get_current_track()
     stream_title = self.adapter.get_stream_title()
@@ -283,10 +283,10 @@ class Player(MprisInterface):
   @log_trace
   def Shuffle(self, value: bool):
     if not self.CanControl:
-      logging.debug(f"Setting {self.INTERFACE}.Shuffle not allowed")
+      logging.debug(f"Setting {self.INTERFACE}.{Property.Shuffle} not allowed")
       return
 
-    logging.debug(f"Setting {self.INTERFACE}.Shuffle to {value}")
+    logging.debug(f"Setting {self.INTERFACE}.{Property.Shuffle} to {value}")
     self.adapter.set_shuffle(value)
 
   @property
@@ -304,7 +304,7 @@ class Player(MprisInterface):
   @log_trace
   def Volume(self, value: Volume):
     if not self.CanControl:
-      logging.debug(f"Setting {self.INTERFACE}.Volume not allowed")
+      logging.debug(f"Setting {self.INTERFACE}.{Property.Volume} not allowed")
       return
 
     if value is None:
@@ -327,7 +327,7 @@ class Player(MprisInterface):
   @log_trace
   def Next(self):
     if not self.CanGoNext:
-      logging.debug(f"{self.INTERFACE}.Next not allowed")
+      logging.debug(f"{self.INTERFACE}.{Method.Next} not allowed")
       return
 
     self.adapter.next()
@@ -335,7 +335,7 @@ class Player(MprisInterface):
   @log_trace
   def OpenUri(self, uri: str):
     if not self.CanControl:
-      logging.debug(f"{self.INTERFACE}.OpenUri not allowed")
+      logging.debug(f"{self.INTERFACE}.{Method.OpenUri} not allowed")
       return
 
     # NOTE Check if URI has MIME type known to the backend, if MIME support
@@ -345,7 +345,7 @@ class Player(MprisInterface):
   @log_trace
   def Previous(self):
     if not self.CanGoPrevious:
-      logging.debug(f"{self.INTERFACE}.Previous not allowed")
+      logging.debug(f"{self.INTERFACE}.{Method.Previous} not allowed")
       return
 
     self.adapter.previous()
@@ -353,7 +353,7 @@ class Player(MprisInterface):
   @log_trace
   def Pause(self):
     if not self.CanPause:
-      logging.debug(f"{self.INTERFACE}.Pause not allowed")
+      logging.debug(f"{self.INTERFACE}.{Method.Pause} not allowed")
       return
 
     self.adapter.pause()
@@ -361,7 +361,7 @@ class Player(MprisInterface):
   @log_trace
   def Play(self):
     if not self.CanPlay:
-      logging.debug(f"{self.INTERFACE}.Play not allowed")
+      logging.debug(f"{self.INTERFACE}.{Method.Play} not allowed")
       return
 
     state = self.adapter.get_playstate()
@@ -375,7 +375,7 @@ class Player(MprisInterface):
   @log_trace
   def PlayPause(self):
     if not self.CanPause:
-      logging.debug(f"{self.INTERFACE}.PlayPause not allowed")
+      logging.debug(f"{self.INTERFACE}.{Method.PlayPause} not allowed")
       return
 
     state = self.adapter.get_playstate()
@@ -392,7 +392,7 @@ class Player(MprisInterface):
   @log_trace
   def Seek(self, offset: Position):
     if not self.CanSeek:
-      logging.debug(f"{self.INTERFACE}.Seek not allowed")
+      logging.debug(f"{self.INTERFACE}.{Method.Seek} not allowed")
       return
 
     current_position = self.adapter.get_current_position()
@@ -406,7 +406,7 @@ class Player(MprisInterface):
   @log_trace
   def SetPosition(self, track_id: str, position: Position):
     if not self.CanSeek:
-      logging.debug(f"{self.INTERFACE}.SetPosition not allowed")
+      logging.debug(f"{self.INTERFACE}.{Method.SetPosition} not allowed")
       return
 
     self.adapter.seek(position, track_id=track_id)
@@ -444,7 +444,7 @@ class Player(MprisInterface):
   @log_trace
   def Stop(self):
     if not self.CanControl:
-      logging.debug(f"{self.INTERFACE}.Stop not allowed")
+      logging.debug(f"{self.INTERFACE}.{Method.Stop} not allowed")
       return
 
     self.adapter.stop()

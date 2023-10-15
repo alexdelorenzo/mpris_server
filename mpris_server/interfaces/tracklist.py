@@ -5,13 +5,13 @@ from typing import ClassVar
 from pydbus.generic import signal
 
 from .interface import MprisInterface
-from ..base import DbusObj, DbusTypes, NoTrack, ROOT_INTERFACE
+from ..base import DbusObj, DbusTypes, Interfaces, NoTrack, ROOT_INTERFACE
 from ..enums import Access, Arg, Direction, Method, Property, Signal
 from ..mpris.metadata import Metadata
 
 
 class TrackList(MprisInterface):
-  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.TrackList"
+  INTERFACE: ClassVar[Interfaces] = Interfaces.TrackList
 
   __doc__ = f"""
   <node>

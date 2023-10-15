@@ -5,12 +5,12 @@ from typing import ClassVar
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import ActivePlaylist, DbusTypes, PlaylistEntry, ROOT_INTERFACE
+from ..base import ActivePlaylist, DbusTypes, Interfaces, PlaylistEntry, ROOT_INTERFACE
 from ..enums import Access, Arg, Direction, Method, Property, Signal
 
 
 class Playlists(MprisInterface):
-  INTERFACE: ClassVar[str] = f"{ROOT_INTERFACE}.Playlists"
+  INTERFACE: ClassVar[Interfaces] = Interfaces.Playlists
 
   __doc__ = f"""
   <node>

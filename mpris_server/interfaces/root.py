@@ -4,7 +4,7 @@ from pathlib import PurePath
 from typing import ClassVar, Final
 
 from .interface import MprisInterface, log_trace
-from ..base import DbusTypes, Paths, ROOT_INTERFACE
+from ..base import DbusTypes, Paths, ROOT_INTERFACE, Interfaces
 from ..enums import Access, Method, Property
 
 
@@ -13,7 +13,7 @@ DESKTOP_EXT: Final[str] = '.desktop'
 
 
 class Root(MprisInterface):
-  INTERFACE: ClassVar[str] = ROOT_INTERFACE
+  INTERFACE: ClassVar[Interfaces] = Interfaces.Root
 
   __doc__ = f"""
   <node>

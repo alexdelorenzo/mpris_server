@@ -7,7 +7,7 @@ import logging
 
 from pydbus.generic import signal
 
-from ..base import NAME, P, ROOT_INTERFACE
+from ..base import Interfaces, NAME, P, ROOT_INTERFACE
 from ..enums import Method
 
 if TYPE_CHECKING:
@@ -26,7 +26,7 @@ def log_trace(method: Method) -> Method:
 
 
 class MprisInterface(ABC):
-  INTERFACE: ClassVar[str] = ROOT_INTERFACE
+  INTERFACE: ClassVar[Interfaces] = Interfaces.Root
 
   PropertiesChanged: Final[signal] = signal()
 
