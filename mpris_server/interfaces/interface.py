@@ -3,21 +3,20 @@ from __future__ import annotations
 import logging
 from abc import ABC
 from functools import wraps
-from typing import ClassVar, Final, Self, TYPE_CHECKING
+from typing import ClassVar, Final, TYPE_CHECKING
 
 from pydbus.generic import signal
 
-from ..base import Interfaces, NAME, P
-from ..enums import Method
+from ..base import Interfaces, Method, NAME
 
 
 if TYPE_CHECKING:
   from ..adapters import MprisAdapter
 
 
-def log_trace(method: Method) -> Method:
+def log_trace[S, **P, T](method: Method) -> Method:
   @wraps(method)
-  def new_method(self: Self, *args: P.args, **kwargs: P.kwargs):
+  def new_method(self: S, *args: P.args, **kwargs: P.kwargs) -> T:
     name = method.__name__
     logging.debug(f'{self.INTERFACE}.{name}() called.')
 
