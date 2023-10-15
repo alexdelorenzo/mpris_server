@@ -8,8 +8,7 @@ from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
 from ..base import Artist, BEGINNING, DbusMetadata, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
-  PAUSE_RATE, \
-  PlayState, Position, Rate, Track, Volume
+  PAUSE_RATE, PlayState, Position, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, LoopStatus, Method, Property, Signal
 from ..mpris.metadata import DEFAULT_METADATA, Metadata, MetadataEntries, get_dbus_metadata
 
@@ -20,7 +19,7 @@ NO_NAME: Final[str] = ''
 class Player(MprisInterface):
   INTERFACE: ClassVar[Interfaces] = Interfaces.Player
 
-  __doc__ = f"""
+  __doc__: Final[str] = f"""
   <node>
     <interface name="{INTERFACE}">
       <method name="{Method.Next}"/>
@@ -71,7 +70,7 @@ class Player(MprisInterface):
 
     return None
 
-  def _get_art_url(self, track: 'Track') -> str:
+  def _get_art_url(self, track: Track) -> str:
     return self.adapter.get_art_url(track)
 
   @property
@@ -123,7 +122,7 @@ class Player(MprisInterface):
 
   @property
   @log_trace
-  def LoopStatus(self) -> str:
+  def LoopStatus(self) -> LoopStatus:
     if not self.adapter.is_repeating():
       return LoopStatus.NONE
 
@@ -249,7 +248,7 @@ class Player(MprisInterface):
 
   @property
   @log_trace
-  def PlaybackStatus(self) -> str:
+  def PlaybackStatus(self) -> PlayState:
     state = self.adapter.get_playstate()
     return state.value.title()
 
@@ -453,4 +452,3 @@ class Player(MprisInterface):
 
 def sort_names(artist: Artist) -> str:
   return artist.name or NO_NAME
-
