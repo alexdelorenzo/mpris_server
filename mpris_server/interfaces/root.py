@@ -4,7 +4,7 @@ from pathlib import PurePath
 from typing import ClassVar, Final
 
 from .interface import MprisInterface, log_trace
-from ..base import DbusTypes, Paths, ROOT_INTERFACE, Interfaces
+from ..base import DbusTypes, Interfaces, Paths
 from ..enums import Access, Method, Property
 
 
