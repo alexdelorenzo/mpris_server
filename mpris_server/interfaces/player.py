@@ -135,7 +135,7 @@ class Player(MprisInterface):
 
   @LoopStatus.setter
   @log_trace
-  def LoopStatus(self, value: str):
+  def LoopStatus(self, value: LoopStatus):
     if not self.CanControl:
       logging.debug(f"Setting {self.INTERFACE}.LoopStatus not allowed")
       return
@@ -143,15 +143,6 @@ class Player(MprisInterface):
     logging.debug(f"Setting {self.INTERFACE}.LoopStatus to {value}")
 
     self.adapter.set_loop_status(value)
-    # if value == "None":
-    # self.core.tracklist.set_repeat(False)
-    # self.core.tracklist.set_single(False)
-    # elif value == "Track":
-    # self.core.tracklist.set_repeat(True)
-    # self.core.tracklist.set_single(True)
-    # elif value == "Playlist":
-    # self.core.tracklist.set_repeat(True)
-    # self.core.tracklist.set_single(False)
 
   @property
   @log_trace

@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC
 from typing import Optional
 
+from . import LoopStatus
 from .base import ActivePlaylist, DEFAULT_DESKTOP, DEFAULT_ORDERINGS, DEFAULT_PLAYLIST_COUNT, \
   DEFAULT_RATE, DbusObj, MIME_TYPES, Paths, PlayState, PlaylistEntry, Position, Rate, Track, URI, \
   Volume, NoTrack, Ordering
@@ -116,8 +117,13 @@ class PlayerAdapter(ABC):
   def set_repeating(self, val: bool):
     pass
 
-  def set_loop_status(self, val: str):
-    pass
+  def set_loop_status(self, val: LoopStatus):
+    match val:
+      case LoopStatus.NONE:
+        self.set_repeating(False)
+
+      case LoopStatus.TRACK | LoopStatus.PLAYLIST:
+        self.set_repeating(True)
 
   def get_rate(self) -> Rate:
     return DEFAULT_RATE
