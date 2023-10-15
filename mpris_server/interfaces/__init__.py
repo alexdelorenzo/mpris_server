@@ -4,7 +4,7 @@ from .playlists import Playlists
 from .root import Root, get_desktop_entry
 from .tracklist import TrackList
 
-from . import interface, player, root, playlists, tracklist
+from . import interface, player, playlists, root, tracklist
 
 
 __all__ = [
