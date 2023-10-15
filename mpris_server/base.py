@@ -23,7 +23,7 @@ ROOT_INTERFACE: Final[str] = INTERFACE
 DBUS_PATH: Final[str] = '/org/mpris/MediaPlayer2'
 NAME: Final[str] = "mprisServer"
 
-NoTrack: Final[str] = f'{DBUS_PATH}/TrackList/NoTrack'
+NoTrack: Final[DbusObj] = f'{DBUS_PATH}/TrackList/NoTrack'
 Properties = list[Property]
 
 
