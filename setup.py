@@ -9,7 +9,7 @@ __version__: Final[str] = '0.8.0'
 
 NAME = "mpris_server"
 DESCRIPTION = "⏯️ Publish a MediaPlayer2 MPRIS device to D-Bus."
-LICENSE = "AGPL-3.0"
+LICENSE = "License :: OSI Approved :: LGPL-3.0-only"
 URL = "https://github.com/alexdelorenzo/mpris_server"
 
 PKGS: list[str] = list({
