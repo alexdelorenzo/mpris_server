@@ -19,6 +19,7 @@ __all__ = [
 ]
 
 DEFAULT_ADAPTER_NAME: Final[str] = 'MprisAdapter'
+DEFAULT_FULLSCREEN: Final[bool] = False
 
 
 class RootAdapter(ABC):
@@ -35,7 +36,7 @@ class RootAdapter(ABC):
     return DEFAULT_DESKTOP
 
   def get_fullscreen(self) -> bool:
-    return False
+    return DEFAULT_FULLSCREEN
 
   def get_mime_types(self) -> list[str]:
     return MIME_TYPES
