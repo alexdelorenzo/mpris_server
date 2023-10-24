@@ -65,12 +65,10 @@ class TrackList(MprisInterface):
 
   @property
   def Tracks(self) -> list[DbusObj]:
-    items = self.adapter.get_tracks()
-
-    if not items:
+    if not (tracks := self.adapter.get_tracks()):
       return [NoTrack]
 
-    return items
+    return tracks
 
   def AddTrack(
     self,
