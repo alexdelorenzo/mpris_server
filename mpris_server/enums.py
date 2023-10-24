@@ -42,9 +42,9 @@ class Direction(StrEnum):
 
 
 class LoopStatus(StrEnum):
-  NONE: str = 'None'
-  TRACK: str = 'Track'
-  PLAYLIST: str = 'Playlist'
+  NONE = 'None'
+  TRACK = 'Track'
+  PLAYLIST = 'Playlist'
 
 
 class Method(StrEnum):
