@@ -3,12 +3,14 @@ from __future__ import annotations
 import logging
 from typing import Final
 from weakref import finalize
+from threading import Thread
 
 from gi.repository import GLib
 from pydbus import SessionBus, SystemBus
 from pydbus.bus import Bus
 from pydbus.publication import Publication
 
+from . import MprisInterface
 from .adapters import MprisAdapter
 from .base import DBUS_PATH, Interfaces, NAME
 from .enums import BusType
@@ -38,14 +40,17 @@ class Server[T: MprisAdapter]:
   player: Player
   playlists: Playlists
   tracklist: TrackList
+  interfaces: tuple[MprisInterface, ...]
 
   _loop: GLib.MainLoop | None
   _publication_token: Publication | None
+  _thread: Thread | None
 
   def __init__(
     self,
     name: str = NAME,
-    adapter: T | None = None
+    adapter: T | None = None,
+    *interfaces: MprisInterface,
   ):
     self.name = name
     self.adapter = adapter
@@ -55,6 +60,7 @@ class Server[T: MprisAdapter]:
     self.player = Player(self.name, self.adapter)
     self.playlists = Playlists(self.name, self.adapter)
     self.tracklist = TrackList(self.name, self.adapter)
+    self.interfaces = self.root, self.player, self.playlists, self.tracklist, *interfaces
 
     self._loop = None
     self._publication_token = None
@@ -64,6 +70,9 @@ class Server[T: MprisAdapter]:
   def __del__(self):
     self.unpublish()
     self.quit_loop()
+
+    if self._thread:
+      self._thread.join(timeout=0)
 
   def publish(self, bus_type: BusType = BusType.default):
     logging.debug(f'Connecting to D-Bus {bus_type} bus...')
@@ -82,13 +91,10 @@ class Server[T: MprisAdapter]:
 
     logging.info(f'MPRIS server connected to D-Bus {bus_type} bus.')
 
-    self._publication_token = bus.publish(
-      f'{Interfaces.Root}.{self.dbus_name}',
-      (DBUS_PATH, self.root),
-      (DBUS_PATH, self.player),
-      (DBUS_PATH, self.playlists),
-      (DBUS_PATH, self.tracklist),
-    )
+    name = f'{Interfaces.Root}.{self.dbus_name}'
+    paths = (DBUS_PATH, interface for interface in self.interfaces)
+
+    self._publication_token = bus.publish(name, *paths)
 
   def unpublish(self):
     if self._publication_token:
@@ -97,10 +103,17 @@ class Server[T: MprisAdapter]:
       self._publication_token.unpublish()
       self._publication_token = None
 
-  def loop(self, bus_type: BusType = BusType.default):
+  def loop(self, bus_type: BusType = BusType.default, background: bool = False):
     if not self._publication_token:
       self.publish(bus_type)
 
+    if background:
+      self._thread = Thread(target=self._run_loop, name=self.name)
+
+    else:
+      self._run_loop()
+
+  def _run_loop(self):
     self._loop = GLib.MainLoop()
 
     try:
