@@ -10,10 +10,10 @@ from pydbus import SessionBus, SystemBus
 from pydbus.bus import Bus
 from pydbus.publication import Publication
 
-from . import MprisInterface
 from .adapters import MprisAdapter
 from .base import DBUS_PATH, Interfaces, NAME
 from .enums import BusType
+from .interfaces.interface import MprisInterface
 from .interfaces.player import Player
 from .interfaces.playlists import Playlists
 from .interfaces.root import Root
@@ -92,7 +92,7 @@ class Server[T: MprisAdapter]:
     logging.info(f'MPRIS server connected to D-Bus {bus_type} bus.')
 
     name = f'{Interfaces.Root}.{self.dbus_name}'
-    paths = (DBUS_PATH, interface for interface in self.interfaces)
+    paths = ((DBUS_PATH, interface) for interface in self.interfaces)
 
     self._publication_token = bus.publish(name, *paths)
 
