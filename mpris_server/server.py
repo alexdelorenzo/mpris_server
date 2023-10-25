@@ -68,6 +68,7 @@ class Server[A: MprisAdapter, I: MprisInterface]:
 
     self._loop = None
     self._publication_token = None
+    self._thread = None
 
     finalize(self, self.__del__)
 
