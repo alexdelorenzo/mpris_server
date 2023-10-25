@@ -73,8 +73,7 @@ class Server[A: MprisAdapter, I: MprisInterface]:
     finalize(self, self.__del__)
 
   def __del__(self):
-    self.unpublish()
-    self.quit_loop()
+    self.quit()
 
   def _get_dbus_paths(self) -> Iterable[tuple[str, I]]:
     for interface in self.interfaces:
@@ -145,3 +144,8 @@ class Server[A: MprisAdapter, I: MprisInterface]:
       if self._thread:
         log.debug("Joining background thread.")
         self._thread.join(timeout=NOW)
+
+  def quit(self):
+    log.debug('Unpublishing and quitting loop.')
+    self.unpublish()
+    self.quit_loop()
