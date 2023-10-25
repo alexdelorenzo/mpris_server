@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Final
+from typing import Final, Iterable
 from weakref import finalize
 from threading import Thread
 
@@ -28,11 +28,15 @@ __all__ = [
 ]
 
 DEFAULT_BUS_TYPE: Final[BusType] = BusType.session
+NOW: Final[int] = 0
 
 
-class Server[T: MprisAdapter]:
+log = logging.getLogger(__name__)
+
+
+class Server[A: MprisAdapter, I: MprisInterface]:
   name: str
-  adapter: T | None
+  adapter: A | None
 
   dbus_name: str
 
@@ -40,7 +44,7 @@ class Server[T: MprisAdapter]:
   player: Player
   playlists: Playlists
   tracklist: TrackList
-  interfaces: tuple[MprisInterface, ...]
+  interfaces: tuple[I, ...]
 
   _loop: GLib.MainLoop | None
   _publication_token: Publication | None
@@ -49,8 +53,8 @@ class Server[T: MprisAdapter]:
   def __init__(
     self,
     name: str = NAME,
-    adapter: T | None = None,
-    *interfaces: MprisInterface,
+    adapter: A | None = None,
+    *interfaces: I,
   ):
     self.name = name
     self.adapter = adapter
@@ -71,47 +75,9 @@ class Server[T: MprisAdapter]:
     self.unpublish()
     self.quit_loop()
 
-    if self._thread:
-      self._thread.join(timeout=0)
-
-  def publish(self, bus_type: BusType = BusType.default):
-    logging.debug(f'Connecting to D-Bus {bus_type} bus...')
-    bus: Bus
-
-    match bus_type:
-      case BusType.system:
-        bus = SystemBus()
-
-      case BusType.session:
-        bus = SessionBus()
-
-      case _:
-        logging.warning(f'Invalid bus "{bus_type}", using {BusType.default}.')
-        bus = SessionBus()
-
-    logging.info(f'MPRIS server connected to D-Bus {bus_type} bus.')
-
-    name = f'{Interfaces.Root}.{self.dbus_name}'
-    paths = ((DBUS_PATH, interface) for interface in self.interfaces)
-
-    self._publication_token = bus.publish(name, *paths)
-
-  def unpublish(self):
-    if self._publication_token:
-      logging.debug('Unpublishing MPRIS interface.')
-
-      self._publication_token.unpublish()
-      self._publication_token = None
-
-  def loop(self, bus_type: BusType = BusType.default, background: bool = False):
-    if not self._publication_token:
-      self.publish(bus_type)
-
-    if background:
-      self._thread = Thread(target=self._run_loop, name=self.name)
-
-    else:
-      self._run_loop()
+  def _get_dbus_paths(self) -> Iterable[tuple[str, I]]:
+    for interface in self.interfaces:
+      yield DBUS_PATH, interface
 
   def _run_loop(self):
     self._loop = GLib.MainLoop()
@@ -122,9 +88,60 @@ class Server[T: MprisAdapter]:
     finally:
       self.quit_loop()
 
-  def quit_loop(self):
-    if self._loop:
-      logging.debug('Quitting GLib loop.')
+  def publish(self, bus_type: BusType = BusType.default):
+    log.debug(f'Connecting to D-Bus {bus_type} bus...')
+    bus: Bus
 
-      self._loop.quit()
-      self._loop = None
+    match bus_type:
+      case BusType.default:
+        bus = SessionBus()
+
+      case BusType.session:
+        bus = SessionBus()
+
+      case BusType.system:
+        bus = SystemBus()
+
+      case _:
+        log.warning(f'Invalid bus "{bus_type}", using {BusType.default}.')
+        bus = SessionBus()
+
+    log.debug(f'MPRIS server connecting to D-Bus {bus_type} bus.')
+
+    name = f'{Interfaces.Root}.{self.dbus_name}'
+    paths = self._get_dbus_paths()
+    self._publication_token = bus.publish(name, *paths)
+
+    log.info(f'Published {self.name} to D-Bus {bus_type} bus.')
+
+  def unpublish(self):
+    if self._publication_token:
+      log.debug('Unpublishing MPRIS interface.')
+
+      self._publication_token.unpublish()
+      self._publication_token = None
+
+  def loop(self, bus_type: BusType = BusType.default, background: bool = False):
+    if not self._publication_token:
+      self.publish(bus_type)
+
+    if background:
+      log.debug("Entering D-Bus loop in background thread.")
+      self._thread = Thread(target=self._run_loop, name=self.name)
+
+    else:
+      log.debug("Entering D-Bus loop in foreground thread.")
+      self._run_loop()
+
+  def quit_loop(self):
+    try:
+      if self._loop:
+        log.debug('Quitting GLib loop.')
+
+        self._loop.quit()
+        self._loop = None
+
+    finally:
+      if self._thread:
+        log.debug("Joining background thread.")
+        self._thread.join(timeout=NOW)
