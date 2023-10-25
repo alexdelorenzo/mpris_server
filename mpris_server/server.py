@@ -108,12 +108,11 @@ class Server[A: MprisAdapter, I: MprisInterface]:
         bus = SessionBus()
 
     log.debug(f'MPRIS server connecting to D-Bus {bus_type} bus.')
-
     name = f'{Interfaces.Root}.{self.dbus_name}'
     paths = self._get_dbus_paths()
-    self._publication_token = bus.publish(name, *paths)
 
-    log.info(f'Published {self.name} to D-Bus {bus_type} bus.')
+    self._publication_token = bus.publish(name, *paths)
+    log.info(f'Published {name} to D-Bus {bus_type} bus.')
 
   def unpublish(self):
     if self._publication_token:
