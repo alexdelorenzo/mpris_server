@@ -5,7 +5,7 @@ from typing import ClassVar, Final
 from pydbus.generic import signal
 
 from .interface import MprisInterface
-from ..base import DbusObj, DbusTypes, Interfaces, NoTrack, ROOT_INTERFACE
+from ..base import DbusObj, DbusTypes, Interfaces, NoTrack
 from ..enums import Access, Arg, Direction, Method, Property, Signal
 from ..mpris.metadata import Metadata
 

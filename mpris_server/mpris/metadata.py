@@ -11,7 +11,11 @@ from ..base import DEFAULT_TRACK_ID, DbusObj, DbusPyTypes, \
 from ..types import get_type, is_type
 
 
+FIRST: Final[int] = 0
 DEFAULT_METADATA: Final[Metadata] = {}
+FIELDS_ERROR: Final[str] = "Added or missing fields."
+
+log = logging.getLogger(__name__)
 
 
 type Name = str
@@ -122,6 +126,9 @@ METADATA_TO_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
 }
 
 
+assert len(MetadataEntries) == len(METADATA_TYPES) == len(METADATA_TO_PY_TYPES), FIELDS_ERROR
+
+
 class _MetadataTypes(NamedTuple):
   ALBUM: PyType = METADATA_TO_PY_TYPES[MetadataEntries.ALBUM]
   ALBUM_ARTISTS: PyType = METADATA_TO_PY_TYPES[MetadataEntries.ALBUM_ARTISTS]
@@ -150,36 +157,36 @@ class _MetadataTypes(NamedTuple):
 MetadataTypes: Final[_MetadataTypes] = _MetadataTypes()
 
 
-assert len(MetadataEntries) == len(METADATA_TYPES) == len(METADATA_TO_PY_TYPES) == len(MetadataTypes)
+assert len(MetadataEntries) == len(MetadataTypes), FIELDS_ERROR
 
 
 class MetadataObj(NamedTuple):
-  album: MprisTypes.STRING | None = None
-  album_artists: MprisTypes.STRING_ARRAY | None = None
-  art_url: MprisTypes.STRING | None = None
-  artists: MprisTypes.STRING_ARRAY | None = None
-  as_text: MprisTypes.STRING_ARRAY | None = None
-  audio_bpm: MprisTypes.INT32 | None = None
-  auto_rating: MprisTypes.DOUBLE | None = None
-  comments: MprisTypes.STRING_ARRAY | None = None
-  composer: MprisTypes.STRING_ARRAY | None = None
-  content_created: MprisTypes.STRING | None = None
-  disc_number: MprisTypes.INT32 | None = None
-  first_used: MetadataTypes.FIRST_USED = None
-  genre: MprisTypes.STRING_ARRAY | None = None
+  album: MetadataTypes.ALBUM | None = None
+  album_artists: MetadataTypes.ALBUM_ARTISTS | None = None
+  art_url: MetadataTypes.ART_URL | None = None
+  artists: MetadataTypes.ARTISTS | None = None
+  as_text: MetadataTypes.AS_TEXT | None = None
+  audio_bpm: MetadataTypes.AUDIO_BPM | None = None
+  auto_rating: MetadataTypes.AUTO_RATING | None = None
+  comments: MetadataTypes.COMMENT | None = None
+  composer: MetadataTypes.COMPOSER | None = None
+  content_created: MetadataTypes.CONTENT_CREATED | None = None
+  disc_number: MetadataTypes.DISC_NUMBER | None = None
+  first_used: MetadataTypes.FIRST_USED | None = None
+  genre: MetadataTypes.GENRE | None = None
   last_used: MetadataTypes.LAST_USED | None = None
-  length: MprisTypes.LENGTH | None = None
-  lyricist: MprisTypes.STRING_ARRAY | None = None
-  title: MprisTypes.STRING | None = None
+  length: MetadataTypes.LENGTH | None = None
+  lyricist: MetadataTypes.LYRICIST | None = None
+  title: MetadataTypes.TITLE | None = None
   track_id: MetadataTypes.TRACK_ID = DEFAULT_TRACK_ID
-  track_number: MprisTypes.INT32 | None = None
-  url: MprisTypes.STRING | None = None
+  track_number: MetadataTypes.TRACK_NUMBER | None = None
+  url: MetadataTypes.URL | None = None
   use_count: MetadataTypes.USE_COUNT | None = None
   user_rating: MetadataTypes.USER_RATING | None = None
 
   def sorted(self) -> SortedMetadata:
     items: Iterable[NameMetadata] = self._asdict().items()
-    items = sorted(items, key=lambda m: m[0].casefold())
+    items = sorted(items, key=lambda m: m[FIRST].casefold())
 
     return dict(items)
 
@@ -194,6 +201,9 @@ class MetadataObj(NamedTuple):
       for entry, metadata in pairs
       if metadata is not None
     }
+
+
+assert len(MetadataEntries) == len(MetadataObj._fields), FIELDS_ERROR
 
 
 Metadata = \
@@ -230,7 +240,7 @@ def is_dbus_type(obj: Any) -> bool:
 
 def is_valid_metadata(entry: str, obj: Any) -> bool:
   if obj is None or entry not in METADATA_TYPES:
-    logging.debug(f"({entry=}, {obj=}) isn't valid metadata, skipping.")
+    log.debug(f"({entry=}, {obj=}) isn't valid metadata, skipping.")
     return False
 
   return is_dbus_type(obj) and not is_null_list(obj)
@@ -238,7 +248,8 @@ def is_valid_metadata(entry: str, obj: Any) -> bool:
 
 def get_dbus_var(entry: MetadataEntry, obj: DbusObj) -> Variant:
   metadata_type = METADATA_TYPES[entry]
-  logging.debug(f"Translating {entry=}, {obj=} to {metadata_type=}")
+  log.debug(f"Translating {entry=}, {obj=} to {metadata_type=}")
+
   return Variant(metadata_type, obj)
 
 

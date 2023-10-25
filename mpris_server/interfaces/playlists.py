@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+import logging
 from typing import ClassVar, Final
 
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import ActivePlaylist, DbusTypes, Interfaces, Ordering, PlaylistEntry, PlaylistId, ROOT_INTERFACE
+from ..base import ActivePlaylist, DbusTypes, Interfaces, Ordering, PlaylistEntry, PlaylistId
 from ..enums import Access, Arg, Direction, Method, Property, Signal
+
+
+log = logging.getLogger(__name__)
 
 
 class Playlists(MprisInterface):
@@ -61,7 +65,7 @@ class Playlists(MprisInterface):
   @log_trace
   def ActivatePlaylist(self, playlist_id: PlaylistId):
     self.adapter.activate_playlist(playlist_id)
-    # logging.debug(
+    # log.debug(
     #     "%s.ActivatePlaylist(%r) called", self.INTERFACE, playlist_id
     # )
     # playlist_uri = get_playlist_uri(playlist_id)
@@ -73,7 +77,7 @@ class Playlists(MprisInterface):
   @log_trace
   def GetPlaylists(self, index: int, max_count: int, order: str, reverse: bool) -> list[PlaylistEntry]:
     return self.adapter.get_playlists(index, max_count, order, reverse)
-    # logging.debug(
+    # log.debug(
     #     "%s.GetPlaylists(%r, %r, %r, %r) called",
     #     self.INTERFACE,
     #     index,

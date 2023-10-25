@@ -14,11 +14,14 @@ if TYPE_CHECKING:
   from ..adapters import MprisAdapter
 
 
+log = logging.getLogger(__name__)
+
+
 def log_trace[S, **P, T](method: Method) -> Method:
   @wraps(method)
   def new_method(self: S, *args: P.args, **kwargs: P.kwargs) -> T:
     name = method.__name__
-    logging.debug(f'{self.INTERFACE}.{name}() called.')
+    log.debug(f'{self.INTERFACE}.{name}() called.')
 
     return method(self, *args, **kwargs)
 
