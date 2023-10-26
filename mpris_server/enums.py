@@ -113,6 +113,7 @@ class Property(StrEnum):
 
 class Signal(StrEnum):
   PlaylistChanged = auto()
+  PropertiesChanged = auto()
   Seeked = auto()
   TrackAdded = auto()
   TrackListReplaced = auto()
