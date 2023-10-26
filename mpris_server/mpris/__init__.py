@@ -30,4 +30,3 @@ __all__ = [
   'SortedMetadata',
   'ValidMetadata',
 ]
-
