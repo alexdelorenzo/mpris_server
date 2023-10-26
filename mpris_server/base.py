@@ -259,10 +259,10 @@ class Track(NamedTuple):
   uri: str | None = None
 
 
-def dbus_emit_changes[T: MprisInterface](
-  interface: T,
-  changes: Changes,
-):
+def dbus_emit_changes[T: MprisInterface](interface: T, changes: Changes):
+  if not all(change in Property for change in changes):
+    raise ValueError("Invalid property in `changes`.")
+
   prop_vals: PropVals = {
     prop: getattr(interface, prop)
     for prop in changes
