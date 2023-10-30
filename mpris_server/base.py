@@ -13,7 +13,6 @@ from strenum import StrEnum
 from .enums import Property
 from .types import GenericAliases
 
-
 if TYPE_CHECKING:
   from .interfaces.interface import MprisInterface
 
@@ -24,7 +23,8 @@ DBUS_PATH: Final[str] = '/org/mpris/MediaPlayer2'
 NAME: Final[str] = "mprisServer"
 
 NoTrack: Final[DbusObj] = f'{DBUS_PATH}/TrackList/NoTrack'
-Properties = list[Property]
+
+type Properties = list[Property]
 
 
 MIME_TYPES: Final[list[str]] = [
