@@ -10,7 +10,7 @@ from .interface import MprisInterface, log_trace
 from ..base import Artist, BEGINNING, DbusMetadata, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
   PAUSE_RATE, PlayState, Position, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, LoopStatus, Method, Property, Signal
-from ..mpris.metadata import Metadata, MetadataEntries, get_dbus_metadata
+from ..mpris.metadata import Metadata, MetadataEntries, MprisMetadata, get_dbus_metadata
 
 
 NO_NAME: Final[str] = ''
@@ -66,7 +66,7 @@ class Player(MprisInterface):
 
   Seeked: Final[signal] = signal()
 
-  def _dbus_metadata(self) -> DbusMetadata | None:
+  def _get_metadata(self) -> Metadata | None:
     if metadata := self.adapter.metadata():
       return get_dbus_metadata(metadata)
 
@@ -165,13 +165,13 @@ class Player(MprisInterface):
   @log_trace
   def Metadata(self) -> Metadata:
     # prefer adapter's metadata to building our own
-    if metadata := self._dbus_metadata():
+    if metadata := self._get_metadata():
       return metadata
 
     # build metadata if no metadata supplied by adapter
     log.debug(f"Building {self.INTERFACE}.{Property.Metadata}")
 
-    metadata: DbusMetadata = {}
+    metadata: Metadata = {}
 
     track = self.adapter.get_current_track()
     stream_title = self.adapter.get_stream_title()
@@ -369,13 +369,12 @@ class Player(MprisInterface):
       log.debug(f"{self.INTERFACE}.{Method.Play} not allowed")
       return
 
-    state = self.adapter.get_playstate()
+    match self.adapter.get_playstate():
+      case PlayState.PAUSED:
+        self.adapter.resume()
 
-    if state is PlayState.PAUSED:
-      self.adapter.resume()
-
-    else:
-      self.adapter.play()
+      case _:
+        self.adapter.play()
 
   @log_trace
   def PlayPause(self):
@@ -383,16 +382,15 @@ class Player(MprisInterface):
       log.debug(f"{self.INTERFACE}.{Method.PlayPause} not allowed")
       return
 
-    state = self.adapter.get_playstate()
+    match self.adapter.get_playstate():
+      case PlayState.PLAYING:
+        self.adapter.pause()
 
-    if state is PlayState.PLAYING:
-      self.adapter.pause()
+      case PlayState.PAUSED:
+        self.adapter.resume()
 
-    elif state is PlayState.PAUSED:
-      self.adapter.resume()
-
-    elif state is PlayState.STOPPED:
-      self.adapter.play()
+      case PlayState.STOPPED:
+        self.adapter.play()
 
   @log_trace
   def Seek(self, offset: Position):
