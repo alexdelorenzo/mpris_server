@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from abc import ABC
 from functools import wraps
-from typing import ClassVar, Final, TYPE_CHECKING
+from typing import ClassVar, Final, Self, TYPE_CHECKING
 
 from pydbus.generic import signal
 
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-def log_trace[S, **P, T](method: Method) -> Method:
+def log_trace[S: Self, **P, T](method: Method) -> Method:
   @wraps(method)
   def new_method(self: S, *args: P.args, **kwargs: P.kwargs) -> T:
     name = method.__name__
@@ -28,18 +28,14 @@ def log_trace[S, **P, T](method: Method) -> Method:
   return new_method
 
 
-class MprisInterface[T: MprisAdapter](ABC):
-  name: str
-  adapter: T | None
-
+class MprisInterface[A: MprisAdapter](ABC):
   INTERFACE: ClassVar[Interfaces] = Interfaces.Root
+
+  name: str
+  adapter: A | None
 
   PropertiesChanged: Final[signal] = signal()
 
-  def __init__(
-    self,
-    name: str = NAME,
-    adapter: T | None = None
-  ):
+  def __init__(self, name: str = NAME, adapter: A | None = None):
     self.name = name
     self.adapter = adapter
