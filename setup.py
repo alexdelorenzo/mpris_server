@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 
 
 __author__ = "Alex DeLorenzo <alex@alexdelorenzo.dev>"
-__version__: Final[str] = '0.8.0'
+__version__: Final[str] = '0.8.1'
 
 NAME = "mpris_server"
 DESCRIPTION = "⏯️ Publish a MediaPlayer2 MPRIS device to D-Bus."
