@@ -61,7 +61,7 @@ class MetadataEntries(StrEnum):
 
 
 # map of D-Bus metadata entries and their D-Bus types
-METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
+METADATA_TYPES: Final[dict[MetadataEntries, DbusTypes]] = {
   MetadataEntries.ALBUM: DbusTypes.STRING,
   MetadataEntries.ALBUM_ARTISTS: DbusTypes.STRING_ARRAY,
   MetadataEntries.ART_URL: DbusTypes.STRING,
@@ -86,7 +86,7 @@ METADATA_TYPES: Final[dict[MetadataEntry, DbusType]] = {
   MetadataEntries.USER_RATING: DbusTypes.DOUBLE,
 }
 
-DBUS_TYPES_TO_PY_TYPES: Final[dict[DbusType, PyType]] = {
+DBUS_TYPES_TO_PY_TYPES: Final[dict[DbusTypes, PyType]] = {
   DbusTypes.BOOLEAN: MprisTypes.BOOLEAN,
   DbusTypes.DATETIME: MprisTypes.DATETIME,
   DbusTypes.DOUBLE: MprisTypes.DOUBLE,
@@ -100,7 +100,7 @@ DBUS_TYPES_TO_PY_TYPES: Final[dict[DbusType, PyType]] = {
   DbusTypes.UINT64: MprisTypes.UINT64,
 }
 
-METADATA_TO_PY_TYPES: Final[dict[MetadataEntry, PyType]] = {
+METADATA_TO_PY_TYPES: Final[dict[MetadataEntries, PyType]] = {
   MetadataEntries.ALBUM: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING],
   MetadataEntries.ALBUM_ARTISTS: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING_ARRAY],
   MetadataEntries.ART_URL: DBUS_TYPES_TO_PY_TYPES[DbusTypes.STRING],
@@ -206,15 +206,14 @@ class MetadataObj(NamedTuple):
 assert len(MetadataEntries) == len(MetadataObj._fields), FIELDS_ERROR
 
 
-Metadata = \
-  TypedDict('Metadata', METADATA_TO_PY_TYPES, total=False)
-
+Metadata = TypedDict('Metadata', METADATA_TO_PY_TYPES, total=False)
 
 type ValidMetadata = Metadata | MetadataObj
+type RuntimeTypes = tuple[type, ...]
 
 
-def get_runtime_types() -> tuple[type, ...]:
-  types = {
+def get_runtime_types() -> RuntimeTypes:
+  types: set[type] = {
     get_type(val)
     for val in DBUS_TYPES_TO_PY_TYPES.values()
     if is_type(val)
@@ -223,8 +222,7 @@ def get_runtime_types() -> tuple[type, ...]:
   return tuple(types)
 
 
-DBUS_RUNTIME_TYPES: Final[tuple[type, ...]] = \
-  get_runtime_types()
+DBUS_RUNTIME_TYPES: Final[RuntimeTypes] = get_runtime_types()
 
 
 def is_null_list(obj: Any) -> bool:
@@ -247,7 +245,7 @@ def is_valid_metadata(entry: str, obj: Any) -> bool:
 
 
 def get_dbus_var(entry: MetadataEntry, obj: DbusObj) -> Variant:
-  metadata_type = METADATA_TYPES[entry]
+  metadata_type: DbusTypes = METADATA_TYPES[entry]
   log.debug(f"Translating {entry=}, {obj=} to {metadata_type=}")
 
   return Variant(metadata_type, obj)
@@ -260,7 +258,7 @@ def get_dbus_metadata(metadata: ValidMetadata) -> Metadata:
   metadata = cast(Metadata, metadata)
 
   return {
-    entry: get_dbus_var(entry, val)
-    for entry, val in metadata.items()
-    if is_valid_metadata(entry, val)
+    entry: get_dbus_var(entry, value)
+    for entry, value in metadata.items()
+    if is_valid_metadata(entry, value)
   }
