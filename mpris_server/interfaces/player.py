@@ -7,7 +7,7 @@ from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import Artist, BEGINNING, DbusMetadata, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
+from ..base import Artist, BEGINNING, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
   PAUSE_RATE, PlayState, Position, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, LoopStatus, Method, Property, Signal
 from ..mpris.metadata import Metadata, MetadataEntries, get_dbus_metadata
