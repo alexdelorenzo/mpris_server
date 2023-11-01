@@ -10,7 +10,7 @@ from .interface import MprisInterface, log_trace
 from ..base import Artist, BEGINNING, DbusMetadata, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
   PAUSE_RATE, PlayState, Position, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, LoopStatus, Method, Property, Signal
-from ..mpris.metadata import Metadata, MetadataEntries, MprisMetadata, get_dbus_metadata
+from ..mpris.metadata import Metadata, MetadataEntries, get_dbus_metadata
 
 
 NO_NAME: Final[str] = ''
