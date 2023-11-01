@@ -44,7 +44,7 @@ class BaseEventAdapter(ABC):
     self.tracklist = tracklist
 
   @staticmethod
-  def emit_changes[T: MprisInterface](interface: T, changes: Changes):
+  def emit_changes[I: MprisInterface](interface: I, changes: Changes):
     dbus_emit_changes(interface, changes)
 
   @abstractmethod

@@ -130,7 +130,7 @@ BEGINNING: Final[int] = 0
 VALID_PUNC: Final[str] = '_'
 VALID_CHARS: Final[set[str]] = {*ascii_letters, *digits, *VALID_PUNC}
 
-NAME_PREFIX: Final[str] = "Mpris_Server_"
+NAME_PREFIX: Final[str] = "MprisServer_"
 RAND_CHARS: Final[int] = 5
 
 # type aliases
@@ -259,7 +259,7 @@ class Track(NamedTuple):
   uri: str | None = None
 
 
-def dbus_emit_changes[T: MprisInterface](interface: T, changes: Changes):
+def dbus_emit_changes[I: MprisInterface](interface: I, changes: Changes):
   if not all(change in Property for change in changes):
     raise ValueError("Invalid property in `changes`.")
 
