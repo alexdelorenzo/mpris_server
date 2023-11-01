@@ -31,31 +31,31 @@ class Player(MprisInterface):
       <method name="{Method.Previous}"/>
       <method name="{Method.Stop}"/>
       <method name="{Method.OpenUri}">
-        <arg name="{Arg.Uri}" type="{DbusTypes.STRING}" direction="{Direction.In}"/>
+        <arg name="{Arg.Uri}" type="{DbusTypes.STRING}" direction="{Direction.IN}"/>
       </method>
         <method name="{Method.Seek}">
-        <arg name="{Arg.Offset}" type="{DbusTypes.INT64}" direction="{Direction.In}"/>
+        <arg name="{Arg.Offset}" type="{DbusTypes.INT64}" direction="{Direction.IN}"/>
       </method>
       <method name="{Method.SetPosition}">
-        <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
-        <arg name="{Arg.Position}" type="{DbusTypes.INT64}" direction="{Direction.In}"/>
+        <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.IN}"/>
+        <arg name="{Arg.Position}" type="{DbusTypes.INT64}" direction="{Direction.IN}"/>
       </method>
 
-      <property name="{Property.CanControl}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.CanGoNext}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.CanGoPrevious}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.CanPause}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.CanPlay}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.CanSeek}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.LoopStatus}" type="{DbusTypes.STRING}" access="{Access.readwrite}"/>
-      <property name="{Property.MaximumRate}" type="{DbusTypes.DOUBLE}" access="{Access.read}"/>
-      <property name="{Property.Metadata}" type="{DbusTypes.METADATA}" access="{Access.read}"/>
-      <property name="{Property.MinimumRate}" type="{DbusTypes.DOUBLE}" access="{Access.read}"/>
-      <property name="{Property.PlaybackStatus}" type="{DbusTypes.STRING}" access="{Access.read}"/>
-      <property name="{Property.Position}" type="{DbusTypes.INT64}" access="{Access.read}"/>
-      <property name="{Property.Rate}" type="{DbusTypes.DOUBLE}" access="{Access.readwrite}"/>
-      <property name="{Property.Shuffle}" type="{DbusTypes.BOOLEAN}" access="{Access.readwrite}"/>
-      <property name="{Property.Volume}" type="{DbusTypes.DOUBLE}" access="{Access.readwrite}"/>
+      <property name="{Property.CanControl}" type="{DbusTypes.BOOLEAN}" access="{Access.READ}"/>
+      <property name="{Property.CanGoNext}" type="{DbusTypes.BOOLEAN}" access="{Access.READ}"/>
+      <property name="{Property.CanGoPrevious}" type="{DbusTypes.BOOLEAN}" access="{Access.READ}"/>
+      <property name="{Property.CanPause}" type="{DbusTypes.BOOLEAN}" access="{Access.READ}"/>
+      <property name="{Property.CanPlay}" type="{DbusTypes.BOOLEAN}" access="{Access.READ}"/>
+      <property name="{Property.CanSeek}" type="{DbusTypes.BOOLEAN}" access="{Access.READ}"/>
+      <property name="{Property.LoopStatus}" type="{DbusTypes.STRING}" access="{Access.READWRITE}"/>
+      <property name="{Property.MaximumRate}" type="{DbusTypes.DOUBLE}" access="{Access.READ}"/>
+      <property name="{Property.Metadata}" type="{DbusTypes.METADATA}" access="{Access.READ}"/>
+      <property name="{Property.MinimumRate}" type="{DbusTypes.DOUBLE}" access="{Access.READ}"/>
+      <property name="{Property.PlaybackStatus}" type="{DbusTypes.STRING}" access="{Access.READ}"/>
+      <property name="{Property.Position}" type="{DbusTypes.INT64}" access="{Access.READ}"/>
+      <property name="{Property.Rate}" type="{DbusTypes.DOUBLE}" access="{Access.READWRITE}"/>
+      <property name="{Property.Shuffle}" type="{DbusTypes.BOOLEAN}" access="{Access.READWRITE}"/>
+      <property name="{Property.Volume}" type="{DbusTypes.DOUBLE}" access="{Access.READWRITE}"/>
 
       <signal name="{Signal.Seeked}">
         <arg name="{Arg.Position}" type="{DbusTypes.INT64}"/>

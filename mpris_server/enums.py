@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from enum import auto
 
-from strenum import StrEnum
+from strenum import StrEnum, LowercaseStrEnum
 
 
 __all__ = [
@@ -17,9 +17,9 @@ __all__ = [
 ]
 
 
-class Access(StrEnum):
-  read = auto()
-  readwrite = auto()
+class Access(LowercaseStrEnum):
+  READ = auto()
+  READWRITE = auto()
 
 
 class Arg(StrEnum):
@@ -42,15 +42,15 @@ class Arg(StrEnum):
   Uri = auto()
 
 
-class BusType(StrEnum):
-  session = auto()
-  system = auto()
-  default = session
+class BusType(LowercaseStrEnum):
+  SESSION = auto()
+  SYSTEM = auto()
+  DEFAULT = SESSION
 
 
-class Direction(StrEnum):
-  In = 'in'
-  out = auto()
+class Direction(LowercaseStrEnum):
+  IN = auto()
+  OUT = auto()
 
 
 class LoopStatus(StrEnum):

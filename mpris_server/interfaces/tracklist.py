@@ -17,23 +17,23 @@ class TrackList(MprisInterface):
   <node>
     <interface name="{INTERFACE}">
       <method name="{Method.AddTrack}">
-        <arg name="{Arg.Uri}" type="{DbusTypes.STRING}" direction="{Direction.In}"/>
-        <arg name="{Arg.AfterTrack}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
-        <arg name="{Arg.SetAsCurrent}" type="{DbusTypes.BOOLEAN}" direction="{Direction.In}"/>
+        <arg name="{Arg.Uri}" type="{DbusTypes.STRING}" direction="{Direction.IN}"/>
+        <arg name="{Arg.AfterTrack}" type="{DbusTypes.OBJ}" direction="{Direction.IN}"/>
+        <arg name="{Arg.SetAsCurrent}" type="{DbusTypes.BOOLEAN}" direction="{Direction.IN}"/>
       </method>
       <method name="{Method.GetTracksMetadata}">
-        <arg name="{Arg.TrackIds}" type="{DbusTypes.OBJ_ARRAY}" direction="{Direction.In}"/>
-        <arg name="{Arg.Metadata}" type="{DbusTypes.METADATA_ARRAY}" direction="{Direction.out}"/>
+        <arg name="{Arg.TrackIds}" type="{DbusTypes.OBJ_ARRAY}" direction="{Direction.IN}"/>
+        <arg name="{Arg.Metadata}" type="{DbusTypes.METADATA_ARRAY}" direction="{Direction.OUT}"/>
       </method>
       <method name="{Method.GoTo}">
-        <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
+        <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.IN}"/>
       </method>
       <method name="{Method.RemoveTrack}">
-        <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
+        <arg name="{Arg.TrackId}" type="{DbusTypes.OBJ}" direction="{Direction.IN}"/>
       </method>
 
-      <property name="{Property.CanEditTracks}" type="{DbusTypes.BOOLEAN}" access="{Access.read}"/>
-      <property name="{Property.Tracks}" type="{DbusTypes.OBJ_ARRAY}" access="{Access.read}"/>
+      <property name="{Property.CanEditTracks}" type="{DbusTypes.BOOLEAN}" access="{Access.READ}"/>
+      <property name="{Property.Tracks}" type="{DbusTypes.OBJ_ARRAY}" access="{Access.READ}"/>
 
       <signal name="{Signal.TrackListReplaced}">
         <arg name="{Arg.Tracks}" type="{DbusTypes.OBJ_ARRAY}"/>

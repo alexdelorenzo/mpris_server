@@ -27,7 +27,7 @@ __all__ = [
   'Server',
 ]
 
-DEFAULT_BUS_TYPE: Final[BusType] = BusType.session
+DEFAULT_BUS_TYPE: Final[BusType] = BusType.SESSION
 NOW: Final[int] = 0
 
 
@@ -88,22 +88,22 @@ class Server[A: MprisAdapter, I: MprisInterface]:
     finally:
       self.quit_loop()
 
-  def publish(self, bus_type: BusType = BusType.default):
+  def publish(self, bus_type: BusType = BusType.DEFAULT):
     log.debug(f'Connecting to D-Bus {bus_type} bus...')
     bus: Bus
 
     match bus_type:
-      case BusType.default:
+      case BusType.DEFAULT:
         bus = SessionBus()
 
-      case BusType.session:
+      case BusType.SESSION:
         bus = SessionBus()
 
-      case BusType.system:
+      case BusType.SYSTEM:
         bus = SystemBus()
 
       case _:
-        log.warning(f'Invalid bus "{bus_type}", using {BusType.default}.')
+        log.warning(f'Invalid bus "{bus_type}", using {BusType.DEFAULT}.')
         bus = SessionBus()
 
     log.debug(f'MPRIS server connecting to D-Bus {bus_type} bus.')
@@ -120,7 +120,7 @@ class Server[A: MprisAdapter, I: MprisInterface]:
       self._publication_token.unpublish()
       self._publication_token = None
 
-  def loop(self, bus_type: BusType = BusType.default, background: bool = False):
+  def loop(self, bus_type: BusType = BusType.DEFAULT, background: bool = False):
     if not self._publication_token:
       self.publish(bus_type)
 

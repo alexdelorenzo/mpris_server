@@ -20,19 +20,19 @@ class Playlists(MprisInterface):
   <node>
     <interface name="{INTERFACE}">
       <method name="{Method.ActivatePlaylist}">
-        <arg name="{Arg.PlaylistId}" type="{DbusTypes.OBJ}" direction="{Direction.In}"/>
+        <arg name="{Arg.PlaylistId}" type="{DbusTypes.OBJ}" direction="{Direction.IN}"/>
       </method>
       <method name="{Method.GetPlaylists}">
-        <arg name="{Arg.Index}" type="{DbusTypes.UINT32}" direction="{Direction.In}"/>
-        <arg name="{Arg.MaxCount}" type="{DbusTypes.UINT32}" direction="{Direction.In}"/>
-        <arg name="{Arg.Order}" type="{DbusTypes.STRING}" direction="{Direction.In}"/>
-        <arg name="{Arg.ReverseOrder}" type="{DbusTypes.BOOLEAN}" direction="{Direction.In}"/>
-        <arg name="{Arg.Playlists}" type="{DbusTypes.PLAYLISTS}" direction="{Direction.out}"/>
+        <arg name="{Arg.Index}" type="{DbusTypes.UINT32}" direction="{Direction.IN}"/>
+        <arg name="{Arg.MaxCount}" type="{DbusTypes.UINT32}" direction="{Direction.IN}"/>
+        <arg name="{Arg.Order}" type="{DbusTypes.STRING}" direction="{Direction.IN}"/>
+        <arg name="{Arg.ReverseOrder}" type="{DbusTypes.BOOLEAN}" direction="{Direction.IN}"/>
+        <arg name="{Arg.Playlists}" type="{DbusTypes.PLAYLISTS}" direction="{Direction.OUT}"/>
       </method>
 
-      <property name="{Property.ActivePlaylist}" type="{DbusTypes.MAYBE_PLAYLIST}" access="{Access.read}"/>
-      <property name="{Property.Orderings}" type="{DbusTypes.STRING_ARRAY}" access="{Access.read}"/>
-      <property name="{Property.PlaylistCount}" type="{DbusTypes.UINT32}" access="{Access.read}"/>
+      <property name="{Property.ActivePlaylist}" type="{DbusTypes.MAYBE_PLAYLIST}" access="{Access.READ}"/>
+      <property name="{Property.Orderings}" type="{DbusTypes.STRING_ARRAY}" access="{Access.READ}"/>
+      <property name="{Property.PlaylistCount}" type="{DbusTypes.UINT32}" access="{Access.READ}"/>
 
       <signal name="{Signal.PlaylistChanged}">
         <arg name="{Arg.Playlist}" type="{DbusTypes.PLAYLIST}"/>
