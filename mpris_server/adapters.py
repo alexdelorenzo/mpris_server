@@ -95,7 +95,7 @@ class PlayerAdapter(ABC):
   def can_seek(self) -> bool:
     pass
 
-  def get_art_url(self, track: int) -> str:
+  def get_art_url(self, track: DbusObj | Track | None) -> str:
     pass
 
   def get_current_position(self) -> Position:
