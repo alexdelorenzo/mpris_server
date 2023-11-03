@@ -21,9 +21,14 @@ def log_trace[S: Self, **P, T](method: Method) -> Method:
   @wraps(method)
   def new_method(self: S, *args: P.args, **kwargs: P.kwargs) -> T:
     name = method.__name__
-    log.debug(f'{self.INTERFACE}.{name}() called.')
+    func = f'{self.INTERFACE}.{name}()'
 
-    return method(self, *args, **kwargs)
+    log.info(f'{func} called.')
+
+    if (result := method(self, *args, **kwargs)) is not None:
+      log.debug(f'{func} result: {result}')
+
+    return result
 
   return new_method
 
