@@ -7,15 +7,18 @@ from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import Artist, BEGINNING, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
+from ..base import Artist, BEGINNING, DbusObj, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
   PAUSE_RATE, PlayState, Position, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, LoopStatus, Method, Property, Signal
 from ..mpris.metadata import Metadata, MetadataEntries, get_dbus_metadata
 
 
-NO_NAME: Final[str] = ''
-
 log = logging.getLogger(__name__)
+
+ERR_NOT_ENOUGH_METADATA: Final[str] = \
+  "Couldn't find enough metadata, please implement metadata() or get_stream_title() and get_current_track() methods.`"
+
+NO_NAME: Final[str] = ''
 
 
 class Player(MprisInterface):
@@ -72,7 +75,18 @@ class Player(MprisInterface):
 
     return None
 
-  def _get_art_url(self, track: Track) -> str:
+  def _get_basic_metadata(self, track: Track) -> Metadata:
+    metadata: Metadata = Metadata()
+
+    if name := self.adapter.get_stream_title():
+      metadata[MetadataEntries.TITLE] = Variant(DbusTypes.STRING, name)
+
+    if art_url := self._get_art_url(track):
+      metadata[MetadataEntries.ART_URL] = Variant(DbusTypes.STRING, art_url)
+
+    return metadata
+
+  def _get_art_url(self, track: DbusObj | Track | None) -> str:
     return self.adapter.get_art_url(track)
 
   @property
@@ -171,85 +185,14 @@ class Player(MprisInterface):
     # build metadata if no metadata supplied by adapter
     log.debug(f"Building {self.INTERFACE}.{Property.Metadata}")
 
-    metadata: Metadata = {}
-
     track = self.adapter.get_current_track()
-    stream_title = self.adapter.get_stream_title()
+    metadata: Metadata = self._get_basic_metadata(track)
 
-    if stream_title or track and track.name:
-      metadata[MetadataEntries.TITLE] = Variant(
-        DbusTypes.STRING,
-        stream_title or track.name,
-      )
-
-    if track is None:
-      log.warning(
-        "Couldn't find metadata, please implement metadata() or get_stream_title() and get_current_track() methods."
-      )
+    if not track:
+      log.warning(ERR_NOT_ENOUGH_METADATA)
       return metadata
 
-    metadata[MetadataEntries.TRACK_ID] = Variant(
-      DbusTypes.OBJ,
-      track.track_id,
-    )
-
-    if track.length:
-      metadata[MetadataEntries.LENGTH] = Variant(
-        DbusTypes.INT64,
-        track.length,
-      )
-
-    if track.uri:
-      metadata[MetadataEntries.URL] = Variant(
-        DbusTypes.STRING,
-        track.uri,
-      )
-
-    if track.artists:
-      artists = list(track.artists)
-      artists.sort(key=sort_names)
-
-      metadata[MetadataEntries.ARTISTS] = Variant(
-        DbusTypes.STRING_ARRAY,
-        [a.name for a in artists if a.name],
-      )
-
-    if track.album and track.album.name:
-      metadata[MetadataEntries.ALBUM] = Variant(
-        DbusTypes.STRING,
-        track.album.name,
-      )
-
-    if track.album and track.album.artists:
-      artists = list(track.album.artists)
-      artists.sort(key=sort_names)
-
-      metadata[MetadataEntries.ALBUM_ARTISTS] = Variant(
-        DbusTypes.STRING_ARRAY,
-        [a.name for a in artists if a.name],
-      )
-
-    art_url = self._get_art_url(track)
-
-    if art_url:
-      metadata[MetadataEntries.ART_URL] = Variant(
-        DbusTypes.STRING,
-        art_url,
-      )
-
-    if track.disc_no:
-      metadata[MetadataEntries.DISC_NUMBER] = Variant(
-        DbusTypes.INT32,
-        track.disc_no,
-      )
-
-    if track.track_no:
-      metadata[MetadataEntries.TRACK_NUMBER] = Variant(
-        DbusTypes.INT32,
-        track.track_no,
-      )
-
-    return metadata
+    return create_metadata_from_track(track, metadata)
 
   @property
   @log_trace
@@ -307,7 +250,7 @@ class Player(MprisInterface):
 
   @Volume.setter
   @log_trace
-  def Volume(self, value: Volume):
+  def Volume(self, value: Volume | None):
     if not self.CanControl:
       log.debug(f"Setting {self.INTERFACE}.{Property.Volume} not allowed")
       return
@@ -455,3 +398,53 @@ class Player(MprisInterface):
 
 def sort_names(artist: Artist) -> str:
   return artist.name or NO_NAME
+
+
+def get_names(artists: list[Artist]) -> list[str]:
+  artists = sorted(artists, key=sort_names)
+  return [artist.name for artist in artists if artist.name]
+
+
+def create_metadata_from_track(track: Track, metadata: Metadata | None = None) -> Metadata:
+  match metadata:
+    case dict():
+      metadata: Metadata = metadata.copy()
+
+    case None | _:
+      metadata: Metadata = Metadata()
+
+  album, art_url, artists, disc_no, length, name, track_id, track_no, _, uri = track
+
+  if name and MetadataEntries.TITLE not in metadata:
+    metadata[MetadataEntries.TITLE] = Variant(DbusTypes.STRING, name)
+
+  if art_url and MetadataEntries.ART_URL not in metadata:
+    metadata[MetadataEntries.ART_URL] = Variant(DbusTypes.STRING, art_url)
+
+  if length:
+    metadata[MetadataEntries.LENGTH] = Variant(DbusTypes.INT64, length)
+
+  if uri:
+    metadata[MetadataEntries.URL] = Variant(DbusTypes.STRING, uri)
+
+  if artists:
+    names = get_names(artists)
+    metadata[MetadataEntries.ARTISTS] = Variant(DbusTypes.STRING_ARRAY, names)
+
+  if album and album.artists:
+    names = get_names(album.artists)
+    metadata[MetadataEntries.ALBUM_ARTISTS] = Variant(DbusTypes.STRING_ARRAY, names)
+
+  if album and album.name:
+    metadata[MetadataEntries.ALBUM] = Variant(DbusTypes.STRING, album.name)
+
+  if disc_no:
+    metadata[MetadataEntries.DISC_NUMBER] = Variant(DbusTypes.INT32, disc_no)
+
+  if track_id:
+    metadata[MetadataEntries.TRACK_ID] = Variant(DbusTypes.OBJ, track_id)
+
+  if track_no:
+    metadata[MetadataEntries.TRACK_NUMBER] = Variant(DbusTypes.INT32, track_no)
+
+  return metadata
