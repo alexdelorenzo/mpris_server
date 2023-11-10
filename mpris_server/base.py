@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from collections.abc import Collection, Iterable
 from decimal import Decimal
 from enum import Enum, auto
 from os import PathLike
 from string import ascii_letters, digits
-from typing import Callable, Concatenate, Final, Iterable, \
+from typing import Callable, Concatenate, Final, \
   NamedTuple, Self, TYPE_CHECKING
 
 from gi.repository.GLib import Variant
@@ -24,7 +25,7 @@ NAME: Final[str] = "mprisServer"
 
 NoTrack: Final[DbusObj] = f'{DBUS_PATH}/TrackList/NoTrack'
 
-type Properties = list[Property]
+type Properties = Collection[Property]
 
 
 MIME_TYPES: Final[list[str]] = [
@@ -104,6 +105,7 @@ ON_ROOT_PROPS: Final[Properties] = [
   Property.SupportedMimeTypes,
   Property.SupportedUriSchemes,
 ]
+INVALIDATED_PROPERTIES: Final[Properties] = ()
 
 
 class Ordering(StrEnum):
@@ -155,12 +157,12 @@ type ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
 # python, d-bus and mpris types
 type PyType = type | GenericAliases
 type DbusPyTypes = str | float | int | bool | list | Decimal
-type PropVals = dict[Property, DbusPyTypes]
+type PropertyValues = dict[Property, DbusPyTypes]
 type DbusMetadata = dict[Property, Variant]
 type DbusType = str
 type DbusObj = str
 
-type Method[S, **P, T] = Callable[Concatenate[S, P], T]
+type Method[S: Self, **P, T] = Callable[Concatenate[S, P], T]
 
 
 DEFAULT_RATE: Final[Rate] = Rate(1.0)
@@ -173,10 +175,10 @@ MAX_VOL: Final[Volume] = Volume(1.0)
 
 
 class Interfaces(StrEnum):
-  Root: Self = INTERFACE
-  Player: Self = f'{INTERFACE}.Player'
-  TrackList: Self = f'{INTERFACE}.TrackList'
-  Playlists: Self = f'{INTERFACE}.Playlists'
+  Root = INTERFACE
+  Player = f'{Root}.Player'
+  TrackList = f'{Root}.TrackList'
+  Playlists = f'{Root}.Playlists'
 
 
 class PlayState(StrEnum):
@@ -259,17 +261,25 @@ class Track(NamedTuple):
   uri: str | None = None
 
 
+def emit_properties_changed[I: MprisInterface](
+  interface: I,
+  changed_properties: PropertyValues,
+  invalidated_properties: Properties = INVALIDATED_PROPERTIES,
+):
+  interface.PropertiesChanged(
+    interface.INTERFACE,
+    changed_properties,
+    invalidated_properties,
+  )
+
+
 def dbus_emit_changes[I: MprisInterface](interface: I, changes: Changes):
   if not all(change in Property for change in changes):
-    raise ValueError("Invalid property in `changes`.")
+    raise ValueError(f"Invalid property in {changes=}")
 
-  prop_vals: PropVals = {
+  changed_properties: PropertyValues = {
     prop: getattr(interface, prop)
     for prop in changes
   }
 
-  interface.PropertiesChanged(
-    interface.INTERFACE,
-    prop_vals,
-    []
-  )
+  emit_properties_changed(interface, changed_properties)
