@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import logging
-from typing import Final, Iterable
+from collections.abc import Iterable
+from typing import Final
 from weakref import finalize
 from threading import Thread
 
@@ -136,7 +137,6 @@ class Server[A: MprisAdapter, I: MprisInterface]:
     try:
       if self._loop:
         log.debug('Quitting GLib loop.')
-
         self._loop.quit()
         self._loop = None
 
