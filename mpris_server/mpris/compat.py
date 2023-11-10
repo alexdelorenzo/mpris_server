@@ -2,9 +2,10 @@
 # See:  https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
 from __future__ import annotations
 
+from collections.abc import Callable
 from functools import wraps
 from random import choices
-from typing import Callable, Final
+from typing import Final
 
 from emoji import demojize, emoji_count
 from unidecode import unidecode

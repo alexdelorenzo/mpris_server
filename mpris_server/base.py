@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Collection, Iterable
+from collections.abc import Callable, Collection, Iterable
 from decimal import Decimal
 from enum import Enum, auto
 from os import PathLike
 from string import ascii_letters, digits
-from typing import Callable, Concatenate, Final, \
-  NamedTuple, Self, TYPE_CHECKING
+from typing import Concatenate, Final, NamedTuple, Self, TYPE_CHECKING
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
