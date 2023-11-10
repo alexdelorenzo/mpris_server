@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Final, Iterable, NamedTuple, Required, Self, TypedDict, cast
+from collections.abc import Iterable
+from typing import Any, Final, NamedTuple, Required, Self, TypedDict, cast
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
