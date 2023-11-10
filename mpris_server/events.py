@@ -104,13 +104,13 @@ class PlayerEventAdapter(BaseEventAdapter, ABC):
 class PlaylistsEventAdapter(BaseEventAdapter, ABC):
   @override
   def emit_all(self):
-    self.on_playerlists_all()
+    self.on_playlists_all()
     super().emit_all()
 
   def emit_playlist_changes(self, changes: Changes):
     self.emit_changes(self.playlist, changes)
 
-  def on_playerlists_all(self):
+  def on_playlists_all(self):
     self.emit_playlist_changes(ON_PLAYLIST_PROPS)
 
   def on_playlist_change(self, playlist_id: DbusObj):
