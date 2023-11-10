@@ -120,7 +120,7 @@ DEFAULT_ORDERINGS: Final[list[Ordering]] = [
   Ordering.Alphabetical,
   Ordering.User,
 ]
-NO_ARTISTS: Final[tuple[Artist]] = tuple()
+NO_ARTISTS: Final[tuple[Artist, ...]] = tuple()
 DEFAULT_ALBUM_NAME: Final[str] = "Default Album"
 DEFAULT_ARTIST_NAME: Final[str] = "Default Artist"
 
@@ -243,14 +243,14 @@ class Artist(NamedTuple):
 
 class Album(NamedTuple):
   art_url: str | None = None
-  artists: tuple[Artist] = NO_ARTISTS
+  artists: tuple[Artist, ...] = NO_ARTISTS
   name: str = DEFAULT_ALBUM_NAME
 
 
 class Track(NamedTuple):
   album: Album | None = None
   art_url: str | None = None
-  artists: tuple[Artist] = NO_ARTISTS
+  artists: tuple[Artist, ...] = NO_ARTISTS
   disc_no: int | None = None
   length: Duration = DEFAULT_TRACK_LENGTH
   name: str = DEFAULT_TRACK_NAME
