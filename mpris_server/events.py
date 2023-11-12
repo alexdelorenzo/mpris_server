@@ -27,14 +27,14 @@ __all__ = [
 
 class BaseEventAdapter(ABC):
   root: Root
-  player: Player
+  player: Player | None
   playlist: Playlists | None
   tracklist: TrackList | None
 
   def __init__(
     self,
-    player: Player,
     root: Root,
+    player: Player | None = None,
     playlist: Playlists | None = None,
     tracklist: TrackList | None = None,
   ):
