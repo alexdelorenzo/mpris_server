@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import ClassVar, Final
+from typing import Any, ClassVar, Final
 
 from gi.repository.GLib import Variant
 from pydbus.generic import signal
@@ -10,7 +10,7 @@ from .interface import MprisInterface, log_trace
 from ..base import Artist, BEGINNING, DbusObj, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
   PAUSE_RATE, PlayState, Position, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, LoopStatus, Method, Property, Signal
-from ..mpris.metadata import Metadata, MetadataEntries, get_dbus_metadata
+from ..mpris.metadata import Metadata, MetadataEntries, get_dbus_metadata, get_dbus_var
 
 
 log = logging.getLogger(__name__)
@@ -79,10 +79,10 @@ class Player(MprisInterface):
     metadata: Metadata = Metadata()
 
     if name := self.adapter.get_stream_title():
-      metadata[MetadataEntries.TITLE] = Variant(DbusTypes.STRING, name)
+      update_metadata(metadata, MetadataEntries.TITLE, name)
 
     if art_url := self._get_art_url(track):
-      metadata[MetadataEntries.ART_URL] = Variant(DbusTypes.STRING, art_url)
+      update_metadata(metadata, MetadataEntries.ART_URL, art_url)
 
     return metadata
 
@@ -402,7 +402,55 @@ def sort_names(artist: Artist) -> str:
 
 def get_names(artists: list[Artist]) -> list[str]:
   artists = sorted(artists, key=sort_names)
+
   return [artist.name for artist in artists if artist.name]
+
+
+def update_metadata(metadata: Metadata, entry: MetadataEntries, value: Any) -> Metadata:
+  if value is None:
+    return metadata
+
+  metadata[entry] = get_dbus_var(entry, value)
+
+  return metadata
+
+
+def update_metadata_from_track(metadata: Metadata, track: Track) -> Metadata:
+  album, art_url, artists, disc_no, length, name, track_id, track_no, _, uri = track
+
+  if name and MetadataEntries.TITLE not in metadata:
+    update_metadata(metadata, MetadataEntries.TITLE, name)
+
+  if art_url and MetadataEntries.ART_URL not in metadata:
+    update_metadata(metadata, MetadataEntries.ART_URL, art_url)
+
+  if length:
+    update_metadata(metadata, MetadataEntries.LENGTH, length)
+
+  if uri:
+    update_metadata(metadata, MetadataEntries.URL, uri)
+
+  if artists:
+    names = get_names(artists)
+    update_metadata(metadata, MetadataEntries.ARTISTS, names)
+
+  if album and (artists := album.artists):
+    names = get_names(artists)
+    update_metadata(metadata, MetadataEntries.ALBUM_ARTISTS, names)
+
+  if album and (name := album.name):
+    update_metadata(metadata, MetadataEntries.ALBUM, name)
+
+  if disc_no:
+    update_metadata(metadata, MetadataEntries.DISC_NUMBER, disc_no)
+
+  if track_id:
+    update_metadata(metadata, MetadataEntries.TRACK_ID, track_id)
+
+  if track_no:
+    update_metadata(metadata, MetadataEntries.TRACK_NUMBER, track_no)
+
+  return metadata
 
 
 def create_metadata_from_track(track: Track, metadata: Metadata | None = None) -> Metadata:
@@ -413,38 +461,6 @@ def create_metadata_from_track(track: Track, metadata: Metadata | None = None) -
     case None | _:
       metadata: Metadata = Metadata()
 
-  album, art_url, artists, disc_no, length, name, track_id, track_no, _, uri = track
-
-  if name and MetadataEntries.TITLE not in metadata:
-    metadata[MetadataEntries.TITLE] = Variant(DbusTypes.STRING, name)
-
-  if art_url and MetadataEntries.ART_URL not in metadata:
-    metadata[MetadataEntries.ART_URL] = Variant(DbusTypes.STRING, art_url)
-
-  if length:
-    metadata[MetadataEntries.LENGTH] = Variant(DbusTypes.INT64, length)
-
-  if uri:
-    metadata[MetadataEntries.URL] = Variant(DbusTypes.STRING, uri)
-
-  if artists:
-    names = get_names(artists)
-    metadata[MetadataEntries.ARTISTS] = Variant(DbusTypes.STRING_ARRAY, names)
-
-  if album and album.artists:
-    names = get_names(album.artists)
-    metadata[MetadataEntries.ALBUM_ARTISTS] = Variant(DbusTypes.STRING_ARRAY, names)
-
-  if album and album.name:
-    metadata[MetadataEntries.ALBUM] = Variant(DbusTypes.STRING, album.name)
-
-  if disc_no:
-    metadata[MetadataEntries.DISC_NUMBER] = Variant(DbusTypes.INT32, disc_no)
-
-  if track_id:
-    metadata[MetadataEntries.TRACK_ID] = Variant(DbusTypes.OBJ, track_id)
-
-  if track_no:
-    metadata[MetadataEntries.TRACK_NUMBER] = Variant(DbusTypes.INT32, track_no)
+  update_metadata_from_track(metadata, track)
 
   return metadata
