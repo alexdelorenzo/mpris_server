@@ -2,7 +2,7 @@
 # See:  https://www.freedesktop.org/wiki/Specifications/mpris-spec/metadata/
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from functools import wraps
 from random import choices
 from typing import Final
@@ -18,7 +18,7 @@ START_WITH: Final[str] = "_"
 FIRST_CHAR: Final[int] = 0
 
 # following must be subscriptable to be used with random.choices()
-VALID_CHARS_SUB: Final[tuple[str, ...]] = tuple(VALID_CHARS)
+VALID_CHARS_SUB: Final[Sequence[str]] = tuple(VALID_CHARS)
 INTERFACE_CHARS: Final[set[str]] = {*VALID_CHARS, '-'}
 
 
@@ -34,9 +34,9 @@ def to_ascii(text: str) -> str:
 
 def random_name() -> str:
   chars = choices(VALID_CHARS_SUB, k=RAND_CHARS)
-  rand = ''.join(chars)
+  name = ''.join(chars)
 
-  return NAME_PREFIX + rand
+  return NAME_PREFIX + name
 
 
 def enforce_dbus_length[**P](func: ReturnsStr) -> ReturnsStr:

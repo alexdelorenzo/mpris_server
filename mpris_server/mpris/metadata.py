@@ -1,22 +1,21 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Iterable
+from collections.abc import Collection, Iterable
 from typing import Any, Final, NamedTuple, Required, Self, TypedDict, cast
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
 
-from ..base import DEFAULT_TRACK_ID, DbusObj, DbusPyTypes, \
-  DbusType, DbusTypes, MprisTypes, PyType
+from ..base import DEFAULT_TRACK_ID, DbusPyTypes, DbusTypes, MprisTypes, PyType
 from ..types import get_type, is_type
 
+
+log = logging.getLogger(__name__)
 
 FIRST: Final[int] = 0
 DEFAULT_METADATA: Final[Metadata] = {}
 FIELDS_ERROR: Final[str] = "Added or missing fields."
-
-log = logging.getLogger(__name__)
 
 
 type Name = str
@@ -51,7 +50,7 @@ class MetadataEntries(StrEnum):
 
   @classmethod
   def sorted(cls: type[Self]) -> list[Self]:
-    return sorted(cls, key=lambda e: e.name.casefold())
+    return sorted(cls, key=sort_by_enum_name)
 
   @classmethod
   def to_dict(cls: type[Self]) -> dict[str, Self]:
@@ -187,7 +186,7 @@ class MetadataObj(NamedTuple):
 
   def sorted(self) -> SortedMetadata:
     items: Iterable[NameMetadata] = self._asdict().items()
-    items = sorted(items, key=lambda m: m[FIRST].casefold())
+    items = sorted(items, key=sort_by_name)
 
     return dict(items)
 
@@ -226,8 +225,8 @@ def get_runtime_types() -> RuntimeTypes:
 DBUS_RUNTIME_TYPES: Final[RuntimeTypes] = get_runtime_types()
 
 
-def is_null_list(obj: Any) -> bool:
-  if isinstance(obj, list):
+def is_null_collection(obj: Any) -> bool:
+  if isinstance(obj, Collection):
     return all(item is None for item in obj)
 
   return False
@@ -242,10 +241,10 @@ def is_valid_metadata(entry: str, obj: Any) -> bool:
     log.debug(f"({entry=}, {obj=}) isn't valid metadata, skipping.")
     return False
 
-  return is_dbus_type(obj) and not is_null_list(obj)
+  return is_dbus_type(obj) and not is_null_collection(obj)
 
 
-def get_dbus_var(entry: MetadataEntry, obj: DbusObj) -> Variant:
+def get_dbus_var(entry: MetadataEntry, obj: Any) -> Variant:
   metadata_type: DbusTypes = METADATA_TYPES[entry]
   log.debug(f"Translating {entry=}, {obj=} to {metadata_type=}")
 
@@ -263,3 +262,13 @@ def get_dbus_metadata(metadata: ValidMetadata) -> Metadata:
     for entry, value in metadata.items()
     if is_valid_metadata(entry, value)
   }
+
+
+def sort_by_name(name_metadata: NameMetadata) -> Name:
+  name, _ = name_metadata
+
+  return name.casefold()
+
+
+def sort_by_enum_name(enum: StrEnum) -> str:
+  return enum.name.casefold()
