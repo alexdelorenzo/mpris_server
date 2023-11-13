@@ -23,7 +23,7 @@ def log_trace[S: Self, **P, T](method: Method) -> Method:
     name = method.__name__
     func = f'{self.INTERFACE}.{name}()'
 
-    log.info(f'{func} called.')
+    log.debug(f'{func} called.')
 
     if (result := method(self, *args, **kwargs)) is not None:
       log.debug(f'{func} result: {result}')
