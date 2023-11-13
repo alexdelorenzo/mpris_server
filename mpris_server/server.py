@@ -2,19 +2,19 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Iterable
+from threading import Thread
 from typing import Final
 from weakref import finalize
-from threading import Thread
 
 from gi.repository import GLib
 from pydbus import SessionBus, SystemBus
 from pydbus.bus import Bus
 from pydbus.publication import Publication
 
-from . import EventAdapter
 from .adapters import MprisAdapter
 from .base import DBUS_PATH, Interfaces, NAME
 from .enums import BusType
+from .events import EventAdapter
 from .interfaces.interface import MprisInterface
 from .interfaces.player import Player
 from .interfaces.playlists import Playlists
@@ -29,11 +29,10 @@ __all__ = [
   'Server',
 ]
 
+log = logging.getLogger(__name__)
+
 DEFAULT_BUS_TYPE: Final[BusType] = BusType.SESSION
 NOW: Final[int] = 0
-
-
-log = logging.getLogger(__name__)
 
 
 class Server[A: MprisAdapter, E: EventAdapter, I: MprisInterface]:
