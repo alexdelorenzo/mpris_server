@@ -11,6 +11,7 @@ from pydbus import SessionBus, SystemBus
 from pydbus.bus import Bus
 from pydbus.publication import Publication
 
+from . import EventAdapter
 from .adapters import MprisAdapter
 from .base import DBUS_PATH, Interfaces, NAME
 from .enums import BusType
@@ -35,17 +36,18 @@ NOW: Final[int] = 0
 log = logging.getLogger(__name__)
 
 
-class Server[A: MprisAdapter, I: MprisInterface]:
+class Server[A: MprisAdapter, E: EventAdapter, I: MprisInterface]:
   name: str
   adapter: A | None
-
-  dbus_name: str
+  events: E | None
 
   root: Root
   player: Player
   playlists: Playlists
   tracklist: TrackList
   interfaces: tuple[I, ...]
+
+  dbus_name: str
 
   _loop: GLib.MainLoop | None
   _publication_token: Publication | None
@@ -55,11 +57,11 @@ class Server[A: MprisAdapter, I: MprisInterface]:
     self,
     name: str = NAME,
     adapter: A | None = None,
+    events: E | None = None,
     *interfaces: I,
   ):
     self.name = name
     self.adapter = adapter
-    self.dbus_name = get_dbus_name(self.name)
 
     self.root = Root(self.name, self.adapter)
     self.player = Player(self.name, self.adapter)
@@ -67,9 +69,13 @@ class Server[A: MprisAdapter, I: MprisInterface]:
     self.tracklist = TrackList(self.name, self.adapter)
     self.interfaces = self.root, self.player, self.playlists, self.tracklist, *interfaces
 
+    self.dbus_name = get_dbus_name(self.name)
+
     self._loop = None
     self._publication_token = None
     self._thread = None
+
+    self.set_event_adapter(events)
 
     finalize(self, self.__del__)
 
@@ -88,6 +94,9 @@ class Server[A: MprisAdapter, I: MprisInterface]:
 
     finally:
       self.quit_loop()
+
+  def set_event_adapter(self, events: E):
+    self.events = events
 
   def publish(self, bus_type: BusType = BusType.DEFAULT):
     log.debug(f'Connecting to D-Bus {bus_type} bus...')
