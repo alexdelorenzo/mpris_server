@@ -13,13 +13,13 @@ from strenum import StrEnum
 from .enums import Property
 from .types import GenericAliases
 
+
 if TYPE_CHECKING:
   from .interfaces.interface import MprisInterface
 
 
 INTERFACE: Final[str] = "org.mpris.MediaPlayer2"
-ROOT_INTERFACE: Final[str] = INTERFACE
-DBUS_PATH: Final[str] = '/org/mpris/MediaPlayer2'
+DBUS_PATH: Final[str] = f"/{INTERFACE.replace('.', '/')}"
 NAME: Final[str] = "mprisServer"
 
 NoTrack: Final[DbusObj] = f'{DBUS_PATH}/TrackList/NoTrack'
@@ -108,8 +108,8 @@ INVALIDATED_PROPERTIES: Final[Properties] = ()
 
 
 class Ordering(StrEnum):
-  Alphabetical: Self = auto()
-  User: Self = auto()
+  Alphabetical = auto()
+  User = auto()
 
 
 DEFAULT_TRACK_ID: Final[str] = '/default/1'
@@ -272,13 +272,18 @@ def emit_properties_changed[I: MprisInterface](
   )
 
 
-def dbus_emit_changes[I: MprisInterface](interface: I, changes: Changes):
-  if not all(change in Property for change in changes):
-    raise ValueError(f"Invalid property in {changes=}")
-
-  changed_properties: PropertyValues = {
+def get_changed_properties[I: MprisInterface](interface: I, changes: Changes) -> PropertyValues:
+  return {
     prop: getattr(interface, prop)
     for prop in changes
   }
 
+
+def dbus_emit_changes[I: MprisInterface](interface: I, changes: Changes):
+  if not all(change in Property for change in changes):
+    raise ValueError(f"Invalid property in {changes=}")
+
+  changed_properties = get_changed_properties(interface, changes)
   emit_properties_changed(interface, changed_properties)
+
+
