@@ -1,24 +1,21 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, ClassVar, Final
+from typing import ClassVar, Final
 
-from gi.repository.GLib import Variant
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import Artist, BEGINNING, DbusObj, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
+from ..base import BEGINNING, DbusObj, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
   PAUSE_RATE, PlayState, Position, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, LoopStatus, Method, Property, Signal
-from ..mpris.metadata import Metadata, MetadataEntries, get_dbus_metadata, get_dbus_var
+from ..mpris.metadata import Metadata, MetadataEntries, create_metadata_from_track, get_dbus_metadata, update_metadata
 
 
 log = logging.getLogger(__name__)
 
 ERR_NOT_ENOUGH_METADATA: Final[str] = \
   "Couldn't find enough metadata, please implement metadata() or get_stream_title() and get_current_track() methods.`"
-
-NO_NAME: Final[str] = ''
 
 
 class Player(MprisInterface):
@@ -243,8 +240,12 @@ class Player(MprisInterface):
     if self.adapter.is_mute():
       return MUTE_VOL
 
-    if not (volume := self.adapter.get_volume()):
-      return MUTE_VOL
+    match self.adapter.get_volume():
+      case Volume() as volume:
+        return volume
+
+      case volume if not volume:
+        return MUTE_VOL
 
     return volume
 
@@ -257,6 +258,9 @@ class Player(MprisInterface):
 
     if value is None:
       return
+
+    elif isinstance(value, Volume):
+      value = float(value)
 
     if value < MUTE_VOL:
       value = MUTE_VOL
@@ -394,73 +398,3 @@ class Player(MprisInterface):
       return
 
     self.adapter.stop()
-
-
-def sort_names(artist: Artist) -> str:
-  return artist.name or NO_NAME
-
-
-def get_names(artists: list[Artist]) -> list[str]:
-  artists = sorted(artists, key=sort_names)
-
-  return [artist.name for artist in artists if artist.name]
-
-
-def update_metadata(metadata: Metadata, entry: MetadataEntries, value: Any) -> Metadata:
-  if value is None:
-    return metadata
-
-  metadata[entry] = get_dbus_var(entry, value)
-
-  return metadata
-
-
-def update_metadata_from_track(metadata: Metadata, track: Track) -> Metadata:
-  album, art_url, artists, disc_no, length, name, track_id, track_no, _, uri = track
-
-  if name and MetadataEntries.TITLE not in metadata:
-    update_metadata(metadata, MetadataEntries.TITLE, name)
-
-  if art_url and MetadataEntries.ART_URL not in metadata:
-    update_metadata(metadata, MetadataEntries.ART_URL, art_url)
-
-  if length:
-    update_metadata(metadata, MetadataEntries.LENGTH, length)
-
-  if uri:
-    update_metadata(metadata, MetadataEntries.URL, uri)
-
-  if artists:
-    names = get_names(artists)
-    update_metadata(metadata, MetadataEntries.ARTISTS, names)
-
-  if album and (artists := album.artists):
-    names = get_names(artists)
-    update_metadata(metadata, MetadataEntries.ALBUM_ARTISTS, names)
-
-  if album and (name := album.name):
-    update_metadata(metadata, MetadataEntries.ALBUM, name)
-
-  if disc_no:
-    update_metadata(metadata, MetadataEntries.DISC_NUMBER, disc_no)
-
-  if track_id:
-    update_metadata(metadata, MetadataEntries.TRACK_ID, track_id)
-
-  if track_no:
-    update_metadata(metadata, MetadataEntries.TRACK_NUMBER, track_no)
-
-  return metadata
-
-
-def create_metadata_from_track(track: Track, metadata: Metadata | None = None) -> Metadata:
-  match metadata:
-    case dict():
-      metadata: Metadata = metadata.copy()
-
-    case None | _:
-      metadata: Metadata = Metadata()
-
-  update_metadata_from_track(metadata, track)
-
-  return metadata

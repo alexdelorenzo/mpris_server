@@ -7,7 +7,7 @@ from typing import Any, Final, NamedTuple, Required, Self, TypedDict, cast
 from gi.repository.GLib import Variant
 from strenum import StrEnum
 
-from ..base import DEFAULT_TRACK_ID, DbusPyTypes, DbusTypes, MprisTypes, PyType
+from ..base import Artist, DEFAULT_TRACK_ID, DbusPyTypes, DbusTypes, MprisTypes, NO_ARTIST_NAME, PyType, Track
 from ..types import get_type, is_type
 
 
@@ -50,7 +50,7 @@ class MetadataEntries(StrEnum):
 
   @classmethod
   def sorted(cls: type[Self]) -> list[Self]:
-    return sorted(cls, key=sort_by_enum_name)
+    return sorted(cls, key=sort_enum_by_name)
 
   @classmethod
   def to_dict(cls: type[Self]) -> dict[str, Self]:
@@ -186,7 +186,7 @@ class MetadataObj(NamedTuple):
 
   def sorted(self) -> SortedMetadata:
     items: Iterable[NameMetadata] = self._asdict().items()
-    items = sorted(items, key=sort_by_name)
+    items = sorted(items, key=sort_metadata_by_name)
 
     return dict(items)
 
@@ -264,11 +264,81 @@ def get_dbus_metadata(metadata: ValidMetadata) -> Metadata:
   }
 
 
-def sort_by_name(name_metadata: NameMetadata) -> Name:
+def sort_metadata_by_name(name_metadata: NameMetadata) -> Name:
   name, _ = name_metadata
 
   return name.casefold()
 
 
-def sort_by_enum_name(enum: StrEnum) -> str:
+def sort_enum_by_name(enum: StrEnum) -> str:
   return enum.name.casefold()
+
+
+def sort_artists_by_name(artist: Artist) -> str:
+  return artist.name or NO_ARTIST_NAME
+
+
+def get_names(artists: list[Artist]) -> list[str]:
+  artists = sorted(artists, key=sort_artists_by_name)
+
+  return [artist.name for artist in artists if artist.name]
+
+
+def update_metadata(metadata: Metadata, entry: MetadataEntries, value: Any) -> Metadata:
+  if value is None:
+    return metadata
+
+  metadata[entry] = get_dbus_var(entry, value)
+
+  return metadata
+
+
+def update_metadata_from_track(metadata: Metadata, track: Track) -> Metadata:
+  album, art_url, artists, disc_no, length, name, track_id, track_no, _, uri = track
+
+  if name and MetadataEntries.TITLE not in metadata:
+    update_metadata(metadata, MetadataEntries.TITLE, name)
+
+  if art_url and MetadataEntries.ART_URL not in metadata:
+    update_metadata(metadata, MetadataEntries.ART_URL, art_url)
+
+  if length:
+    update_metadata(metadata, MetadataEntries.LENGTH, length)
+
+  if uri:
+    update_metadata(metadata, MetadataEntries.URL, uri)
+
+  if artists:
+    names = get_names(artists)
+    update_metadata(metadata, MetadataEntries.ARTISTS, names)
+
+  if album and (artists := album.artists):
+    names = get_names(artists)
+    update_metadata(metadata, MetadataEntries.ALBUM_ARTISTS, names)
+
+  if album and (name := album.name):
+    update_metadata(metadata, MetadataEntries.ALBUM, name)
+
+  if disc_no:
+    update_metadata(metadata, MetadataEntries.DISC_NUMBER, disc_no)
+
+  if track_id:
+    update_metadata(metadata, MetadataEntries.TRACK_ID, track_id)
+
+  if track_no:
+    update_metadata(metadata, MetadataEntries.TRACK_NUMBER, track_no)
+
+  return metadata
+
+
+def create_metadata_from_track(track: Track, metadata: Metadata | None = None) -> Metadata:
+  match metadata:
+    case dict():
+      metadata: Metadata = metadata.copy()
+
+    case None | _:
+      metadata: Metadata = Metadata()
+
+  update_metadata_from_track(metadata, track)
+
+  return metadata

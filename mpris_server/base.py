@@ -120,10 +120,10 @@ DEFAULT_ORDERINGS: Final[list[Ordering]] = [
   Ordering.Alphabetical,
   Ordering.User,
 ]
-NO_ARTISTS: Final[tuple[Artist, ...]] = tuple()
 DEFAULT_ALBUM_NAME: Final[str] = "Default Album"
 DEFAULT_ARTIST_NAME: Final[str] = "Default Artist"
-
+NO_ARTISTS: Final[tuple[Artist, ...]] = tuple()
+NO_ARTIST_NAME: Final[str] = ''
 
 BEGINNING: Final[int] = 0
 
@@ -285,5 +285,3 @@ def dbus_emit_changes[I: MprisInterface](interface: I, changes: Changes):
 
   changed_properties = get_changed_properties(interface, changes)
   emit_properties_changed(interface, changed_properties)
-
-
