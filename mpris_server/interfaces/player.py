@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from fractions import Fraction
 from typing import ClassVar, Final
 
 from pydbus.generic import signal
@@ -256,24 +257,28 @@ class Player(MprisInterface):
       log.debug(f"Setting {self.INTERFACE}.{Property.Volume} not allowed")
       return
 
-    if value is None:
-      return
+    match volume := value:
+      case None:
+        return
 
-    elif isinstance(value, Volume):
-      value = float(value)
+      case Volume() | int() | float() | Fraction():
+        volume = float(volume)
 
-    if value < MUTE_VOL:
-      value = MUTE_VOL
+      case unknown:
+        log.warning(f"Unknown volume type: {type(unknown)}, continuing anyway.")
 
-    elif value > MAX_VOL:
-      value = MAX_VOL
+    if volume < MUTE_VOL:
+      volume = MUTE_VOL
 
-    self.adapter.set_volume(value)
+    elif volume > MAX_VOL:
+      volume = MAX_VOL
 
-    if value > MUTE_VOL:
+    self.adapter.set_volume(volume)
+
+    if volume > MUTE_VOL:
       self.adapter.set_mute(False)
 
-    elif value <= MUTE_VOL:
+    elif volume <= MUTE_VOL:
       self.adapter.set_mute(True)
 
   @log_trace
