@@ -50,10 +50,10 @@ class RootAdapter(ABC):
   def quit(self):
     pass
 
-  def set_fullscreen(self, val: bool):
+  def set_fullscreen(self, value: bool):
     pass
 
-  def set_raise(self, val: bool):
+  def set_raise(self, value: bool):
     pass
 
 
@@ -158,33 +158,33 @@ class PlayerAdapter(ABC):
   def seek(self, time: Position, track_id: DbusObj | None = None):
     pass
 
-  def set_loop_status(self, val: LoopStatus):
-    match val:
+  def set_loop_status(self, value: LoopStatus):
+    match value:
       case LoopStatus.NONE:
         self.set_repeating(False)
 
       case LoopStatus.TRACK | LoopStatus.PLAYLIST:
         self.set_repeating(True)
 
-  def set_maximum_rate(self, val: Rate):
+  def set_maximum_rate(self, value: Rate):
     pass
 
-  def set_minimum_rate(self, val: Rate):
+  def set_minimum_rate(self, value: Rate):
     pass
 
-  def set_mute(self, val: bool):
+  def set_mute(self, value: bool):
     pass
 
-  def set_rate(self, val: Rate):
+  def set_rate(self, value: Rate):
     pass
 
-  def set_repeating(self, val: bool):
+  def set_repeating(self, value: bool):
     pass
 
-  def set_shuffle(self, val: bool):
+  def set_shuffle(self, value: bool):
     pass
 
-  def set_volume(self, val: Volume):
+  def set_volume(self, value: Volume):
     pass
 
   def stop(self):
