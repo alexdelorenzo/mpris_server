@@ -178,9 +178,6 @@ class PlayerAdapter(ABC):
   def set_rate(self, val: Rate):
     pass
 
-  def set_rate(self, val: Rate):
-    pass
-
   def set_repeating(self, val: bool):
     pass
 
