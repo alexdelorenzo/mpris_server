@@ -136,6 +136,7 @@ class Server[A: MprisAdapter, E: EventAdapter, I: MprisInterface]:
     if background:
       log.debug("Entering D-Bus loop in background thread.")
       self._thread = Thread(target=self._run_loop, name=self.name)
+      self._thread.start()
 
     else:
       log.debug("Entering D-Bus loop in foreground thread.")
@@ -152,6 +153,7 @@ class Server[A: MprisAdapter, E: EventAdapter, I: MprisInterface]:
       if self._thread:
         log.debug("Joining background thread.")
         self._thread.join(timeout=NOW)
+        self._thread = None
 
   def quit(self):
     log.debug('Unpublishing and quitting loop.')
