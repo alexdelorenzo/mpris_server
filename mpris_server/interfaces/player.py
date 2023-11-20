@@ -7,7 +7,7 @@ from typing import ClassVar, Final
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import BEGINNING, DbusObj, DbusTypes, Interfaces, MAX_RATE, MAX_VOL, MIN_RATE, MUTE_VOL, \
+from ..base import BEGINNING, DbusObj, DbusTypes, Interfaces, MAX_RATE, MAX_VOLUME, MIN_RATE, MUTE_VOLUME, \
   PAUSE_RATE, PlayState, Position, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, LoopStatus, Method, Property, Signal
 from ..mpris.metadata import Metadata, MetadataEntries, create_metadata_from_track, get_dbus_metadata, update_metadata
@@ -239,14 +239,14 @@ class Player(MprisInterface):
   @log_trace
   def Volume(self) -> Volume:
     if self.adapter.is_mute():
-      return MUTE_VOL
+      return MUTE_VOLUME
 
-    match self.adapter.get_volume():
-      case Volume() as volume:
+    match volume := self.adapter.get_volume():
+      case Volume():
         return volume
 
-      case volume if not volume:
-        return MUTE_VOL
+      case _ if not volume:
+        return MUTE_VOLUME
 
     return volume
 
@@ -262,23 +262,23 @@ class Player(MprisInterface):
         return
 
       case Volume() | int() | float() | Fraction():
-        volume = float(volume)
+        volume = Volume(volume)
 
       case unknown:
         log.warning(f"Unknown volume type: {type(unknown)}, continuing anyway.")
 
-    if volume < MUTE_VOL:
-      volume = MUTE_VOL
+    if volume < MUTE_VOLUME:
+      volume = MUTE_VOLUME
 
-    elif volume > MAX_VOL:
-      volume = MAX_VOL
+    elif volume > MAX_VOLUME:
+      volume = MAX_VOLUME
 
     self.adapter.set_volume(volume)
 
-    if volume > MUTE_VOL:
+    if volume > MUTE_VOLUME:
       self.adapter.set_mute(False)
 
-    elif volume <= MUTE_VOL:
+    elif volume <= MUTE_VOLUME:
       self.adapter.set_mute(True)
 
   @log_trace
