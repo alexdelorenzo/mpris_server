@@ -244,7 +244,7 @@ def is_valid_metadata(entry: str, obj: Any) -> bool:
   return is_dbus_type(obj) and not is_null_collection(obj)
 
 
-def get_dbus_var(entry: MetadataEntry, obj: Any) -> Variant:
+def get_dbus_var(entry: MetadataEntries, obj: Any) -> Variant:
   metadata_type: DbusTypes = METADATA_TYPES[entry]
   log.debug(f"Translating {entry=}, {obj=} to {metadata_type=}")
 
