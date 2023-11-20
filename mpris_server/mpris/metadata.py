@@ -331,13 +331,16 @@ def update_metadata_from_track(metadata: Metadata, track: Track) -> Metadata:
   return metadata
 
 
-def create_metadata_from_track(track: Track, metadata: Metadata | None = None) -> Metadata:
+def create_metadata_from_track(track: Track | None, metadata: Metadata | None = None) -> Metadata:
   match metadata:
     case dict():
       metadata: Metadata = metadata.copy()
 
     case None | _:
       metadata: Metadata = Metadata()
+
+  if not track:
+    return metadata
 
   update_metadata_from_track(metadata, track)
 
