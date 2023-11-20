@@ -275,7 +275,7 @@ def sort_enum_by_name(enum: StrEnum) -> str:
 
 
 def sort_artists_by_name(artist: Artist) -> str:
-  return artist.name or NO_ARTIST_NAME
+  return artist.name.casefold() or NO_ARTIST_NAME
 
 
 def get_names(artists: list[Artist]) -> list[str]:
