@@ -243,14 +243,14 @@ class Artist(NamedTuple):
 
 class Album(NamedTuple):
   art_url: str | None = None
-  artists: tuple[Artist, ...] = NO_ARTISTS
+  artists: list[Artist] = NO_ARTISTS
   name: str = DEFAULT_ALBUM_NAME
 
 
 class Track(NamedTuple):
   album: Album | None = None
   art_url: str | None = None
-  artists: tuple[Artist, ...] = NO_ARTISTS
+  artists: list[Artist] = NO_ARTISTS
   disc_no: int | None = None
   length: Duration = DEFAULT_TRACK_LENGTH
   name: str = DEFAULT_TRACK_NAME
