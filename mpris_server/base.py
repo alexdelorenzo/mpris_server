@@ -89,7 +89,6 @@ ON_TRACKS_PROPS: Final[Properties] = [
 ]
 ON_PLAYLIST_PROPS: Final[Properties] = [
   Property.ActivePlaylist,
-  Property.CanEditTracks,
   Property.Orderings,
   Property.PlaylistCount,
 ]

@@ -35,12 +35,12 @@ class BaseEventAdapter(ABC):
     self,
     root: Root,
     player: Player | None = None,
-    playlist: Playlists | None = None,
+    playlists: Playlists | None = None,
     tracklist: TrackList | None = None,
   ):
     self.root = root
     self.player = player
-    self.playlist = playlist
+    self.playlist = playlists
     self.tracklist = tracklist
 
   @staticmethod
