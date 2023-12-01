@@ -7,7 +7,7 @@ from typing import ClassVar, Final
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import BEGINNING, DbusObj, DbusTypes, Interfaces, MAX_RATE, MAX_VOLUME, MIN_RATE, MUTE_VOLUME, \
+from ..base import BEGINNING, DbusObj, DbusTypes, Interface, MAX_RATE, MAX_VOLUME, MIN_RATE, MUTE_VOLUME, \
   PAUSE_RATE, PlayState, Position, Rate, Track, Volume
 from ..enums import Access, Arg, Direction, LoopStatus, Method, Property, Signal
 from ..mpris.metadata import Metadata, MetadataEntries, create_metadata_from_track, get_dbus_metadata, update_metadata
@@ -20,7 +20,7 @@ ERR_NOT_ENOUGH_METADATA: Final[str] = \
 
 
 class Player(MprisInterface):
-  INTERFACE: ClassVar[Interfaces] = Interfaces.Player
+  INTERFACE: ClassVar[Interface] = Interface.Player
 
   __doc__: Final[str] = f"""
   <node>

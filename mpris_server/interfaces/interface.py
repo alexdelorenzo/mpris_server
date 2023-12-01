@@ -7,7 +7,7 @@ from typing import ClassVar, Final, Self, TYPE_CHECKING
 
 from pydbus.generic import signal
 
-from ..base import Interfaces, Method, NAME
+from ..base import Interface, Method, NAME
 
 
 if TYPE_CHECKING:
@@ -34,7 +34,7 @@ def log_trace[S: Self, **P, T](method: Method) -> Method:
 
 
 class MprisInterface[A: MprisAdapter](ABC):
-  INTERFACE: ClassVar[Interfaces] = Interfaces.Root
+  INTERFACE: ClassVar[Interface] = Interface.Root
 
   name: str
   adapter: A | None

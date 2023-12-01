@@ -6,7 +6,7 @@ from typing import ClassVar, Final
 from pydbus.generic import signal
 
 from .interface import MprisInterface, log_trace
-from ..base import ActivePlaylist, DbusTypes, Interfaces, Ordering, PlaylistEntry, PlaylistId
+from ..base import ActivePlaylist, DbusTypes, Interface, Ordering, PlaylistEntry, PlaylistId
 from ..enums import Access, Arg, Direction, Method, Property, Signal
 
 
@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 class Playlists(MprisInterface):
-  INTERFACE: ClassVar[Interfaces] = Interfaces.Playlists
+  INTERFACE: ClassVar[Interface] = Interface.Playlists
 
   __doc__: Final[str] = f"""
   <node>

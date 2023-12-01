@@ -172,7 +172,7 @@ MUTE_VOLUME: Final[Volume] = Volume(0.0)
 MAX_VOLUME: Final[Volume] = Volume(1.0)
 
 
-class Interfaces(StrEnum):
+class Interface(StrEnum):
   Root = INTERFACE
   Player = f'{Root}.Player'
   TrackList = f'{Root}.TrackList'

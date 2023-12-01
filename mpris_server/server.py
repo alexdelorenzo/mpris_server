@@ -12,7 +12,7 @@ from pydbus.bus import Bus
 from pydbus.publication import Publication
 
 from .adapters import MprisAdapter
-from .base import DBUS_PATH, Interfaces, NAME
+from .base import DBUS_PATH, Interface, NAME
 from .enums import BusType
 from .events import EventAdapter
 from .interfaces.interface import MprisInterface
@@ -116,7 +116,7 @@ class Server[A: MprisAdapter, E: EventAdapter, I: MprisInterface]:
         bus = SessionBus()
 
     log.debug(f'MPRIS server connecting to D-Bus {bus_type} bus.')
-    name = f'{Interfaces.Root}.{self.dbus_name}'
+    name = f'{Interface.Root}.{self.dbus_name}'
     paths = self._get_dbus_paths()
 
     self._publication_token = bus.publish(name, *paths)
