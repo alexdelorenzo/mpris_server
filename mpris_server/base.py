@@ -255,7 +255,7 @@ class Track(NamedTuple):
   length: Duration = DEFAULT_TRACK_LENGTH
   name: str = DEFAULT_TRACK_NAME
   track_id: DbusObj = DEFAULT_TRACK_ID
-  track_no: int | None = None
+  track_number: int | None = None
   type: Enum | None = None
   uri: str | None = None
 

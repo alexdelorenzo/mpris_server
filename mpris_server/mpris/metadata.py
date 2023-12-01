@@ -298,7 +298,7 @@ def update_metadata_from_track(track: Track, metadata: Metadata | None = None) -
   if metadata is None:
     metadata = Metadata()
 
-  album, art_url, artists, disc_number, length, name, track_id, track_no, _, uri = track
+  album, art_url, artists, disc_number, length, name, track_id, track_number, _, uri = track
 
   if name and (entry := MetadataEntries.TITLE) not in metadata:
     update_metadata(metadata, entry, name)
@@ -329,8 +329,8 @@ def update_metadata_from_track(track: Track, metadata: Metadata | None = None) -
   if track_id:
     update_metadata(metadata, MetadataEntries.TRACK_ID, track_id)
 
-  if track_no:
-    update_metadata(metadata, MetadataEntries.TRACK_NUMBER, track_no)
+  if track_number:
+    update_metadata(metadata, MetadataEntries.TRACK_NUMBER, track_number)
 
   return metadata
 
