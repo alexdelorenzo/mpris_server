@@ -10,11 +10,11 @@ type GenericAliases = GenericAlias | _GenericAlias
 
 
 def is_type(obj: type) -> bool:
-  return isinstance(obj, type) or get_origin(obj)
+  return isinstance(obj, type) or bool(get_origin(obj))
 
 
 def is_generic(obj: type) -> bool:
-  return hasattr(obj, ORIGIN) or get_origin(obj)
+  return hasattr(obj, ORIGIN) or bool(get_origin(obj))
 
 
 def get_type(obj: type) -> type | None:
