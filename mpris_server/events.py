@@ -3,9 +3,9 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import override
 
-from .base import DbusObj, ON_ENDED_PROPS, ON_OPTION_PROPS, ON_PLAYBACK_PROPS, ON_PLAYER_PROPS, ON_PLAYLIST_PROPS, \
-  ON_PLAYPAUSE_PROPS, ON_ROOT_PROPS, ON_SEEK_PROPS, ON_TITLE_PROPS, ON_TRACKS_PROPS, ON_VOLUME_PROPS, Position, \
-  dbus_emit_changes, Changes
+from .base import Changes, DbusObj, ON_ENDED_PROPS, ON_OPTION_PROPS, ON_PLAYBACK_PROPS, ON_PLAYER_PROPS, \
+  ON_PLAYLIST_PROPS, ON_PLAYPAUSE_PROPS, ON_ROOT_PROPS, ON_SEEK_PROPS, ON_TITLE_PROPS, ON_TRACKS_PROPS, ON_VOLUME_PROPS, \
+  Position, dbus_emit_changes
 from .interfaces.interface import MprisInterface
 from .interfaces.player import Player
 from .interfaces.playlists import Playlists
