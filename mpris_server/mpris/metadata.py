@@ -126,7 +126,16 @@ METADATA_TO_PY_TYPES: Final[dict[MetadataEntries, PyType]] = {
 }
 
 
-assert len(MetadataEntries) == len(METADATA_TYPES) == len(METADATA_TO_PY_TYPES), FIELDS_ERROR
+Metadata = TypedDict('Metadata', METADATA_TO_PY_TYPES, total=False)
+
+DEFAULT_METADATA: Final[Metadata] = Metadata()
+
+assert (
+  len(MetadataEntries) ==
+  len(METADATA_TYPES) ==
+  len(METADATA_TO_PY_TYPES) ==
+  len(Metadata.__annotations__)
+), FIELDS_ERROR
 
 
 class _MetadataTypes(NamedTuple):
@@ -155,7 +164,6 @@ class _MetadataTypes(NamedTuple):
 
 
 MetadataTypes: Final[_MetadataTypes] = _MetadataTypes()
-
 
 assert len(MetadataEntries) == len(MetadataTypes), FIELDS_ERROR
 
@@ -205,10 +213,6 @@ class MetadataObj(NamedTuple):
 
 assert len(MetadataEntries) == len(MetadataObj._fields), FIELDS_ERROR
 
-
-Metadata = TypedDict('Metadata', METADATA_TO_PY_TYPES, total=False)
-
-DEFAULT_METADATA: Final[Metadata] = Metadata()
 
 type ValidMetadata = Metadata | MetadataObj
 type RuntimeTypes = tuple[type, ...]
