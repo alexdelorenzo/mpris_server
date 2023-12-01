@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Collection, Iterable
+from collections.abc import Collection, Iterable, Mapping, Sequence
 from typing import Any, Final, NamedTuple, Required, Self, TypedDict, cast
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
 
-from ..base import Artist, DEFAULT_TRACK_ID, DbusPyTypes, DbusTypes, MprisTypes, NO_ARTIST_NAME, PyType, Track
+from ..base import Artist, Compatible, DEFAULT_TRACK_ID, DbusPyTypes, DbusTypes, MprisTypes, NO_ARTIST_NAME, PyType, \
+  Track
 from ..types import get_type, is_type
 
 
@@ -226,30 +227,49 @@ def get_runtime_types() -> RuntimeTypes:
 DBUS_RUNTIME_TYPES: Final[RuntimeTypes] = get_runtime_types()
 
 
-def is_null_collection(obj: Any) -> bool:
-  if isinstance(obj, Collection):
-    return all(item is None for item in obj)
+def is_null_collection(val: Any) -> bool:
+  if isinstance(val, Collection):
+    return all(item is None for item in val)
 
   return False
 
 
-def is_dbus_type(obj: Any) -> bool:
-  return isinstance(obj, DBUS_RUNTIME_TYPES)
+def is_dbus_type(val: Any) -> bool:
+  return isinstance(val, DBUS_RUNTIME_TYPES)
 
 
-def is_valid_metadata(entry: str, obj: Any) -> bool:
-  if obj is None or entry not in METADATA_TYPES:
-    log.debug(f"({entry=}, {obj=}) isn't valid metadata, skipping.")
+def is_valid_metadata(entry: str, val: Any) -> bool:
+  if val is None or entry not in METADATA_TYPES:
+    log.debug(f"<{entry=}, {val=}> isn't valid metadata, skipping.")
     return False
 
-  return is_dbus_type(obj) and not is_null_collection(obj)
+  return is_dbus_type(val) and not is_null_collection(val)
 
 
-def get_dbus_var(entry: MetadataEntries, obj: Any) -> Variant:
+def get_dbus_var(entry: MetadataEntries, val: Any) -> Variant:
   metadata_type: DbusTypes = METADATA_TYPES[entry]
-  log.debug(f"Translating {entry=}, {obj=} to {metadata_type=}")
+  var: Compatible = to_compatible_type(val)
 
-  return Variant(metadata_type, obj)
+  log.debug(f"Translating <{entry=}, {val=}> to <{metadata_type=}, {var=}>")
+
+  return Variant(metadata_type, var)
+
+
+def to_compatible_type(val: Any) -> Compatible:
+  match val:
+    case bytes(string):
+      return string.decode()
+
+    case str(string):
+      return string
+
+    case Mapping() as mapping:
+      return dict(mapping)
+
+    case Sequence() as sequence:
+      return list(sequence)
+
+  return val
 
 
 def get_dbus_metadata(metadata: ValidMetadata) -> Metadata:
