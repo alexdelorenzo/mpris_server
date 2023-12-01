@@ -14,7 +14,6 @@ from ..types import get_type, is_type
 log = logging.getLogger(__name__)
 
 FIRST: Final[int] = 0
-DEFAULT_METADATA: Final[Metadata] = {}
 FIELDS_ERROR: Final[str] = "Added or missing fields."
 
 
@@ -208,6 +207,8 @@ assert len(MetadataEntries) == len(MetadataObj._fields), FIELDS_ERROR
 
 Metadata = TypedDict('Metadata', METADATA_TO_PY_TYPES, total=False)
 
+DEFAULT_METADATA: Final[Metadata] = Metadata()
+
 type ValidMetadata = Metadata | MetadataObj
 type RuntimeTypes = tuple[type, ...]
 
@@ -293,14 +294,17 @@ def update_metadata(metadata: Metadata, entry: MetadataEntries, value: Any) -> M
   return metadata
 
 
-def update_metadata_from_track(metadata: Metadata, track: Track) -> Metadata:
-  album, art_url, artists, disc_no, length, name, track_id, track_no, _, uri = track
+def update_metadata_from_track(track: Track, metadata: Metadata | None = None) -> Metadata:
+  if metadata is None:
+    metadata = Metadata()
 
-  if name and MetadataEntries.TITLE not in metadata:
-    update_metadata(metadata, MetadataEntries.TITLE, name)
+  album, art_url, artists, disc_number, length, name, track_id, track_no, _, uri = track
 
-  if art_url and MetadataEntries.ART_URL not in metadata:
-    update_metadata(metadata, MetadataEntries.ART_URL, art_url)
+  if name and (entry := MetadataEntries.TITLE) not in metadata:
+    update_metadata(metadata, entry, name)
+
+  if art_url and (entry := MetadataEntries.ART_URL) not in metadata:
+    update_metadata(metadata, entry, art_url)
 
   if length:
     update_metadata(metadata, MetadataEntries.LENGTH, length)
@@ -319,8 +323,8 @@ def update_metadata_from_track(metadata: Metadata, track: Track) -> Metadata:
   if album and (name := album.name):
     update_metadata(metadata, MetadataEntries.ALBUM, name)
 
-  if disc_no:
-    update_metadata(metadata, MetadataEntries.DISC_NUMBER, disc_no)
+  if disc_number:
+    update_metadata(metadata, MetadataEntries.DISC_NUMBER, disc_number)
 
   if track_id:
     update_metadata(metadata, MetadataEntries.TRACK_ID, track_id)
@@ -342,6 +346,6 @@ def create_metadata_from_track(track: Track | None, metadata: Metadata | None = 
   if not track:
     return metadata
 
-  update_metadata_from_track(metadata, track)
+  update_metadata_from_track(track, metadata)
 
   return metadata

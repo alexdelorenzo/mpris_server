@@ -31,7 +31,7 @@ REQS: list[str] = [
 
 README: str = Path('README.md').read_text()
 
-PYTHON_VERSION = '>=3.12'
+PYTHON_VERSION: str = '>=3.12'
 
 setup(
   name=NAME,

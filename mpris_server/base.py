@@ -251,7 +251,7 @@ class Track(NamedTuple):
   album: Album | None = None
   art_url: str | None = None
   artists: list[Artist] = NO_ARTISTS
-  disc_no: int | None = None
+  disc_number: int | None = None
   length: Duration = DEFAULT_TRACK_LENGTH
   name: str = DEFAULT_TRACK_NAME
   track_id: DbusObj = DEFAULT_TRACK_ID
