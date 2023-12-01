@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Collection, Iterable
+from collections.abc import Callable, Collection, Iterable, Mapping, Sequence
 from decimal import Decimal
 from enum import Enum, auto
 from os import PathLike
 from string import ascii_letters, digits
-from typing import Concatenate, Final, NamedTuple, Self, TYPE_CHECKING
+from typing import Concatenate, Final, NamedTuple, Self, TYPE_CHECKING, Union
 
 from gi.repository.GLib import Variant
 from strenum import StrEnum
@@ -212,29 +212,30 @@ class DbusTypes(StrEnum):
 
 
 class _MprisTypes(NamedTuple):
-  ARRAY: PyType = list
+  ARRAY: PyType = Sequence
   BOOLEAN: PyType = bool
   DATETIME: PyType = str
   DOUBLE: PyType = float
   INT32: PyType = int
   INT64: PyType = int
-  MAP: PyType = dict
+  MAP: PyType = Mapping
   OBJ: PyType = str
-  OBJ_ARRAY: PyType = list[str]
+  OBJ_ARRAY: PyType = Sequence[str]
   STRING: PyType = str
-  STRING_ARRAY: PyType = list[str]
+  STRING_ARRAY: PyType = Sequence[str]
   UINT32: PyType = int
   UINT64: PyType = int
   VARIANT: PyType = object
 
   MAYBE_PLAYLIST: PyType = PlaylistEntry | None
   METADATA: PyType = DbusMetadata
-  METADATA_ARRAY: PyType = list[DbusMetadata]
+  METADATA_ARRAY: PyType = Sequence[DbusMetadata]
   PLAYLIST: PyType = PlaylistEntry
-  PLAYLISTS: PyType = list[PlaylistEntry]
+  PLAYLISTS: PyType = Sequence[PlaylistEntry]
 
 
 MprisTypes: Final = _MprisTypes()
+type Compatible = Union[*MprisTypes]
 
 
 class Artist(NamedTuple):
@@ -243,14 +244,14 @@ class Artist(NamedTuple):
 
 class Album(NamedTuple):
   art_url: str | None = None
-  artists: list[Artist] = NO_ARTISTS
+  artists: Sequence[Artist] = NO_ARTISTS
   name: str = DEFAULT_ALBUM_NAME
 
 
 class Track(NamedTuple):
   album: Album | None = None
   art_url: str | None = None
-  artists: list[Artist] = NO_ARTISTS
+  artists: Sequence[Artist] = NO_ARTISTS
   disc_number: int | None = None
   length: Duration = DEFAULT_TRACK_LENGTH
   name: str = DEFAULT_TRACK_NAME
