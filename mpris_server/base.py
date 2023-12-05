@@ -251,6 +251,7 @@ class Track(NamedTuple):
   album: Album | None = None
   art_url: str | None = None
   artists: Sequence[Artist] = NO_ARTISTS
+  comments: list[str] | None = None
   disc_number: int | None = None
   length: Duration = DEFAULT_TRACK_LENGTH
   name: str = DEFAULT_TRACK_NAME
