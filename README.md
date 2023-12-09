@@ -8,10 +8,10 @@ Whereas [existing MPRIS libraries for Python](https://github.com/hugosenari/mpri
 existing MPRIS support, `mpris_server` is a library used to implement MPRIS support in apps that don't already have it.
 If you want to give your media player an MPRIS interface, then `mpris_server` is right for you.
 
+Check out [`📺 cast_control`](https://github.com/alexdelorenzo/cast_control) for an app that uses `mpris_server`.
+
 `mpris_server` is a fork of [Mopidy-MPRIS](https://github.com/mopidy/mopidy-mpris) that was extended and made into a
 general purpose library.
-
-Check out [`📺 cast_control`](https://github.com/alexdelorenzo/cast_control) for an app that uses `mpris_server`.
 
 ## Features
 
