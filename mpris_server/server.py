@@ -135,7 +135,7 @@ class Server[A: MprisAdapter, E: EventAdapter, I: MprisInterface]:
 
     if background:
       log.debug("Entering D-Bus loop in background thread.")
-      self._thread = Thread(target=self._run_loop, name=self.name)
+      self._thread = Thread(target=self._run_loop, name=self.name, daemon=True)
       self._thread.start()
 
     else:
