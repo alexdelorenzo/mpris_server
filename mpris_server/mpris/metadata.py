@@ -131,10 +131,10 @@ Metadata = TypedDict('Metadata', METADATA_TO_PY_TYPES, total=False)
 DEFAULT_METADATA: Final[Metadata] = Metadata()
 
 assert (
-  len(MetadataEntries) ==
-  len(METADATA_TYPES) ==
-  len(METADATA_TO_PY_TYPES) ==
-  len(Metadata.__annotations__)
+  len(MetadataEntries)
+  == len(METADATA_TYPES)
+  == len(METADATA_TO_PY_TYPES)
+  == len(Metadata.__annotations__)
 ), FIELDS_ERROR
 
 

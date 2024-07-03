@@ -7,7 +7,6 @@ from os import PathLike
 from string import ascii_letters, digits
 from typing import Concatenate, Final, NamedTuple, Self, TYPE_CHECKING, Union
 
-from gi.repository.GLib import Variant
 from strenum import StrEnum
 
 from .enums import Property
@@ -156,7 +155,7 @@ type ActivePlaylist = tuple[PlaylistValidity, PlaylistEntry]
 type PyType = type | GenericAliases
 type DbusPyTypes = str | float | int | bool | list | Decimal
 type PropertyValues = dict[Property, DbusPyTypes]
-type DbusMetadata = dict[Property, Variant]
+type DbusMetadata = dict[Property, 'Variant']
 type DbusType = str
 type DbusObj = str
 
