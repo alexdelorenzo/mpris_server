@@ -33,7 +33,8 @@ changes in your media player. This allows for real-time updates from your media 
 - [D-Bus](https://www.freedesktop.org/wiki/Software/dbus/)
 - Python >= 3.7
 - [PyGObject](https://pypi.org/project/PyGObject/)
-- `requirements.txt`
+- See `project.dependencies` in `pyproject.toml`
+- Rye
 
 #### Installing PyGObject
 
