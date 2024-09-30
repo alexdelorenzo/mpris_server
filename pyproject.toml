@@ -1,6 +1,6 @@
 [project]
 name = "mpris_server"
-version = "0.9.6"
+version = "0.10.0"
 description = "⏯️ Publish a MediaPlayer2 MPRIS device to D-Bus."
 readme = "README.md"
 readme-content-type = "text/markdown"
